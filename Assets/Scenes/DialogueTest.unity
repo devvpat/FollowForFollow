@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 1010930432}
   - component: {fileID: 1010930431}
   m_Layer: 5
-  m_Name: Name
+  m_Name: DialogueName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,8 +622,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 769321930}
   - {fileID: 1010930430}
+  - {fileID: 769321930}
   m_Father: {fileID: 1027745539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -643,7 +643,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c765a17b347f441f8ae949ec0d5cc11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
-  dialogues: []
+  dialogues:
+  - name: Character A
+    dialogueText: Hello
+  - name: Character B
+    dialogueText: Hi
+  - name: Character A
+    dialogueText: Its me
+  - name: Character B
+    dialogueText: Hiiii
+  inputActionReference: {fileID: 1781555164194001046, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  dialogueName: {fileID: 1010930431}
+  dialogueText: {fileID: 769321931}
 --- !u!114 &1839944979
 MonoBehaviour:
   m_ObjectHideFlags: 0
