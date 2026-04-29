@@ -16,8 +16,14 @@ public class RandomEnemyBehavior : IEnemyBehavior
 
         if (roll < AttackWeight)
         {
-            // Choose random ally and attack
+            // Choose random target from allies
             Ally target = allies[Random.Range(0, allies.Count)];
+
+            // Accuracy check
+            bool hit = Random.Range(0, 100) < actor.Accuracy;
+            if (!hit) return $"[-] {actor.Name} attacks {target.Name} but misses!";
+
+            // Attack enemy target
             int damage  = target.TakeDamage(actor.GetAttackDamage());
             return $"[-] {actor.Name} attacks {target.Name} for {damage} damage!";
         }

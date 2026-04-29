@@ -26,11 +26,11 @@ public class AllyParty : MonoBehaviour
     {
         Allies = new List<Ally>
         {
-            //       name     maxHP   attack  maxMana
-            new Ally("Lau",   120,    20,     100),
-            new Ally("Ren",   160,    18,      60),
-            new Ally("Lar",   100,    25,     120),
-            new Ally("Ral",   140,    15,      80),
+            //         name    maxHP  atk  def  spd  acc  mana
+            new Ally("Aria",   120,   20,  20,  65,  90,  100),
+            new Ally("Brom",   160,   18,  50,  40,  80,  60),
+            new Ally("Celia",  100,   25,  10,  75,  85,  120),
+            new Ally("Doric",  140,   15,  65,  30,  75,  80),
         };
     }
 

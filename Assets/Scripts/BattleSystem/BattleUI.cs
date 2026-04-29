@@ -48,7 +48,7 @@ public class BattleUI : MonoBehaviour
         BattleManager.Instance.OnLogMessage += AppendLog;
         BattleManager.Instance.OnStateChanged += Refresh;
         BattleManager.Instance.OnAllyTurnStart += HandleAllyTurnStart;
-        BattleManager.Instance.OnEnemyPhaseStart += HandleEnemyPhase;
+        BattleManager.Instance.OnEnemyTurnStart += HandleEnemyTurnStart;
         BattleManager.Instance.OnBattleEnd += HandleBattleEnd;
 
         attackButton.onClick.AddListener(OnAttackPressed);
@@ -63,7 +63,7 @@ public class BattleUI : MonoBehaviour
         BattleManager.Instance.OnLogMessage -= AppendLog;
         BattleManager.Instance.OnStateChanged -= Refresh;
         BattleManager.Instance.OnAllyTurnStart -= HandleAllyTurnStart;
-        BattleManager.Instance.OnEnemyPhaseStart -= HandleEnemyPhase;
+        BattleManager.Instance.OnEnemyTurnStart -= HandleEnemyTurnStart;
         BattleManager.Instance.OnBattleEnd -= HandleBattleEnd;
     }
 
@@ -78,28 +78,26 @@ public class BattleUI : MonoBehaviour
         actionPanel.SetActive(false);
     }
 
-    private void HandleAllyTurnStart(int allyIndex)
+    private void HandleAllyTurnStart(Ally ally)
     {
         _selectedAction = AllyActionType.Attack;
         _selectedTarget = null;
         _targetingMode = false;
 
-        Ally current = BattleManager.Instance.Allies[allyIndex];
-
         // Highlight active ally card
         for (int i = 0; i < _allyCharsUI.Count; i++)
-            _allyCharsUI[i].SetActive(i == allyIndex);
+            _allyCharsUI[i].SetActive(BattleManager.Instance.Allies[i] == ally);
 
         // Update action buttons
         actionPanel.SetActive(true);
-        specialButton.interactable = current.CanUseSpecial;
+        specialButton.interactable = ally.CanUseSpecial;
 
         // Clear enemy targeting highlights
         foreach (var card in _enemyCharsUI)
             card.SetHighlighted(false);
     }
 
-    private void HandleEnemyPhase()
+    private void HandleEnemyTurnStart(Enemy enemy)
     {
         // Disable action panel + set all ally cards to inactive and all enemy cards to non-highlighted
         actionPanel.SetActive(false);
@@ -123,7 +121,7 @@ public class BattleUI : MonoBehaviour
         else
         {
             // Show defeat message and set button to restart
-            resultTitleText.text = "💀 Defeat!";
+            resultTitleText.text = "Defeat!";
             resultButtonLabel.text = "Restart";
             resultButton.onClick.RemoveAllListeners();
             resultButton.onClick.AddListener(OnRestart);
@@ -172,9 +170,9 @@ public class BattleUI : MonoBehaviour
         // Check if special button needs to be disabled
         if (BattleManager.Instance.WaitingForInput)
         {
-            int idx = BattleManager.Instance.CurrentAllyIndex;
-            if (idx < BattleManager.Instance.Allies.Count)
-                specialButton.interactable = BattleManager.Instance.Allies[idx].CanUseSpecial;
+            Ally ally = BattleManager.Instance.CurrentAlly;
+            if (ally != null)
+                specialButton.interactable = ally.CanUseSpecial;
         }
     }
 

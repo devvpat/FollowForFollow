@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework.Internal;
 using UnityEngine;
 
 // Singleton class that handles all battle logic
@@ -10,11 +9,11 @@ public class BattleManager : MonoBehaviour
 
     // ----- BATTLE EVENTS -----
 
-    public event System.Action OnBattleStart;
+    public event System.Action OnBattleStart; // start of battle
     public event System.Action<string> OnLogMessage; // battle log entry
     public event System.Action OnStateChanged; // redraw UI
-    public event System.Action<int> OnAllyTurnStart; // ally index
-    public event System.Action OnEnemyPhaseStart;
+    public event System.Action<Ally> OnAllyTurnStart; // ally taking turn
+    public event System.Action<Enemy> OnEnemyTurnStart; // enemy taking turn
     public event System.Action<bool> OnBattleEnd; // true = player won
 
     // ----- BATTLE STATE -----
@@ -22,7 +21,9 @@ public class BattleManager : MonoBehaviour
     public List<Ally> Allies { get; private set; }
     public List<Enemy> Enemies { get; private set; }
 
-    private int  _currentAllyIndex;
+    public const float BattleTickThreshold = 100f; // when a character's tick timer reaches this, they can act
+
+    private Ally _currentAlly;
     private bool _battleActive;
     private bool _waitingForPlayerInput;
 
@@ -47,10 +48,13 @@ public class BattleManager : MonoBehaviour
     // Starts a new fight
     public void StartNewFight()
     {
-        Allies = AllyParty.Instance.Allies;        // live references — stats persist
+        Allies = AllyParty.Instance.Allies;
         Enemies = SpawnEnemies();
+        foreach (var a in Allies) a.ResetTickTimer();
+        foreach (var e in Enemies) e.ResetTickTimer();
+
         _battleActive = true;
-        _currentAllyIndex = 0;
+        _currentAlly = null;
 
         OnBattleStart?.Invoke();
         Log("[*] A new battle begins!");
@@ -74,89 +78,112 @@ public class BattleManager : MonoBehaviour
     {
         while (_battleActive)
         {
-            // ALLY PHASE
-            for (int i = 0; i < Allies.Count; i++)
+            // Pass a tick for all characters and collect all characters that are ready to take an action
+            List<BattleCharacter> charactersTakingTurn = new List<BattleCharacter>();
+            foreach (var a in Allies) if (a.Tick()) charactersTakingTurn.Add(a);
+            foreach (var e in Enemies) if (e.Tick()) charactersTakingTurn.Add(e);
+
+            // Sort by TickTimer value so highest goes first
+            charactersTakingTurn.Sort((char1, char2) => char2.TickTimer.CompareTo(char1.TickTimer));
+            
+            // debug: list all characters taking a turn this round
+            if (charactersTakingTurn.Count > 0)
             {
-                // Check if ally is alive and if there are still enemies to fight
-                Ally ally = Allies[i];
-                if (!ally.IsAlive) continue;
-                if (!IsAnyEnemyAlive()) break;
+                string charNames = string.Join(", ", charactersTakingTurn.ConvertAll(c => c.Name));
+                Debug.Log($"[*] Taking turns this round: {charNames}");
+            }
 
-                ally.EndDefend();
-                _currentAllyIndex = i;
-                OnAllyTurnStart?.Invoke(i);
-                Log($"[+] {ally.Name}'s turn.");
+            // Let each character take their turn in order
+            foreach (var currChar in charactersTakingTurn) {
+                // Check battle state
+                if (!currChar.IsAlive) continue; // skip if character is dead
+                if (!IsAnyEnemyAlive() || !IsAnyAllyAlive()) break; // end battle if no one is alive
 
-                // Wait for player input
-                _waitingForPlayerInput = true;
-                _pendingAction = null;
-                OnStateChanged?.Invoke();
+                // End current character's defend state
+                currChar.EndDefend();
 
-                yield return new WaitUntil(() => !_waitingForPlayerInput);
-
-                // Execute the chosen action
-                if (_pendingAction != null)
-                    ExecuteAllyAction(ally, _pendingAction);
-
-                OnStateChanged?.Invoke();
-
-                // Check if all enemies are defeated
-                if (!IsAnyEnemyAlive())
+                // Process ally character turn
+                if (currChar is Ally ally)
                 {
-                    EndBattle(playerWon: true);
-                    yield break;
+                    // Log turn start and set waiting for player input
+                    _currentAlly = ally;
+                    OnAllyTurnStart?.Invoke(ally);
+                    Log($"[*] {ally.Name}'s turn.");
+                    _waitingForPlayerInput = true;
+                    _pendingAction = null;
+                    OnStateChanged?.Invoke();
+
+                    // Wait until player submits an action
+                    yield return new WaitUntil(() => !_waitingForPlayerInput);
+
+                    // Execute the submitted action
+                    if (_pendingAction != null)
+                        ExecuteAllyAction(ally, _pendingAction);
+                }
+                // Process enemy character turn
+                else if (currChar is Enemy enemy)
+                {
+                    // Log turn start, execute enemy action, and log result
+                    OnEnemyTurnStart?.Invoke(enemy);
+                    Log($"[*] {enemy.Name}'s turn.");
+                    string result = enemy.TakeTurn(GetLivingAllies(), GetLivingEnemies());
+                    Log(result);
+
+                    yield return new WaitForSeconds(1f); // small delay after enemy action for log readability
                 }
 
-                yield return new WaitForSeconds(0.4f);
-            }
-
-            // ENEMY PHASE
-            OnEnemyPhaseStart?.Invoke();
-            Log("[-] Enemies act!");
-
-            foreach (var enemy in Enemies)
-            {
-                // Check if enemy is alive and if there are still allies to fight
-                if (!enemy.IsAlive) continue;
-                if (!IsAnyAllyAlive()) break;
-
-                enemy.EndDefend();
-
-                // Enemy takes its turn via its designated behavior
-                var livingAllies = GetLivingAllies();
-                string result = enemy.TakeTurn(livingAllies, GetLivingEnemies());
-                Log(result);
-
+                // Consume current character's ticks and update UI
+                currChar.ConsumeTickTurn();
                 OnStateChanged?.Invoke();
-                yield return new WaitForSeconds(0.6f);
+
+                // Check if battle ended after current character finished their action
+                if (!IsAnyEnemyAlive())
+                {
+                    EndBattle(true);
+                    yield break;
+                }
+                else if (!IsAnyAllyAlive())
+                {
+                    EndBattle(false);
+                    yield break;
+                }
             }
 
-            // Check if all allies are defeated
-            if (!IsAnyAllyAlive())
-            {
-                EndBattle(playerWon: false);
-                yield break;
-            }
-
-            OnStateChanged?.Invoke();
+            // Wait until next frame to continue battle loop
+            yield return null;
         }
     }
-
 
     // Executes the given ally action, applying its effects to the target enemy if applicable.
     private void ExecuteAllyAction(Ally ally, PendingAllyAction action)
     {
+        int accuracyRoll = Random.Range(0, 100); // [0, 99]
+        
         switch (action.ActionType)
         {
             case AllyActionType.Attack:
-                if (action.EnemyTarget == null) { Log("[*]No target!"); return; }
+                // Check target validity and perform accuracy check
+                if (action.EnemyTarget == null) { Log("[*] No target!"); return; }
+                if (accuracyRoll >= ally.Accuracy)
+                {
+                    Log($"[+] {ally.Name} attacks {action.EnemyTarget.Name} but misses!");
+                    break;
+                }
+                // Attack enemy target
                 int atkDmg = action.EnemyTarget.TakeDamage(ally.GetAttackDamage());
                 Log($"[+] {ally.Name} attacks {action.EnemyTarget.Name} for {atkDmg} damage!");
                 break;
 
             case AllyActionType.SpecialAttack:
-                if (action.EnemyTarget == null) { Log("[*]No target!"); return; }
-                if (!ally.CanUseSpecial) { Log($"[*] {ally.Name} has no mana!"); return; }
+                // Check target validity, mana, and perform accuracy check
+                if (action.EnemyTarget == null) { Log("[*] No target!"); return; }
+                if (!ally.CanUseSpecial) { Log($"[*] {ally.Name} does not have enough mana!"); return; }
+                if (accuracyRoll >= ally.Accuracy)
+                {
+                    Log($"[+] {ally.Name} attacks {action.EnemyTarget.Name} but misses!");
+                    break;
+                }
+                // Special attack enemy target
                 int spDmg = ally.UseSpecialAttack();
                 int dealt = action.EnemyTarget.TakeDamage(spDmg);
                 Log($"[+] {ally.Name} uses a special attack on {action.EnemyTarget.Name} for {dealt} damage!");
@@ -164,7 +191,7 @@ public class BattleManager : MonoBehaviour
 
             case AllyActionType.Defend:
                 ally.StartDefend();
-                Log($"[+] {ally.Name} defends — damage reduced by {(int)(BattleCharacter.DefendDamageReduction * 100)}% this round.");
+                Log($"[+] {ally.Name} defends — damage reduced by {ally.Defense}% this round.");
                 break;
         }
     }
@@ -186,14 +213,18 @@ public class BattleManager : MonoBehaviour
         var list  = new List<Enemy>();
 
         string[] names   = { "Goblin", "Orc", "Troll", "Bandit" };
-        int[]    hpPool  = { 60,  80,  120, 70  };
-        int[]    atkPool = { 12,  16,  10,  14  };
+        int[]    hpPool  = { 60,  80,  120,  70 };
+        int[]    atkPool = { 12,  16,  10,   14 };
+        int[]    defPool = { 10,  20,  35,   15 };
+        int[]    spdPool = { 50,  35,  25,   55 };
+        int[]    accPool = { 80,  70,  65,   85 };
+
 
         for (int i = 0; i < count; i++)
         {
             int idx = Random.Range(0, names.Length);
             string enemyName = count > 1 ? $"{names[idx]} {i + 1}" : names[idx];
-            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], new RandomEnemyBehavior()));
+            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], defPool[idx], spdPool[idx], accPool[idx], new RandomEnemyBehavior()));
         }
         return list;
     }
@@ -226,7 +257,7 @@ public class BattleManager : MonoBehaviour
         return list;
     }
 
-    public int CurrentAllyIndex => _currentAllyIndex;
+    public Ally CurrentAlly => _currentAlly;
     public bool WaitingForInput => _waitingForPlayerInput;
 
     // ----- TEMP -----

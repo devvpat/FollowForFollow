@@ -14,8 +14,8 @@ public class Ally : BattleCharacter
 
     public bool CanUseSpecial => CurrentMana >= SpecialManaCost && IsAlive;
 
-    public Ally(string name, int maxHP, int attack, int maxMana)
-        : base(name, maxHP, attack)
+    public Ally(string name, int maxHP, int attack, int defense, int speed, int accuracy, int maxMana)
+        : base(name, maxHP, attack, defense, speed, accuracy)
     {
         MaxMana     = maxMana;
         CurrentMana = maxMana;
