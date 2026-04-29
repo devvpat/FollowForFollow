@@ -26,6 +26,4 @@ public class Enemy : BattleCharacter
         EndDefend();  // reset defend state at the start of each turn
         return _behavior.DecideAction(this, allies, enemies);
     }
-
-    public int GetAttackDamage() => Attack;
 }

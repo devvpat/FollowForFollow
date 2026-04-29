@@ -163,30 +163,33 @@ public class BattleManager : MonoBehaviour
         {
             case AllyActionType.Attack:
                 // Check target validity and perform accuracy check
-                if (action.EnemyTarget == null) { Log("[*] No target!"); return; }
+                if (action.Target == null) { Log("[*] No target!"); return; }
                 if (accuracyRoll >= ally.Accuracy)
                 {
-                    Log($"[+] {ally.Name} attacks {action.EnemyTarget.Name} but misses!");
+                    Log($"[*] {ally.Name} attacks {action.Target.Name} but misses!");
                     break;
                 }
                 // Attack enemy target
-                int atkDmg = action.EnemyTarget.TakeDamage(ally.GetAttackDamage());
-                Log($"[+] {ally.Name} attacks {action.EnemyTarget.Name} for {atkDmg} damage!");
+                int atkDmg = action.Target.TakeDamage(ally.GetAttackDamage());
+                Log($"[+] {ally.Name} attacks {action.Target.Name} for {atkDmg} damage!");
                 break;
 
-            case AllyActionType.SpecialAttack:
-                // Check target validity, mana, and perform accuracy check
-                if (action.EnemyTarget == null) { Log("[*] No target!"); return; }
-                if (!ally.CanUseSpecial) { Log($"[*] {ally.Name} does not have enough mana!"); return; }
-                if (accuracyRoll >= ally.Accuracy)
+            case AllyActionType.Skill:
+                // Check target validity and mana availability
+                if (action.Target == null) { Log("[*] No target!"); return; }
+                ISkill skill = action.SkillUsed;
+                if (!ally.CanAffordSkill(skill)) { Log($"[*] {ally.Name} does not have enough mana!"); return; }
+                // Spend mana and perform accuracy check if applicable
+                ally.SpendMana(skill.ManaCost);
+                bool skillHits = skill.BypassAccuracy || accuracyRoll < ally.Accuracy;
+                if (!skillHits)
                 {
-                    Log($"[+] {ally.Name} attacks {action.EnemyTarget.Name} but misses!");
+                    Log($"[*] {ally.Name} tried to use {skill.Name} on {action.Target.Name} but misses!");
                     break;
                 }
-                // Special attack enemy target
-                int spDmg = ally.UseSpecialAttack();
-                int dealt = action.EnemyTarget.TakeDamage(spDmg);
-                Log($"[+] {ally.Name} uses a special attack on {action.EnemyTarget.Name} for {dealt} damage!");
+                // Execute skill and log result
+                SkillResult result = skill.Execute(ally, action.Target);
+                Log(result.LogMessage);
                 break;
 
             case AllyActionType.Defend:
@@ -261,6 +264,7 @@ public class BattleManager : MonoBehaviour
     public bool WaitingForInput => _waitingForPlayerInput;
 
     // ----- TEMP -----
+    [Header("TEMP")]
     public GameObject TestStartButton;
     public void OnClickTest()
     {
@@ -272,17 +276,18 @@ public class BattleManager : MonoBehaviour
 
 // ----- ALLY ACTION STRUCTURE -----
 
-public enum AllyActionType { Attack, SpecialAttack, Defend }
+public enum AllyActionType { Attack, Skill, Defend }
 
 public class PendingAllyAction
 {
     public AllyActionType ActionType;
-    public Enemy          EnemyTarget;   // null for Defend
+    public BattleCharacter Target;
+    public ISkill SkillUsed;
 
-    public static PendingAllyAction MakeAttack(Enemy target)   =>
-        new PendingAllyAction { ActionType = AllyActionType.Attack,        EnemyTarget = target };
-    public static PendingAllyAction MakeSpecial(Enemy target)  =>
-        new PendingAllyAction { ActionType = AllyActionType.SpecialAttack, EnemyTarget = target };
-    public static PendingAllyAction MakeDefend()               =>
-        new PendingAllyAction { ActionType = AllyActionType.Defend,        EnemyTarget = null   };
+    public static PendingAllyAction MakeAttack(BattleCharacter target) =>
+        new PendingAllyAction { ActionType = AllyActionType.Attack, Target = target };
+    public static PendingAllyAction MakeSkill(BattleCharacter target, ISkill skill) =>
+        new PendingAllyAction { ActionType = AllyActionType.Skill, Target = target, SkillUsed = skill };
+    public static PendingAllyAction MakeDefend() =>
+        new PendingAllyAction { ActionType = AllyActionType.Defend, Target = null };
 }

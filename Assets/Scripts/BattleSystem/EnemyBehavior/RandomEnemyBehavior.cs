@@ -24,7 +24,7 @@ public class RandomEnemyBehavior : IEnemyBehavior
             if (!hit) return $"[-] {actor.Name} attacks {target.Name} but misses!";
 
             // Attack enemy target
-            int damage  = target.TakeDamage(actor.GetAttackDamage());
+            int damage  = target.TakeDamage(actor.Attack);
             return $"[-] {actor.Name} attacks {target.Name} for {damage} damage!";
         }
         else

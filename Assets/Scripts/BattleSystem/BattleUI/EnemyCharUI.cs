@@ -21,13 +21,13 @@ public class EnemyCharUI : MonoBehaviour
     public Color highlightedColor = new Color(1f, 0.85f, 0.1f, 1f);
     public Color normalColor = new Color(1f, 1f,    1f,   0f);
 
-    private Enemy _enemy;
-    private Action<Enemy> _onClickCallback;
+    private BattleCharacter _enemy;
+    private Action<BattleCharacter> _onClickCallback;
     private Button _button;
 
-    public Enemy Enemy => _enemy;
+    public BattleCharacter Enemy => _enemy;
 
-    public void Bind(Enemy enemy, Action<Enemy> onClickCallback)
+    public void Bind(BattleCharacter enemy, Action<BattleCharacter> onClickCallback)
     {
         _enemy = enemy;
         _onClickCallback = onClickCallback;

@@ -16,8 +16,14 @@ public class BattleUI : MonoBehaviour
 
     [Header("Action Buttons")]
     public Button attackButton;
-    public Button specialButton;
+    public Button skillButton;
     public Button defendButton;
+
+    [Header("Skill Submenu")]
+    public GameObject skillPanel;
+    public Button[] skillButtons; // should have 4
+    public TMP_Text[] skillButtonsTexts; // should have 4
+    public Button backButton;
 
     [Header("Result Overlay")]
     public TMP_Text resultTitleText;
@@ -37,7 +43,8 @@ public class BattleUI : MonoBehaviour
     private List<EnemyCharUI> _enemyCharsUI = new();
 
     private AllyActionType _selectedAction;
-    private Enemy _selectedTarget;
+    private ISkill _selectedSkill;
+    private BattleCharacter _selectedTarget;
     private bool _targetingMode; // true when player must click an enemy
 
     // ----- EVENT SUBSCRIPTIONS -----
@@ -52,8 +59,14 @@ public class BattleUI : MonoBehaviour
         BattleManager.Instance.OnBattleEnd += HandleBattleEnd;
 
         attackButton.onClick.AddListener(OnAttackPressed);
-        specialButton.onClick.AddListener(OnSpecialPressed);
+        skillButton.onClick.AddListener(OnSkillMenuPressed);
         defendButton.onClick.AddListener(OnDefendPressed);
+        backButton.onClick.AddListener(OnBackPressed);
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            int index = i;
+            skillButtons[i].onClick.AddListener(() => OnSkillPressed(index));
+        }
     }
 
     private void OnDisable()
@@ -65,6 +78,16 @@ public class BattleUI : MonoBehaviour
         BattleManager.Instance.OnAllyTurnStart -= HandleAllyTurnStart;
         BattleManager.Instance.OnEnemyTurnStart -= HandleEnemyTurnStart;
         BattleManager.Instance.OnBattleEnd -= HandleBattleEnd;
+
+        attackButton.onClick.RemoveListener(OnAttackPressed);
+        skillButton.onClick.RemoveListener(OnSkillMenuPressed);
+        defendButton.onClick.RemoveListener(OnDefendPressed);
+        backButton.onClick.RemoveListener(OnBackPressed);
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            skillButtons[i].onClick.RemoveListener(() => OnSkillPressed(i));
+        }
+
     }
 
     // ----- EVENT HANDLERS -----
@@ -88,16 +111,16 @@ public class BattleUI : MonoBehaviour
         for (int i = 0; i < _allyCharsUI.Count; i++)
             _allyCharsUI[i].SetActive(BattleManager.Instance.Allies[i] == ally);
 
-        // Update action buttons
+        // Update action area
         actionPanel.SetActive(true);
-        specialButton.interactable = ally.CanUseSpecial;
+        skillPanel.SetActive(false);
 
         // Clear enemy targeting highlights
         foreach (var card in _enemyCharsUI)
             card.SetHighlighted(false);
     }
 
-    private void HandleEnemyTurnStart(Enemy enemy)
+    private void HandleEnemyTurnStart(BattleCharacter enemy)
     {
         // Disable action panel + set all ally cards to inactive and all enemy cards to non-highlighted
         actionPanel.SetActive(false);
@@ -160,20 +183,25 @@ public class BattleUI : MonoBehaviour
         }
     }
 
+    private void PopulateSkillPanel()
+    {
+        Ally ally = BattleManager.Instance.CurrentAlly;
+        if (ally == null) return;
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            ISkill skill = ally.Skills[i];
+            skillButtonsTexts[i].text = $"{skill.Name}\n({skill.ManaCost} MP)";
+            skillButtons[i].interactable = ally.CanAffordSkill(skill);
+        }
+    }
+
     // ----- UI UPDATE METHOD -----
 
     private void Refresh()
     {
         foreach (var card in _allyCharsUI) card.Refresh();
         foreach (var card in _enemyCharsUI) card.Refresh();
-
-        // Check if special button needs to be disabled
-        if (BattleManager.Instance.WaitingForInput)
-        {
-            Ally ally = BattleManager.Instance.CurrentAlly;
-            if (ally != null)
-                specialButton.interactable = ally.CanUseSpecial;
-        }
     }
 
     // ----- ACTION BUTTON HANDLERS -----
@@ -184,17 +212,12 @@ public class BattleUI : MonoBehaviour
         EnterTargetingMode();
     }
 
-    private void OnSpecialPressed()
-    {
-        _selectedAction = AllyActionType.SpecialAttack;
-        EnterTargetingMode();
-    }
-
     private void OnDefendPressed()
     {
         // No need for a target when defending
         BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeDefend());
         actionPanel.SetActive(false);
+        _targetingMode = false;
     }
 
     private void EnterTargetingMode()
@@ -205,7 +228,7 @@ public class BattleUI : MonoBehaviour
             card.SetHighlighted(card.Enemy.IsAlive);
     }
 
-    private void OnEnemyCardClicked(Enemy enemy)
+    private void OnEnemyCardClicked(BattleCharacter enemy)
     {
         if (!_targetingMode || !enemy.IsAlive) return;
 
@@ -218,12 +241,38 @@ public class BattleUI : MonoBehaviour
         PendingAllyAction action = _selectedAction switch
         {
             AllyActionType.Attack => PendingAllyAction.MakeAttack(_selectedTarget),
-            AllyActionType.SpecialAttack => PendingAllyAction.MakeSpecial(_selectedTarget),
+            AllyActionType.Skill => PendingAllyAction.MakeSkill(_selectedTarget, _selectedSkill),
             _ => PendingAllyAction.MakeAttack(_selectedTarget)
         };
 
         BattleManager.Instance.SubmitAllyAction(action);
         actionPanel.SetActive(false);
+    }
+
+    private void OnSkillMenuPressed()
+    {
+        skillPanel.SetActive(true);
+        PopulateSkillPanel();
+    }
+
+    private void OnSkillPressed(int index)
+    {
+        Ally ally = BattleManager.Instance.CurrentAlly;
+        if (ally == null) return;
+
+        ISkill skill = ally.Skills[index];
+        if (!ally.CanAffordSkill(skill)) return;
+
+        _selectedAction = AllyActionType.Skill;
+        _selectedSkill = skill;
+
+        skillPanel.SetActive(false);
+        EnterTargetingMode();
+    }
+
+    private void OnBackPressed()
+    {
+        skillPanel.SetActive(false);
     }
 
     // ----- LOG -----

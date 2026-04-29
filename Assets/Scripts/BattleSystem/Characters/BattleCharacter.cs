@@ -77,6 +77,25 @@ public class BattleCharacter
         return damage;
     }
 
+    // Applies damage directly to HP, bypassing defense (HP clamped to 0) and returns the damage applied
+    public int TakeDamageRaw(int damage)
+    {
+        CurrentHP = Mathf.Max(0, CurrentHP - damage);
+        return damage;
+    }
+
+    // Restores HP by the specified amount (HP clamped to MaxHP)
+    public void RestoreHP(int amount)
+    {
+        CurrentHP = Mathf.Min(MaxHP, CurrentHP + amount);
+    }
+
+    // Modifies the Defense stat by the specified amount (clamped between 0 and 100)
+    public void ModifyDefense(int amount)
+    {
+        Defense = Mathf.Clamp(Defense + amount, 0, 100);
+    }
+
     // Set HP directly (clamps between 0 and MaxHP)
     public void SetHP(int hp)
     {
