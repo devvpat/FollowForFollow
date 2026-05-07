@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum MoralAlignment { LawfulGood, TrueNeutral, ChaoticGood, ChaoticNeutral }
@@ -8,9 +9,9 @@ public class CharacterProfile : ScriptableObject
 {
     [Header("Identity")]
     public string realName;
-    public string ign; 
+    public string ign;
     public Sprite portraitSprite;
-    
+
     [Header("Personality & Traits")]
     public MoralAlignment alignment;
     public EnergyLevel energyLevel;
@@ -21,5 +22,14 @@ public class CharacterProfile : ScriptableObject
     [TextArea(2, 3)] public string statusMessage;
 
     [Header("Combat Setup")]
-    public string preferredRole; 
+    public string preferredRole;
+
+    [Header("Stats")]
+    public int maxHP = 100;
+    public int attack = 10;
+    public int defense = 10;
+    public int speed = 10;
+
+    [Header("Inventory")]
+    public List<ItemData> items = new List<ItemData>();
 }
