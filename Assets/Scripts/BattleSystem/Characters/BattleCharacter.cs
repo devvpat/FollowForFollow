@@ -55,6 +55,11 @@ public class BattleCharacter
         TickTimer = 0;
     }
 
+    public void SetTickTimer(int val)
+    {
+        TickTimer = val;
+    }
+
     // ----- ACTIONS -----
 
     public void StartDefend()

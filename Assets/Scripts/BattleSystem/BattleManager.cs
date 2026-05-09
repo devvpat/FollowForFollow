@@ -21,7 +21,7 @@ public class BattleManager : MonoBehaviour
     public List<Ally> Allies { get; private set; }
     public List<Enemy> Enemies { get; private set; }
 
-    public const float BattleTickThreshold = 100f; // when a character's tick timer reaches this, they can act
+    public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
 
     private Ally _currentAlly;
     private bool _battleActive;
@@ -219,7 +219,7 @@ public class BattleManager : MonoBehaviour
         int[]    hpPool  = { 60,  80,  120,  70 };
         int[]    atkPool = { 12,  16,  10,   14 };
         int[]    defPool = { 10,  20,  35,   15 };
-        int[]    spdPool = { 50,  35,  25,   55 };
+        int[]    spdPool = { 5000,  3500,  2500,   5500 };
         int[]    accPool = { 80,  70,  65,   85 };
 
 

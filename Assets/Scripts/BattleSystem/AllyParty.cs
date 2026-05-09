@@ -27,10 +27,10 @@ public class AllyParty : MonoBehaviour
         Allies = new List<Ally>
         {
             //         name    maxHP  atk  def  spd  acc  mana  role
-            new Ally("Aria",   120,   20,  20,  65,  90,  100,  AllyRole.Mage),
-            new Ally("Brom",   160,   18,  50,  40,  80,  60,   AllyRole.Warrior),
-            new Ally("Celia",  100,   25,  10,  75,  85,  120,  AllyRole.Rogue),
-            new Ally("Doric",  140,   15,  65,  30,  75,  80,   AllyRole.Cleric),
+            new Ally("Aria",   120,   20,  20,  6500,  90,  100,  AllyRole.Mage),
+            new Ally("Brom",   160,   18,  50,  4000,  80,  60,   AllyRole.Warrior),
+            new Ally("Celia",  100,   25,  10,  7500,  85,  120,  AllyRole.Rogue),
+            new Ally("Doric",  140,   15,  65,  3000,  75,  80,   AllyRole.Cleric),
         };
     }
 
