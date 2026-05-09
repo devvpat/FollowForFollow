@@ -8,8 +8,8 @@ public class Enemy : BattleCharacter
 
     private IEnemyBehavior _behavior;
 
-    public Enemy(string name, int maxHP, int attack, int defense, int speed, int accuracy, IEnemyBehavior behavior)
-        : base(name, maxHP, attack, defense, speed, accuracy)
+    public Enemy(string name, int maxHP, int attack, int defense, int speed, int accuracy, int critChance, int critDamage, IEnemyBehavior behavior)
+        : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage)
     {
         _behavior = behavior;
     }

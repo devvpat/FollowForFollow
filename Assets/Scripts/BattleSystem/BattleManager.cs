@@ -221,13 +221,15 @@ public class BattleManager : MonoBehaviour
         int[]    defPool = { 10,  20,  35,   15 };
         int[]    spdPool = { 5000,  3500,  2500,   5500 };
         int[]    accPool = { 80,  70,  65,   85 };
+        int[]    crPool  = { 5, 10, 15, 40 };
+        int[]    cdPool  = { 150, 150, 150, 150 };
 
 
         for (int i = 0; i < count; i++)
         {
             int idx = Random.Range(0, names.Length);
             string enemyName = count > 1 ? $"{names[idx]} {i + 1}" : names[idx];
-            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], defPool[idx], spdPool[idx], accPool[idx], new RandomEnemyBehavior()));
+            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], defPool[idx], spdPool[idx], accPool[idx], crPool[idx], cdPool[idx], new RandomEnemyBehavior()));
         }
         return list;
     }

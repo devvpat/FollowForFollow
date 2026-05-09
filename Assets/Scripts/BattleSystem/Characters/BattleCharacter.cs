@@ -7,20 +7,22 @@ public class BattleCharacter
 
     public string Name { get; protected set; }
 
-    public int MaxHP { get; protected set; }
+    public int MaxHP { get; protected set; } = 100;
     public int CurrentHP { get; protected set; }
 
-    public int Attack { get; protected set; }
-    public int Defense { get; protected set; } // 0-100, % damage reduction
-    public int Speed { get; protected set; } // Higher speed means earlier turn order
-    public int Accuracy { get; protected set; } // 0-100, % chance to hit
+    public int Attack { get; protected set; } = 15;
+    public int Defense { get; protected set; } = 25; // 0-100, % damage reduction
+    public int Speed { get; protected set; } = 5000; // Higher speed means earlier turn order
+    public int Accuracy { get; protected set; } = 75; // 0-100, % chance to hit
+    public int CritChance { get; protected set; } = 10; // 0-100, % chance to deal critical hit
+    public int CritDamage { get; protected set; } = 150; // % damage multiplier for critical hits
 
     public float TickTimer { get; private set; } // Accumulates over time based on Speed, upon reaching the threshold the character can act
 
     public bool IsDefending { get; private set; }
     public bool IsAlive => CurrentHP > 0;
 
-    public BattleCharacter(string name, int maxHP, int attack, int defense, int speed, int accuracy)
+    public BattleCharacter(string name, int maxHP, int attack, int defense, int speed, int accuracy, int critChance, int critDamage)
     {
         Name = name;
         MaxHP = maxHP;
@@ -29,6 +31,8 @@ public class BattleCharacter
         Defense = Mathf.Clamp(defense, 0, 100);
         Speed = Mathf.Clamp(speed, 0, 100);
         Accuracy = Mathf.Clamp(accuracy, 0, 100);
+        CritChance = Mathf.Clamp(critChance, 0, 100);
+        CritDamage = Mathf.Clamp(critDamage, 0, 100);
     }
 
     // ----- TICK & TURN ORDER -----

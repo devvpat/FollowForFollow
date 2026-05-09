@@ -11,8 +11,8 @@ public class Ally : BattleCharacter
     public int MaxMana { get; private set; }
     public int CurrentMana { get; private set; }
 
-    public Ally(string name, int maxHP, int attack, int defense, int speed, int accuracy, int maxMana, AllyRole role)
-        : base(name, maxHP, attack, defense, speed, accuracy)
+    public Ally(string name, int maxHP, int attack, int defense, int speed, int accuracy, int critChance, int critDamage, int maxMana, AllyRole role)
+        : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage)
     {
         MaxMana = maxMana;
         CurrentMana = maxMana;
