@@ -26,11 +26,11 @@ public class AllyParty : MonoBehaviour
     {
         Allies = new List<Ally>
         {
-            //         name    maxHP  atk  def  spd    acc  critChance  critDamage  mana  role
-            new Ally("Aria",   120,   20,  20,  6500,  90,  5,          150,        100,  AllyRole.Mage),
-            new Ally("Brom",   160,   18,  50,  4000,  80,  10,         150,        60,   AllyRole.Warrior),
-            new Ally("Celia",  100,   25,  10,  7500,  85,	15,	        150,  	    120,  AllyRole.Rogue),
-            new Ally("Doric",  140,   15,  65,	3000,  75,	40,	        150,	    80,	  AllyRole.Cleric),
+            //         name    maxHP  atk  def     spd    acc     critChance  critDamage  mana  role
+            new Ally("Aria",   120,   20,  0.20f,  6500,  0.90f,  0.05f,      1.50f,      100,  AllyRole.Mage),
+            new Ally("Brom",   160,   18,  0.50f,  4000,  0.80f,  0.10f,      1.50f,      60,   AllyRole.Warrior),
+            new Ally("Celia",  100,   25,  0.10f,  7500,  0.85f,  0.15f,	  1.50f,  	  120,  AllyRole.Rogue),
+            new Ally("Doric",  140,   15,  0.65f,  3000,  0.75f,  0.40f,	  1.50f,	  80,	AllyRole.Cleric),
         };
     }
 

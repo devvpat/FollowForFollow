@@ -4,7 +4,7 @@ public enum AllyRole { Warrior, Mage, Rogue, Cleric, Default }
 
 public static class RoleFactory
 {
-    public static IRoleDefinition GetRole(AllyRole role)
+    public static IRole GetRole(AllyRole role)
     {
         return role switch
         {

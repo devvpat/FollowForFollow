@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Warrior: brute force. HeavyStrike costs less and hits harder.
-public class WarriorRole : IRoleDefinition
+public class WarriorRole : IRole
 {
     public string RoleName => "Warrior";
 
@@ -21,11 +21,13 @@ public class WarriorHeavyStrikeSkill : ISkill
     public int ManaCost => 30;
     public string Description => "Warrior's brutal blow. Deals 300% ATK damage.";
     public bool BypassAccuracy => false;
+    public SkillPower Power => SkillPower.High;
 
     public SkillResult Execute(Ally ally, BattleCharacter target)
     {
-        int raw = Mathf.RoundToInt(ally.Attack * 3.0f);
-        int damage = target.TakeDamage(raw);
+        ally.ModifyMultAttack(3f);
+        float damage = BattleManager.CalculateAndApplyDamage(ally, target, skill: this);
+        ally.ModifyMultAttack(1/3f);
         return SkillResult.Hit($"[+] {ally.Name} crushes {target.Name} for {damage} damage!", damage);
     }
 }

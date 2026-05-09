@@ -12,19 +12,17 @@ public class RandomEnemyBehavior : IEnemyBehavior
         if (allies.Count == 0)
             return $"{actor.Name} looks around confused — no targets!";
 
-        float roll = Random.value;
-
-        if (roll < AttackWeight)
+        if (Random.Range(0, 100)/100f < AttackWeight)
         {
             // Choose random target from allies
             Ally target = allies[Random.Range(0, allies.Count)];
 
             // Accuracy check
-            bool hit = Random.Range(0, 100) < actor.Accuracy;
+            bool hit = Random.Range(0, 100)/100f < actor.Accuracy;
             if (!hit) return $"[-] {actor.Name} attacks {target.Name} but misses!";
 
             // Attack enemy target
-            int damage  = target.TakeDamage(actor.Attack);
+            float damage = BattleManager.CalculateAndApplyDamage(actor, target);
             return $"[-] {actor.Name} attacks {target.Name} for {damage} damage!";
         }
         else

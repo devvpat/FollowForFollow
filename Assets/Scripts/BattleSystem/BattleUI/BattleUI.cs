@@ -267,7 +267,16 @@ public class BattleUI : MonoBehaviour
         _selectedSkill = skill;
 
         skillPanel.SetActive(false);
-        EnterTargetingMode();
+
+        if (skill.NeedsTarget)
+        {
+            EnterTargetingMode();
+        } else
+        {
+            // If skill doesn't need target, submit action immediately with ally as target
+            BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeSkill(ally, skill));
+            actionPanel.SetActive(false);
+        }
     }
 
     private void OnBackPressed()

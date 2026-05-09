@@ -16,24 +16,28 @@ public class BattleManager : MonoBehaviour
     public event System.Action<Enemy> OnEnemyTurnStart; // enemy taking turn
     public event System.Action<bool> OnBattleEnd; // true = player won
 
+    // ----- BATTLE NUMBERS -----
+
+    public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
+    public const float DefenseConstant = 100f;
+
+    [Header("Enemy Count")]
+    [Range(1, 4)]
+    [SerializeField] private int minEnemies = 1;
+    [Range(1, 4)]
+    [SerializeField] private int maxEnemies = 4;
+
     // ----- BATTLE STATE -----
 
     public List<Ally> Allies { get; private set; }
     public List<Enemy> Enemies { get; private set; }
-
-    public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
+    public Ally CurrentAlly => _currentAlly;
+    public bool WaitingForInput => _waitingForPlayerInput;
 
     private Ally _currentAlly;
     private bool _battleActive;
     private bool _waitingForPlayerInput;
-
     private PendingAllyAction _pendingAction;
-
-    [Header("Enemy Count")]
-    [Range(1, 4)]
-    public int minEnemies = 1;
-    [Range(1, 4)]
-    public int maxEnemies = 4;
 
     // ----- SETUP -----
 
@@ -157,8 +161,8 @@ public class BattleManager : MonoBehaviour
     // Executes the given ally action, applying its effects to the target enemy if applicable.
     private void ExecuteAllyAction(Ally ally, PendingAllyAction action)
     {
-        int accuracyRoll = Random.Range(0, 100); // [0, 99]
-        
+        float accuracyRoll = Random.Range(0, 100) / 100f; // [0.0f, 1.0f) for accuracy checks
+
         switch (action.ActionType)
         {
             case AllyActionType.Attack:
@@ -170,7 +174,7 @@ public class BattleManager : MonoBehaviour
                     break;
                 }
                 // Attack enemy target
-                int atkDmg = action.Target.TakeDamage(ally.GetAttackDamage());
+                float atkDmg = CalculateAndApplyDamage(ally, action.Target);
                 Log($"[+] {ally.Name} attacks {action.Target.Name} for {atkDmg} damage!");
                 break;
 
@@ -210,26 +214,76 @@ public class BattleManager : MonoBehaviour
 
     // ----- UTILITY METHODS -----
 
+    // Calculates damage from attacker to defender using the specified skill / normal attack
+    // Applies the calculated damage to the defender
+    // Returns the final damage dealt
+    public static float CalculateAndApplyDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
+    {
+        float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense);
+        defender.TakeDamage(damage);
+        return damage;
+    }
+
+    // Calculates and returns the final (post-mitigation) damage of a normal attack/skill
+    // If skill is not null, applies the skill's power to the damage calculation
+    public static float CalculateDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
+    {
+        float rawDamage = skill == null
+            ? CalculatePreMitigationAttackDamage(attacker, isGuaranteedCrit)
+            : CalculatePreMitigationSkillDamage(attacker, skill, isGuaranteedCrit);
+        float finalDamage = CalculatePostMitigationDamage(rawDamage, defender, bypassDefense);
+        return finalDamage;
+    }
+
+    // Calculates raw damage for normal attacks
+    // RawDamage = (Attack * AttackModifier) * (isCrit ? CritDamage : 1)
+    public static float CalculatePreMitigationAttackDamage(BattleCharacter attacker, bool isGuaranteedCrit = false)
+    {
+        float dmg = attacker.Attack * attacker.AttackModifier;
+        if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
+            dmg *= attacker.CritDamage;
+        return dmg;
+    }
+
+    // Calculates raw damage for skills
+    // RawDamage = (SkillPower + (Attack * AttackModifier)) * (isCrit ? CritDamage : 1)
+    public static float CalculatePreMitigationSkillDamage(BattleCharacter attacker, ISkill skill, bool isGuaranteedCrit = false)
+    {
+        float dmg = (int)skill.Power + (attacker.Attack * attacker.AttackModifier);
+        if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
+            dmg *= attacker.CritDamage;
+        return dmg;
+    }
+
+    // Calculates final damage after applying defense mitigation
+    // MitigatedDamage = RawDamage * (DefenseConstant / (DefenseConstant + Defense * DefenseModifier))
+    public static float CalculatePostMitigationDamage(float rawDamage, BattleCharacter defender, bool bypassDefense)
+    {
+        if (bypassDefense) return rawDamage;
+        float mitigatedDamage = rawDamage * (DefenseConstant / (DefenseConstant + defender.Defense * defender.DefenseModifier));
+        return mitigatedDamage;
+    }
+
     private List<Enemy> SpawnEnemies()
     {
         int count = Random.Range(minEnemies, maxEnemies + 1);
         var list  = new List<Enemy>();
 
         string[] names   = { "Goblin", "Orc", "Troll", "Bandit" };
-        int[]    hpPool  = { 60,  80,  120,  70 };
-        int[]    atkPool = { 12,  16,  10,   14 };
-        int[]    defPool = { 10,  20,  35,   15 };
-        int[]    spdPool = { 5000,  3500,  2500,   5500 };
-        int[]    accPool = { 80,  70,  65,   85 };
-        int[]    crPool  = { 5, 10, 15, 40 };
-        int[]    cdPool  = { 150, 150, 150, 150 };
+        float[]    hpPool  = { 60,  80,  120,  70 };
+        float[]    atkPool = { 12,  16,  10,   14 };
+        float[]    defPool = { 0.10f,  0.20f,  0.35f,   0.15f };
+        float[]    spdPool = { 5000,  3500,  2500,   5500 };
+        float[]    accPool = { 0.80f,  0.70f,  0.65f,   0.85f };
+        float[]    crPool  = { 0.05f, 0.10f, 0.15f, 0.40f };
+        float[]    cdPool  = { 1.50f, 1.50f, 1.50f, 1.50f };
 
 
         for (int i = 0; i < count; i++)
         {
             int idx = Random.Range(0, names.Length);
             string enemyName = count > 1 ? $"{names[idx]} {i + 1}" : names[idx];
-            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], defPool[idx], spdPool[idx], accPool[idx], crPool[idx], cdPool[idx], new RandomEnemyBehavior()));
+            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], defPool[idx], spdPool[idx], accPool[idx], crPool[idx], cdPool[idx], EnemyBehaviorType.Random));
         }
         return list;
     }
@@ -261,9 +315,6 @@ public class BattleManager : MonoBehaviour
         foreach (var e in Enemies) if (e.IsAlive) list.Add(e);
         return list;
     }
-
-    public Ally CurrentAlly => _currentAlly;
-    public bool WaitingForInput => _waitingForPlayerInput;
 
     // ----- TEMP -----
     [Header("TEMP")]

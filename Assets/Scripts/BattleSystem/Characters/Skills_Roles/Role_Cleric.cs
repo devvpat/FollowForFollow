@@ -1,5 +1,5 @@
 // Cleric: Drain becomes a heal targeting an ally instead, FocusStrike buffs defense.
-public class ClericRole : IRoleDefinition
+public class ClericRole : IRole
 {
     public string RoleName => "Cleric";
 
@@ -19,13 +19,15 @@ public class ClericHealSkill : ISkill
     public int ManaCost => 25;
     public string Description => "Restores 60 HP to self.";
     public bool BypassAccuracy => true;
+    public bool NeedsTarget => false;
+    public SkillPower Power => SkillPower.None;
 
     private const int HealAmount = 60;
 
-    public SkillResult Execute(Ally caster, BattleCharacter target)
+    public SkillResult Execute(Ally ally, BattleCharacter target)
     {
-        caster.RestoreHP(HealAmount);
-        return SkillResult.Hit($"[+] {caster.Name} heals for {HealAmount} HP!", 0);
+        ally.RestoreHP(HealAmount);
+        return SkillResult.Hit($"[+] {ally.Name} heals for {HealAmount} HP!", 0);
     }
 }
 
@@ -34,14 +36,16 @@ public class ClericFortifySkill : ISkill
 {
     public string Name => "Fortify";
     public int ManaCost => 50;
-    public string Description => "Raises your defense by 5%.";
+    public string Description => "Raises your defense by 2%.";
     public bool BypassAccuracy => true;
+    public bool NeedsTarget => false;
+    public SkillPower Power => SkillPower.None;
 
-    private const int DefenseBonus = 5;
+    private const float DefenseBonus = 0.02f; // 2% defense boost
 
-    public SkillResult Execute(Ally caster, BattleCharacter target)
+    public SkillResult Execute(Ally ally, BattleCharacter target)
     {
-        caster.ModifyDefense(DefenseBonus);
-        return SkillResult.Hit($"🛡 {caster.Name} fortifies, gaining +{DefenseBonus}% defense!", 0);
+        ally.ModifyAddDefense(DefenseBonus);
+        return SkillResult.Hit($"🛡 {ally.Name} fortifies, gaining +{DefenseBonus}% defense!", 0);
     }
 }

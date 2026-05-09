@@ -6,24 +6,23 @@ public class Enemy : BattleCharacter
 {
     // ----- STATS -----
 
-    private IEnemyBehavior _behavior;
+    private IEnemyBehavior behavior;
 
-    public Enemy(string name, int maxHP, int attack, int defense, int speed, int accuracy, int critChance, int critDamage, IEnemyBehavior behavior)
+    public Enemy(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, EnemyBehaviorType behaviorType)
         : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage)
     {
-        _behavior = behavior;
+        behavior = EnemyBehaviorFactory.GetBehavior(behaviorType);
     }
 
-    public void SetBehavior(IEnemyBehavior behavior)
+    public void SetBehavior(EnemyBehaviorType behaviorType)
     {
-        _behavior = behavior;
+        behavior = EnemyBehaviorFactory.GetBehavior(behaviorType);
     }
 
     // ----- ACTIONS -----
 
     public string TakeTurn(List<Ally> allies, List<Enemy> enemies)
     {
-        EndDefend();  // reset defend state at the start of each turn
-        return _behavior.DecideAction(this, allies, enemies);
+        return behavior.DecideAction(this, allies, enemies);
     }
 }
