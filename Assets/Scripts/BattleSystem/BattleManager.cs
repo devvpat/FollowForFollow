@@ -21,12 +21,6 @@ public class BattleManager : MonoBehaviour
     public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
     public const float DefenseConstant = 100f;
 
-    [Header("Enemy Count")]
-    [Range(1, 4)]
-    [SerializeField] private int minEnemies = 1;
-    [Range(1, 4)]
-    [SerializeField] private int maxEnemies = 4;
-
     // ----- BATTLE STATE -----
 
     public List<Ally> Allies { get; private set; }

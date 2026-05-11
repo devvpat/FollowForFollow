@@ -64,4 +64,17 @@ public class AllyParty : MonoBehaviour
         foreach (var a in Allies)
             a.ResetFully();
     }
+
+    public void UpdateAllyRole(string allyName, AllyRole newRole)
+    {
+        var ally = Allies.Find(a => a.Name == allyName);
+        if (ally == null)
+        {
+            Debug.LogError($"Ally with name {allyName} not found!");
+            return;
+        } else
+        {
+            ally.UpdateRole(newRole);
+        }
+    }
 }

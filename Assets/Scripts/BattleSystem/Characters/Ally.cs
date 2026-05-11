@@ -50,4 +50,11 @@ public class Ally : BattleCharacter
     {
         CurrentMana = Mathf.Min(CurrentMana + amount, MaxMana);
     }
+
+    public void UpdateRole(AllyRole newRole)
+    {
+        Role = newRole;
+        RoleDefintion = RoleFactory.GetRole(newRole);
+        Skills = RoleDefintion.GetSkills();
+    }
 }
