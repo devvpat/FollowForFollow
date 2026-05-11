@@ -46,6 +46,6 @@ public class ClericFortifySkill : ISkill
     public SkillResult Execute(Ally ally, BattleCharacter target)
     {
         ally.ModifyAddDefense(DefenseBonus);
-        return SkillResult.Hit($"🛡 {ally.Name} fortifies, gaining +{DefenseBonus}% defense!", 0);
+        return SkillResult.Hit($"[+] {ally.Name} fortifies, gaining +{DefenseBonus}% defense!", 0);
     }
 }

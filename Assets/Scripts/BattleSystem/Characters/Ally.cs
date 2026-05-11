@@ -22,6 +22,11 @@ public class Ally : BattleCharacter
         Skills = RoleDefintion.GetSkills();
     }
 
+    public static Ally CreateFromData(AllyData data)
+    {
+        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role);
+    }
+
     // ----- ACTIONS -----
 
     // Full reset to max stats

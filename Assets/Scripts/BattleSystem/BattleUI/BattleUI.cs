@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 // Handles all functionality related to the battle UI:
@@ -137,15 +138,15 @@ public class BattleUI : MonoBehaviour
         {
             // Show victory message and set button to start next fight
             resultTitleText.text = "Victory!";
-            resultButtonLabel.text = "Next Fight";
+            resultButtonLabel.text = "Continue";
             resultButton.onClick.RemoveAllListeners();
-            resultButton.onClick.AddListener(() => BattleManager.Instance.StartNewFight());
+            resultButton.onClick.AddListener(() => gameObject.SetActive(false)); // Hide the UI
         }
         else
         {
             // Show defeat message and set button to restart
             resultTitleText.text = "Defeat!";
-            resultButtonLabel.text = "Restart";
+            resultButtonLabel.text = "Replay";
             resultButton.onClick.RemoveAllListeners();
             resultButton.onClick.AddListener(OnRestart);
         }
@@ -295,8 +296,7 @@ public class BattleUI : MonoBehaviour
 
     private void OnRestart()
     {
-        AllyParty.Instance.ResetAllAlliesStats();
-        BattleManager.Instance.StartNewFight();
-        resultOverlay.SetActive(false);
+        // Reload current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

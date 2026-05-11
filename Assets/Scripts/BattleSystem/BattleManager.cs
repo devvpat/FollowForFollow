@@ -50,15 +50,28 @@ public class BattleManager : MonoBehaviour
     // ----- PUBLIC API -----
 
     // Starts a new fight
-    public void StartNewFight()
+    public void StartNewFight(List<Enemy> enemies)
     {
+        if (_battleActive)
+        {
+            Debug.LogWarning("Battle already active! Cannot start a new fight.");
+            return;
+        }
+        if (enemies == null || enemies.Count == 0)
+        {
+            Debug.LogWarning("No enemies provided! Cannot start a fight.");
+            return;
+        }
+
         Allies = AllyParty.Instance.Allies;
-        Enemies = SpawnEnemies();
+        Enemies = enemies;
         foreach (var a in Allies) a.ResetTickTimer();
         foreach (var e in Enemies) e.ResetTickTimer();
 
         _battleActive = true;
         _currentAlly = null;
+        _waitingForPlayerInput = false;
+        _pendingAction = null;
 
         OnBattleStart?.Invoke();
         Log("[*] A new battle begins!");
@@ -264,30 +277,6 @@ public class BattleManager : MonoBehaviour
         return mitigatedDamage;
     }
 
-    private List<Enemy> SpawnEnemies()
-    {
-        int count = Random.Range(minEnemies, maxEnemies + 1);
-        var list  = new List<Enemy>();
-
-        string[] names   = { "Goblin", "Orc", "Troll", "Bandit" };
-        float[]    hpPool  = { 60,  80,  120,  70 };
-        float[]    atkPool = { 12,  16,  10,   14 };
-        float[]    defPool = { 0.10f,  0.20f,  0.35f,   0.15f };
-        float[]    spdPool = { 5000,  3500,  2500,   5500 };
-        float[]    accPool = { 0.80f,  0.70f,  0.65f,   0.85f };
-        float[]    crPool  = { 0.05f, 0.10f, 0.15f, 0.40f };
-        float[]    cdPool  = { 1.50f, 1.50f, 1.50f, 1.50f };
-
-
-        for (int i = 0; i < count; i++)
-        {
-            int idx = Random.Range(0, names.Length);
-            string enemyName = count > 1 ? $"{names[idx]} {i + 1}" : names[idx];
-            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], defPool[idx], spdPool[idx], accPool[idx], crPool[idx], cdPool[idx], EnemyBehaviorType.Random));
-        }
-        return list;
-    }
-
     private void Log(string msg) => OnLogMessage?.Invoke(msg);
 
     public bool IsAnyEnemyAlive()
@@ -319,10 +308,11 @@ public class BattleManager : MonoBehaviour
     // ----- TEMP -----
     [Header("TEMP")]
     public GameObject TestStartButton;
+    public EnemyParty EnemyPartyRef;
     public void OnClickTest()
     {
         TestStartButton.SetActive(false);
-        StartNewFight();
+        StartNewFight(EnemyPartyRef.Enemies);
     }
     // ----- TEMP -----
 }

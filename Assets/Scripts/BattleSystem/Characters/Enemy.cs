@@ -19,6 +19,11 @@ public class Enemy : BattleCharacter
         behavior = EnemyBehaviorFactory.GetBehavior(behaviorType);
     }
 
+    public static Enemy CreateFromData(EnemyData data)
+    {
+        return new Enemy(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.Behavior);
+    }
+
     // ----- ACTIONS -----
 
     public string TakeTurn(List<Ally> allies, List<Enemy> enemies)
