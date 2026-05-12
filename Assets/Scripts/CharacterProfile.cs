@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum MoralAlignment { LawfulGood, TrueNeutral, ChaoticGood, ChaoticNeutral }
 public enum EnergyLevel { Low, Medium, High, Varies }
+public enum PartyRole { Support, Attacker, Defender, Observer }
 
 [CreateAssetMenu(fileName = "New Buddy Profile", menuName = "F4F/Buddy Profile")]
 public class CharacterProfile : ScriptableObject
@@ -23,13 +23,5 @@ public class CharacterProfile : ScriptableObject
 
     [Header("Combat Setup")]
     public string preferredRole;
-
-    [Header("Stats")]
-    public int maxHP = 100;
-    public int attack = 10;
-    public int defense = 10;
-    public int speed = 10;
-
-    [Header("Inventory")]
-    public List<ItemData> items = new List<ItemData>();
+    public PartyRole partyRole;
 }

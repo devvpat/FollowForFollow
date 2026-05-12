@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1a2b3c4d5e6f70819203a4b5c6d7e80, type: 3}
-  m_Name: Winston_Profile
+  m_Name: MainPlayer_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
-  realName: Winston
-  ign: 
+  realName: Player
+  ign: You
   portraitSprite: {fileID: 0}
-  alignment: 3
-  energyLevel: 0
-  likes: Loves Vaporblade's lore and enjoys yapping about it all the time. He's a
-    big fan of the little glitches and breaking the game.
-  dislikes: Hates people making fun of others, that isn't teasing. Hates smurfs.
-  statusMessage: 
-  preferredRole: 
+  alignment: 1
+  energyLevel: 1
+  likes:
+  dislikes:
+  statusMessage:
+  preferredRole:
+  partyRole: 0

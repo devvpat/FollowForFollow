@@ -1,59 +1,75 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(RectTransform))]
 public class BuddySlotUI : MonoBehaviour
 {
-    [Header("UI Connections")]
     public Image portraitImage;
     public TMP_Text ignText;
-    public TMP_Dropdown roleDropdown;
-    public Button detailsButton;
-    public Toggle selectToggle;
-
-    [Header("Data Connection")]
     public CharacterProfile assignedProfile;
-    public BuddyDetailsPanel detailsPanel;
+    public CharacterProfilePanel profilePanel;
+
+    [Header("Selection Feedback")]
+    public GameObject selectionHighlight;
+
+    static BuddySlotUI currentSelection;
+    Button button;
+
+    void Awake()
+    {
+        button = GetComponent<Button>();
+        if (button == null)
+            button = gameObject.AddComponent<Button>();
+        button.onClick.AddListener(HandleClick);
+
+        SetHighlight(false);
+    }
 
     void Start()
     {
-        ignText.text = assignedProfile.ign;
-        if (assignedProfile.portraitSprite != null)
-        {
+        if (assignedProfile == null)
+            return;
+
+        if (ignText != null)
+            ignText.text = assignedProfile.ign;
+
+        if (portraitImage != null && assignedProfile.portraitSprite != null)
             portraitImage.sprite = assignedProfile.portraitSprite;
-        }
-
-        roleDropdown.ClearOptions();
-        List<string> perceptionRoles = new List<string>
-        {
-            "Support",
-            "Attacker",
-            "Defender",
-            "Observer"
-        };
-        roleDropdown.AddOptions(perceptionRoles);
-
-        if (detailsButton != null)
-            detailsButton.onClick.AddListener(OpenDetails);
-
-        if (selectToggle != null)
-        {
-            selectToggle.isOn = PartyManager.Instance != null
-                                && PartyManager.Instance.IsSelected(assignedProfile);
-            selectToggle.onValueChanged.AddListener(OnSelectChanged);
-        }
     }
 
-    void OpenDetails()
+    void HandleClick()
     {
-        if (detailsPanel != null)
-            detailsPanel.Show(assignedProfile);
+        if (assignedProfile == null)
+            return;
+
+        if (profilePanel == null)
+            profilePanel = Object.FindFirstObjectByType<CharacterProfilePanel>();
+
+        if (profilePanel != null)
+            profilePanel.Show(assignedProfile);
+
+        SetSelected();
     }
 
-    void OnSelectChanged(bool isOn)
+    void SetSelected()
     {
-        if (PartyManager.Instance != null)
-            PartyManager.Instance.SetSelected(assignedProfile, isOn);
+        if (currentSelection != null && currentSelection != this)
+            currentSelection.SetHighlight(false);
+
+        currentSelection = this;
+        SetHighlight(true);
+    }
+
+    void SetHighlight(bool active)
+    {
+        if (selectionHighlight != null)
+            selectionHighlight.SetActive(active);
+    }
+
+    void OnDisable()
+    {
+        if (currentSelection == this)
+            currentSelection = null;
     }
 }
