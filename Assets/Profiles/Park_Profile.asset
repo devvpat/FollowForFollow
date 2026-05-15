@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Park_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
   realName: Park Minseong
-  ign: John Vaporblade
-  portraitSprite: {fileID: 0}
+  ign: "John Vaporblade :\xDE"
+  portraitSprite: {fileID: -184693960786962222, guid: 229fe7d985645f846bf5614bfdb25cf2, type: 3}
   alignment: 0
   energyLevel: 0
-  likes: Loves cooking and is passionate about serving others through it. He enjoys
-    being in the support role and helping the team.
-  dislikes: People crossing boundaries. He's a clean freak, so he tries to make sure
-    everyone isn't messy.
+  likes: Cooking, Supporting, Teamwork
+  dislikes: Messiness, Boundary-Crossing
   statusMessage: 
   preferredRole: Support/Healer
+  partyRole: 0
+  allyData: {fileID: 11400000, guid: 95c32208b06714b4dacd5d8b11c1c591, type: 2}

@@ -24,4 +24,5 @@ public class CharacterProfile : ScriptableObject
     [Header("Combat Setup")]
     public string preferredRole;
     public PartyRole partyRole;
+    public AllyData allyData;
 }

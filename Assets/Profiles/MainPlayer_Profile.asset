@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a2b3c4d5e6f70819203a4b5c6d7e80, type: 3}
   m_Name: MainPlayer_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
-  realName: Player
-  ign: You
-  portraitSprite: {fileID: 0}
+  realName: Phoebe Blythe
+  ign: "Apo11o\u2727\u02D6\xB0."
+  portraitSprite: {fileID: -184693960786962222, guid: 229fe7d985645f846bf5614bfdb25cf2, type: 3}
   alignment: 1
   energyLevel: 1
-  likes:
-  dislikes:
-  statusMessage:
-  preferredRole:
+  likes: Video Games, Mystery Novels, Fanfics, Youtube
+  dislikes: Social Interaction (Chud)
+  statusMessage: 
+  preferredRole: 
   partyRole: 0
+  allyData: {fileID: 11400000, guid: 30cd075a038219e4381b9a0ace19020b, type: 2}

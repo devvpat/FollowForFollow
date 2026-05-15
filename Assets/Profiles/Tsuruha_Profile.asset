@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Tsuruha_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
   realName: Hataori Tsuruha
-  ign: KaraageOfCrane
-  portraitSprite: {fileID: 0}
+  ign: "KaraageOfCrane\u2022\u1D17\u2022"
+  portraitSprite: {fileID: -184693960786962222, guid: 229fe7d985645f846bf5614bfdb25cf2, type: 3}
   alignment: 2
   energyLevel: 2
-  likes: Loves action RPGs and is completely infatuated with this game.
-  dislikes: Big and hard decisions that force her to choose one way or the other.
-    Whenever the word "no" is thrown around.
+  likes: Action RPGs, Vtubing, Open World RPGs, Sandbox Games
+  dislikes: Hard Choices, Rejection
   statusMessage: 
   preferredRole: 
+  partyRole: 0
+  allyData: {fileID: 11400000, guid: a08381af9e8e1954e8d91bc1d6b7acdd, type: 2}
