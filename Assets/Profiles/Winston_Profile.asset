@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Winston_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
   realName: Winston
-  ign: 
-  portraitSprite: {fileID: 0}
+  ign: Bookwyrm
+  portraitSprite: {fileID: -184693960786962222, guid: 229fe7d985645f846bf5614bfdb25cf2, type: 3}
   alignment: 3
   energyLevel: 0
-  likes: Loves Vaporblade's lore and enjoys yapping about it all the time. He's a
-    big fan of the little glitches and breaking the game.
-  dislikes: Hates people making fun of others, that isn't teasing. Hates smurfs.
+  likes: Vaporblade Lore, Youtubing
+  dislikes: Bullying, Smurfs
   statusMessage: 
   preferredRole: 
+  partyRole: 0
+  allyData: {fileID: 11400000, guid: 711b9514a48c35847be4e1bf1807113b, type: 2}
