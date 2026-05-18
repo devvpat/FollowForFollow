@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
   realName: Phoebe Blythe
   ign: "Apo11o\u2727\u02D6\xB0."
-  portraitSprite: {fileID: -184693960786962222, guid: 229fe7d985645f846bf5614bfdb25cf2, type: 3}
+  portraitSprite: {fileID: -8897452064755399100, guid: 6c684e434068ccd47a022d27b3b9b1ea, type: 3}
   alignment: 1
   energyLevel: 1
   likes: Video Games, Mystery Novels, Fanfics, Youtube

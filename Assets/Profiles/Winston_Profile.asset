@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Winston_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
   realName: Winston
-  ign: "Cul8r(\uFF61\u2022\u0300\u1D17-)\u2727"
+  ign: Bookwyrm
   portraitSprite: {fileID: -184693960786962222, guid: 229fe7d985645f846bf5614bfdb25cf2, type: 3}
   alignment: 3
   energyLevel: 0
