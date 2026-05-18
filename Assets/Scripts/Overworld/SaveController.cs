@@ -6,7 +6,7 @@ public class SaveController : MonoBehaviour
 {
     public static SaveController Instance { get; private set; }
 
-    private string SavePath => Path.Combine(Application.persistentDataPath, "savefile.json");
+    private string saveLocation;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -19,6 +19,9 @@ public class SaveController : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        //Define save location
+        saveLocation = Path.Combine(Application.persistentDataPath, "savefile.json");
     }
 
     public void SaveGame()
@@ -29,14 +32,14 @@ public class SaveController : MonoBehaviour
             mapBoundary = GameObject.FindAnyObjectByType<CinemachineConfiner2D>().BoundingShape2D.gameObject.name
         };
 
-        File.WriteAllText(SavePath, JsonUtility.ToJson(saveData));
+        File.WriteAllText(saveLocation, JsonUtility.ToJson(saveData));
     }
 
     public void LoadGame()
     {
-        if (File.Exists(SavePath))
+        if (File.Exists(saveLocation))
         {
-            SaveData saveData = JsonUtility.FromJson<SaveData>(File.ReadAllText(SavePath));
+            SaveData saveData = JsonUtility.FromJson<SaveData>(File.ReadAllText(saveLocation));
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             player.transform.position = saveData.playerPosition;
             FindAnyObjectByType<CinemachineConfiner2D>().BoundingShape2D = GameObject.Find(saveData.mapBoundary).GetComponent<BoxCollider2D>();
