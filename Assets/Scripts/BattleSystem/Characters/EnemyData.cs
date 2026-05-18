@@ -1,0 +1,16 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "NewEnemyData", menuName = "Character/Enemy Data")]
+public class EnemyData : ScriptableObject
+{
+    public string Name = "Test";
+    public float MaxHP = 100f;
+    public float Attack = 15f;
+    public float Defense = 0.25f; // % damage reduction
+    public float Speed = 5000f; // Higher speed means earlier turn order
+    public float Accuracy = 0.75f; // % chance to hit
+    public float CritChance = 0.1f; // % chance to deal critical hit
+    public float CritDamage = 1.5f; // % damage multiplier for critical hits
+
+    public EnemyBehaviorType Behavior = EnemyBehaviorType.Random;
+}

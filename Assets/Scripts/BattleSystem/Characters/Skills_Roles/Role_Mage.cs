@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Mage: Slash becomes a magic bolt (ignore target defense), Drain restores more mana.
-public class MageRole : IRoleDefinition
+public class MageRole : IRole
 {
     public string RoleName => "Mage";
 
@@ -21,12 +21,13 @@ public class MageBoltSkill : ISkill
     public int ManaCost => 15;
     public string Description => "A bolt of magic. Deals 120% ATK, ignores defense.";
     public bool BypassAccuracy => false;
+    public SkillPower Power => SkillPower.Medium;
 
     public SkillResult Execute(Ally ally, BattleCharacter target)
     {
-        // Bypass TakeDamage (which applies defense) — apply directly to HP
-        int damage = Mathf.RoundToInt(ally.Attack * 1.2f);
-        target.TakeDamageRaw(damage);
+        ally.ModifyMultAttack(1.2f);
+        float damage = BattleManager.CalculateAndApplyDamage(ally, target, skill: this, bypassDefense: true);
+        ally.ModifyMultAttack(1/1.2f);
         return SkillResult.Hit($"[+] {ally.Name} blasts {target.Name} with magic for {damage} damage!", damage);
     }
 }
@@ -38,13 +39,15 @@ public class MageDrainSkill : ISkill
     public int ManaCost => 25;
     public string Description => "Drains energy. Deals 80% ATK damage and restores 40 mana.";
     public bool BypassAccuracy => false;
+    public SkillPower Power => SkillPower.None;
 
     private const int ManaRestore = 40;
 
     public SkillResult Execute(Ally ally, BattleCharacter target)
     {
-        int raw = UnityEngine.Mathf.RoundToInt(ally.Attack * 0.8f);
-        int damage = target.TakeDamage(raw);
+        ally.ModifyMultAttack(0.8f);
+        float damage = BattleManager.CalculateAndApplyDamage(ally, target, skill: this);
+        ally.ModifyMultAttack(1/0.8f);
         ally.RestoreMana(ManaRestore);
         return SkillResult.Hit($"[+] {ally.Name} drains {target.Name} for {damage} damage and restores {ManaRestore} mana!", damage);
     }

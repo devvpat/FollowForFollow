@@ -1,5 +1,5 @@
 // Default: Has all default skills.
-public class DefaultRole : IRoleDefinition
+public class DefaultRole : IRole
 {
     public string RoleName => "Default";
 

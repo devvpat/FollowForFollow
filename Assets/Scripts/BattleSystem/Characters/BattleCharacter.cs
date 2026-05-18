@@ -6,29 +6,35 @@ public class BattleCharacter
     // ----- STATS -----
 
     public string Name { get; protected set; }
-
-    public int MaxHP { get; protected set; }
-    public int CurrentHP { get; protected set; }
-
-    public int Attack { get; protected set; }
-    public int Defense { get; protected set; } // 0-100, % damage reduction
-    public int Speed { get; protected set; } // Higher speed means earlier turn order
-    public int Accuracy { get; protected set; } // 0-100, % chance to hit
+    public float MaxHP { get; protected set; } = 100f;
+    public float CurrentHP { get; protected set; }
+    public float Attack { get; protected set; } = 15f;
+    public float AttackModifier { get; protected set; } = 1f; // Multiplier for attack damage
+    public float Defense { get; protected set; } = 0.25f; // % damage reduction
+    public float DefenseModifier { get; protected set; } = 1f; // Multiplier for defense effectiveness
+    public float Speed { get; protected set; } = 5000f; // Higher speed means earlier turn order
+    public float Accuracy { get; protected set; } = 0.75f; // % chance to hit
+    public float CritChance { get; protected set; } = 0.1f; // % chance to deal critical hit
+    public float CritDamage { get; protected set; } = 1.5f; // % damage multiplier for critical hits
 
     public float TickTimer { get; private set; } // Accumulates over time based on Speed, upon reaching the threshold the character can act
 
     public bool IsDefending { get; private set; }
     public bool IsAlive => CurrentHP > 0;
 
-    public BattleCharacter(string name, int maxHP, int attack, int defense, int speed, int accuracy)
+    public BattleCharacter(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage)
     {
         Name = name;
         MaxHP = maxHP;
         CurrentHP = maxHP;
         Attack = attack;
+        AttackModifier = 1f;
         Defense = Mathf.Clamp(defense, 0, 100);
+        DefenseModifier = 1f;
         Speed = Mathf.Clamp(speed, 0, 100);
         Accuracy = Mathf.Clamp(accuracy, 0, 100);
+        CritChance = Mathf.Clamp(critChance, 0, 100);
+        CritDamage = Mathf.Clamp(critDamage, 0, 100);
     }
 
     // ----- TICK & TURN ORDER -----
@@ -55,49 +61,63 @@ public class BattleCharacter
         TickTimer = 0;
     }
 
-    // ----- ACTIONS -----
+    public void SetTickTimer(int val)
+    {
+        TickTimer = val;
+    }
+
+    // ----- MODIFIERS -----
 
     public void StartDefend()
     {
         IsDefending = true;
+        DefenseModifier += 0.5f; // Example: defending increases defense effectiveness by 50%
     }
 
     public void EndDefend()
     {
         IsDefending = false;
+        DefenseModifier -= 0.5f; // Example: stopping defense decreases defense effectiveness by 50%
     }
 
-    // Applies and returns the actual damage taken by the character after considering defense (HP clamped to 0)
-    public int TakeDamage(int rawDamage)
-    {
-        int damage = IsDefending
-            ? Mathf.RoundToInt(rawDamage * (1f - Defense / 1000f)) // if defending, reduces damage by Defense stat percent
-            : rawDamage; // otherwise, take full damage
-        CurrentHP = Mathf.Max(0, CurrentHP - damage);
-        return damage;
-    }
-
-    // Applies damage directly to HP, bypassing defense (HP clamped to 0) and returns the damage applied
-    public int TakeDamageRaw(int damage)
+    // Reduces HP by specified damage amount (HP clamped to 0)
+    public void TakeDamage(float damage)
     {
         CurrentHP = Mathf.Max(0, CurrentHP - damage);
-        return damage;
     }
 
     // Restores HP by the specified amount (HP clamped to MaxHP)
-    public void RestoreHP(int amount)
+    public void RestoreHP(float amount)
     {
         CurrentHP = Mathf.Min(MaxHP, CurrentHP + amount);
     }
 
-    // Modifies the Defense stat by the specified amount (clamped between 0 and 100)
-    public void ModifyDefense(int amount)
+    // Modifies attack (additive) by the specified amount (e.g. amount = 0.2f -> 20% increase)
+    public void ModifyAddAttack(float amount)
     {
-        Defense = Mathf.Clamp(Defense + amount, 0, 100);
+        AttackModifier += amount;
+    }
+
+    // Modifies attack (multiplicative) by the specified amount (e.g. amount = 1.2f -> 20% increase)
+    public void ModifyMultAttack(float amount)
+    {
+        AttackModifier *= amount;
+    }
+
+    // Modifies defense (additive) by the specified amount (e.g. amount = 0.2f -> 20% increase)
+    public void ModifyAddDefense(float amount)
+    {
+        DefenseModifier += amount;
+    }
+
+    // Modifies defense (multiplicative) by the specified amount (e.g. amount = 1.2f -> 20% increase)
+    public void ModifyMultDefense(float amount)
+    {
+        DefenseModifier *= amount;
     }
 
     // Set HP directly (clamps between 0 and MaxHP)
-    public void SetHP(int hp)
+    public void SetHP(float hp)
     {
         CurrentHP = Mathf.Clamp(hp, 0, MaxHP);
     }

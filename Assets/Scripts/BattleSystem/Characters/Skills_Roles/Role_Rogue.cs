@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Rogue: FocusStrike becomes a guaranteed crit, Slash hits twice.
-public class RogueRole : IRoleDefinition
+public class RogueRole : IRole
 {
     public string RoleName => "Rogue";
 
@@ -21,14 +21,16 @@ public class RogueDoubleSlashSkill : ISkill
     public int ManaCost => 15;
     public string Description => "Two quick strikes. Deals 80% ATK twice.";
     public bool BypassAccuracy => false;
+    public SkillPower Power => SkillPower.Low;
 
     public SkillResult Execute(Ally ally, BattleCharacter target)
     {
-        int raw1 = Mathf.RoundToInt(ally.Attack * 0.8f);
-        int raw2 = Mathf.RoundToInt(ally.Attack * 0.8f);
-        int d1 = target.TakeDamage(raw1);
-        int d2 = target.IsAlive ? target.TakeDamage(raw2) : 0;
-        int total = d1 + d2;
+        ally.ModifyMultAttack(0.8f);
+        float d1 = BattleManager.CalculateDamage(ally, target, skill: this);
+        float d2 = BattleManager.CalculateDamage(ally, target, skill: this);
+        ally.ModifyMultAttack(1/0.8f);
+        float total = d1 + d2;
+        target.TakeDamage(total);
         return SkillResult.Hit($"[+] {ally.Name} double slashes {target.Name} for {d1}+{d2} ({total}) damage!", total);
     }
 }
@@ -36,15 +38,17 @@ public class RogueDoubleSlashSkill : ISkill
 // Rogue's FocusStrike: guaranteed hit, 200% ATK.
 public class RogueCritStrikeSkill : ISkill
 {
-    public string Name => "Crit Strike";
+    public string Name => "Big Strike";
     public int ManaCost => 20;
-    public string Description => "A precise crit. Guaranteed hit, deals 200% ATK damage.";
+    public string Description => "A big, guaranteed hit, deals 200% ATK damage.";
     public bool BypassAccuracy => true;
+    public SkillPower Power => SkillPower.High;
 
     public SkillResult Execute(Ally ally, BattleCharacter target)
     {
-        int raw = Mathf.RoundToInt(ally.Attack * 2.0f);
-        int damage = target.TakeDamage(raw);
-        return SkillResult.Hit($"[+] {ally.Name} crits {target.Name} for {damage} damage!", damage);
+        ally.ModifyMultAttack(2f);
+        float damage = BattleManager.CalculateAndApplyDamage(ally, target, skill: this);
+        ally.ModifyMultAttack(1/2f);
+        return SkillResult.Hit($"[+] {ally.Name} slams {target.Name} for {damage} damage!", damage);
     }
 }

@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6312785535581708575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 628.3707, y: 456.1231, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,3 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09073e529b74fee4086a2c2bc7e5e981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AllyParty
+  AllyDataList:
+  - {fileID: 11400000, guid: 30cd075a038219e4381b9a0ace19020b, type: 2}
+  - {fileID: 11400000, guid: 95c32208b06714b4dacd5d8b11c1c591, type: 2}
+  - {fileID: 11400000, guid: a08381af9e8e1954e8d91bc1d6b7acdd, type: 2}
+  - {fileID: 11400000, guid: 711b9514a48c35847be4e1bf1807113b, type: 2}

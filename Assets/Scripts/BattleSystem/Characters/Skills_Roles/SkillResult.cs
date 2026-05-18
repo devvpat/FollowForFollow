@@ -3,12 +3,12 @@
 public class SkillResult
 {
     public string LogMessage;
-    public int DamageDealt;
+    public float DamageDealt;
     public bool HitTarget;
 
     public static SkillResult Miss(string msg) =>
         new SkillResult { LogMessage = msg, HitTarget = false, DamageDealt = 0 };
 
-    public static SkillResult Hit(string msg, int damage) =>
+    public static SkillResult Hit(string msg, float damage) =>
         new SkillResult { LogMessage = msg, HitTarget = true, DamageDealt = damage };
 }

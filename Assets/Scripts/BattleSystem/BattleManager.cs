@@ -16,24 +16,22 @@ public class BattleManager : MonoBehaviour
     public event System.Action<Enemy> OnEnemyTurnStart; // enemy taking turn
     public event System.Action<bool> OnBattleEnd; // true = player won
 
+    // ----- BATTLE NUMBERS -----
+
+    public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
+    public const float DefenseConstant = 100f;
+
     // ----- BATTLE STATE -----
 
     public List<Ally> Allies { get; private set; }
     public List<Enemy> Enemies { get; private set; }
-
-    public const float BattleTickThreshold = 100f; // when a character's tick timer reaches this, they can act
+    public Ally CurrentAlly => _currentAlly;
+    public bool WaitingForInput => _waitingForPlayerInput;
 
     private Ally _currentAlly;
     private bool _battleActive;
     private bool _waitingForPlayerInput;
-
     private PendingAllyAction _pendingAction;
-
-    [Header("Enemy Count")]
-    [Range(1, 4)]
-    public int minEnemies = 1;
-    [Range(1, 4)]
-    public int maxEnemies = 4;
 
     // ----- SETUP -----
 
@@ -46,15 +44,28 @@ public class BattleManager : MonoBehaviour
     // ----- PUBLIC API -----
 
     // Starts a new fight
-    public void StartNewFight()
+    public void StartNewFight(List<Enemy> enemies)
     {
+        if (_battleActive)
+        {
+            Debug.LogWarning("Battle already active! Cannot start a new fight.");
+            return;
+        }
+        if (enemies == null || enemies.Count == 0)
+        {
+            Debug.LogWarning("No enemies provided! Cannot start a fight.");
+            return;
+        }
+
         Allies = AllyParty.Instance.Allies;
-        Enemies = SpawnEnemies();
+        Enemies = enemies;
         foreach (var a in Allies) a.ResetTickTimer();
         foreach (var e in Enemies) e.ResetTickTimer();
 
         _battleActive = true;
         _currentAlly = null;
+        _waitingForPlayerInput = false;
+        _pendingAction = null;
 
         OnBattleStart?.Invoke();
         Log("[*] A new battle begins!");
@@ -157,8 +168,8 @@ public class BattleManager : MonoBehaviour
     // Executes the given ally action, applying its effects to the target enemy if applicable.
     private void ExecuteAllyAction(Ally ally, PendingAllyAction action)
     {
-        int accuracyRoll = Random.Range(0, 100); // [0, 99]
-        
+        float accuracyRoll = Random.Range(0, 100) / 100f; // [0.0f, 1.0f) for accuracy checks
+
         switch (action.ActionType)
         {
             case AllyActionType.Attack:
@@ -170,7 +181,7 @@ public class BattleManager : MonoBehaviour
                     break;
                 }
                 // Attack enemy target
-                int atkDmg = action.Target.TakeDamage(ally.GetAttackDamage());
+                float atkDmg = CalculateAndApplyDamage(ally, action.Target);
                 Log($"[+] {ally.Name} attacks {action.Target.Name} for {atkDmg} damage!");
                 break;
 
@@ -210,26 +221,54 @@ public class BattleManager : MonoBehaviour
 
     // ----- UTILITY METHODS -----
 
-    private List<Enemy> SpawnEnemies()
+    // Calculates damage from attacker to defender using the specified skill / normal attack
+    // Applies the calculated damage to the defender
+    // Returns the final damage dealt
+    public static float CalculateAndApplyDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
     {
-        int count = Random.Range(minEnemies, maxEnemies + 1);
-        var list  = new List<Enemy>();
+        float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense);
+        defender.TakeDamage(damage);
+        return damage;
+    }
 
-        string[] names   = { "Goblin", "Orc", "Troll", "Bandit" };
-        int[]    hpPool  = { 60,  80,  120,  70 };
-        int[]    atkPool = { 12,  16,  10,   14 };
-        int[]    defPool = { 10,  20,  35,   15 };
-        int[]    spdPool = { 50,  35,  25,   55 };
-        int[]    accPool = { 80,  70,  65,   85 };
+    // Calculates and returns the final (post-mitigation) damage of a normal attack/skill
+    // If skill is not null, applies the skill's power to the damage calculation
+    public static float CalculateDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
+    {
+        float rawDamage = skill == null
+            ? CalculatePreMitigationAttackDamage(attacker, isGuaranteedCrit)
+            : CalculatePreMitigationSkillDamage(attacker, skill, isGuaranteedCrit);
+        float finalDamage = CalculatePostMitigationDamage(rawDamage, defender, bypassDefense);
+        return finalDamage;
+    }
 
+    // Calculates raw damage for normal attacks
+    // RawDamage = (Attack * AttackModifier) * (isCrit ? CritDamage : 1)
+    public static float CalculatePreMitigationAttackDamage(BattleCharacter attacker, bool isGuaranteedCrit = false)
+    {
+        float dmg = attacker.Attack * attacker.AttackModifier;
+        if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
+            dmg *= attacker.CritDamage;
+        return dmg;
+    }
 
-        for (int i = 0; i < count; i++)
-        {
-            int idx = Random.Range(0, names.Length);
-            string enemyName = count > 1 ? $"{names[idx]} {i + 1}" : names[idx];
-            list.Add(new Enemy(enemyName, hpPool[idx], atkPool[idx], defPool[idx], spdPool[idx], accPool[idx], new RandomEnemyBehavior()));
-        }
-        return list;
+    // Calculates raw damage for skills
+    // RawDamage = (SkillPower + (Attack * AttackModifier)) * (isCrit ? CritDamage : 1)
+    public static float CalculatePreMitigationSkillDamage(BattleCharacter attacker, ISkill skill, bool isGuaranteedCrit = false)
+    {
+        float dmg = (int)skill.Power + (attacker.Attack * attacker.AttackModifier);
+        if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
+            dmg *= attacker.CritDamage;
+        return dmg;
+    }
+
+    // Calculates final damage after applying defense mitigation
+    // MitigatedDamage = RawDamage * (DefenseConstant / (DefenseConstant + Defense * DefenseModifier))
+    public static float CalculatePostMitigationDamage(float rawDamage, BattleCharacter defender, bool bypassDefense)
+    {
+        if (bypassDefense) return rawDamage;
+        float mitigatedDamage = rawDamage * (DefenseConstant / (DefenseConstant + defender.Defense * defender.DefenseModifier));
+        return mitigatedDamage;
     }
 
     private void Log(string msg) => OnLogMessage?.Invoke(msg);
@@ -260,16 +299,14 @@ public class BattleManager : MonoBehaviour
         return list;
     }
 
-    public Ally CurrentAlly => _currentAlly;
-    public bool WaitingForInput => _waitingForPlayerInput;
-
     // ----- TEMP -----
     [Header("TEMP")]
     public GameObject TestStartButton;
+    public EnemyParty EnemyPartyRef;
     public void OnClickTest()
     {
         TestStartButton.SetActive(false);
-        StartNewFight();
+        StartNewFight(EnemyPartyRef.Enemies);
     }
     // ----- TEMP -----
 }
