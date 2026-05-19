@@ -9,10 +9,10 @@ public class MinionDebufferBehavior : IEnemyBehavior
     {
         // prioritize ally DPS or Support
         List<Ally> validTargets = allies.FindAll(a => a.IsAlive);
-        var dps_or_support = validTargets.FindAll(a => a.Role == AllyRole.DPS || a.Role == AllyRole.Support);
+        var gc_or_bdps = validTargets.FindAll(a => a.Role == AllyRole.GlassCannon || a.Role == AllyRole.BurstDPS);
 
         Ally target = null;
-        if (dps_or_support.Count > 0) target = dps_or_support[Random.Range(0, dps_or_support.Count)];
+        if (gc_or_bdps.Count > 0) target = gc_or_bdps[Random.Range(0, gc_or_bdps.Count)];
         else if (validTargets.Count > 0) target = validTargets[Random.Range(0, validTargets.Count)];
         else return $"{Self.Name} has no targets to debuff!";
 

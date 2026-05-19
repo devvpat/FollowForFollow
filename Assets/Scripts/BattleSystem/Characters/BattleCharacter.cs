@@ -230,6 +230,12 @@ public class BattleCharacter
         Blur += amount;
     }
 
+    // Modifies max health (multiplicative) by the specified amount (e.g. amount = 1.2f -> 20% increase).
+    public void ModifyMultMaxHP(float amount)
+    {
+        MaxHP *= amount;
+    }
+
     // Set HP directly (clamps between 0 and MaxHP)
     public void SetHP(float hp)
     {

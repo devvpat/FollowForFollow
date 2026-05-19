@@ -95,10 +95,6 @@ public class BattleManager : MonoBehaviour
             var charactersTakingTurn = new Utils.PriorityQueue<BattleCharacter, float>(tickComparer);
             foreach (var a in Allies) if (a.Tick()) charactersTakingTurn.Enqueue(a, a.TickTimer);
             foreach (var e in Enemies) if (e.Tick()) charactersTakingTurn.Enqueue(e, e.TickTimer);
-        
-            // print all allies ticks
-            Debug.Log($"Num char to turn = {charactersTakingTurn.Count}");
-            Debug.Log($"[Ally Ticks] {string.Join(", ", Allies.Select(a => $"{a.Name}: {a.TickTimer}"))} ||| [Enemy Ticks] {string.Join(", ", Enemies.Select(e => $"{e.Name}: {e.TickTimer}"))}");
 
             // Let each character take their turn in order
             while (charactersTakingTurn.TryDequeue(out BattleCharacter currChar, out float tickValue)) {
@@ -277,7 +273,7 @@ public class BattleManager : MonoBehaviour
     // RawDamage = (SkillPower + (Attack * AttackModifier)) * (isCrit ? CritDamage : 1)
     public static float CalculatePreMitigationSkillDamage(BattleCharacter attacker, ISkill skill, bool isGuaranteedCrit = false)
     {
-        float dmg = skill.Power * Mathf.Pow(ISkill.SkillPowerScale, AllyParty.Instance.LevelScale) + (attacker.Attack * attacker.AttackModifier);
+        float dmg = skill.Power * Mathf.Pow(ISkill.SkillPowerScale, AllyParty.Instance.LevelScale) * (attacker is Ally ? (attacker as Ally).SkillPowerMod : 1f) + (attacker.Attack * attacker.AttackModifier);
         if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
             dmg *= attacker.CritDamage;
         return dmg;

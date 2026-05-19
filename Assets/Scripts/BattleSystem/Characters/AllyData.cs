@@ -15,5 +15,5 @@ public class AllyData : ScriptableObject
 
     public float MaxMana = 100f;
     public CharacterSkillSet charSkillSet = CharacterSkillSet.Bookwyrm;
-    public AllyRole Role = AllyRole.DPS;
+    public AllyRole Role = AllyRole.AllRounder;
 }
