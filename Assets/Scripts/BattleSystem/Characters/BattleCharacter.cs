@@ -17,6 +17,7 @@ public class BattleCharacter
     public float Accuracy { get; protected set; } = 0.75f; // % chance to hit
     public float CritChance { get; protected set; } = 0.1f; // % chance to deal critical hit
     public float CritDamage { get; protected set; } = 1.5f; // % damage multiplier for critical hits
+    public float Blur { get; protected set; } = 0.0f; // % chance to evade attacks
 
     public float TickTimer { get; private set; } // Accumulates over time based on Speed, upon reaching the threshold the character can act
     public List<BaseStatusEffect> StatusEffects { get; private set; } // List of current status effects on the character
@@ -95,8 +96,9 @@ public class BattleCharacter
     }
 
     // Adds a status effect to the character without calling OnApply or OnReapply
-    public void AddStatusEffectToList(BaseStatusEffect effect)
+    public void AddStatusEffectToList(BaseStatusEffect effect, bool callOnApply = true)
     {
+        if (callOnApply) effect.OnApply(this);
         StatusEffects.Add(effect);
     }
 
@@ -158,9 +160,19 @@ public class BattleCharacter
         if (IsShielded)
         {
             // If shielded, ignore the damage and reduce shield durability by 1
-            Shield shield = StatusEffects.Find(e => e is Shield) as Shield;
-            shield.ReduceDurability();
+            var s = (Shield)StatusEffects.Find(e => e is Shield);
+            s.ReduceDurability();
             return;
+        }
+        if (Blur > 0)
+        {
+            // If blur is greater than 0, calculate evasion chance
+            float evasionRoll = Random.Range(0, 100)/100f;
+            if (evasionRoll < Blur)
+            {
+                // Attack is evaded, no damage taken
+                return;
+            }
         }
         CurrentHP = Mathf.Max(0, CurrentHP - damage);
     }
@@ -194,6 +206,18 @@ public class BattleCharacter
     public void ModifyMultSpeed(float amount)
     {
         Speed *= amount;
+    }
+
+    // Modifies accuracy (multiplicative) by the specified amount (e.g. amount = 1.2f -> 20% increase)
+    public void ModifyMultAccuracy(float amount)
+    {
+        Accuracy *= amount;
+    }
+
+    // Modifies blur (additive) by the specified amount (e.g. amount = 0.1f -> 10% increase)
+    public void ModifyAddBlur(float amount)
+    {
+        Blur += amount;
     }
 
     // Set HP directly (clamps between 0 and MaxHP)

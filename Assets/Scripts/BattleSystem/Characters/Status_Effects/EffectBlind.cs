@@ -1,20 +1,20 @@
 using System;
 
-// Haste: Changes the characters speed stat by x% for x turns.
-public class Haste : BaseStatusEffect
+// Blinded: Reduces the hit chance of the attacker by X percent.
+public class Blind : BaseStatusEffect
 {
-    private const float speedModifier = 0.3f; // 30% speed increase
+    private const float blindModifier = 0.5f; // 50% accuracy reduction
 
-    public Haste(int duration) : base(
-        name: "Haste",
-        description: $"Increases speed by {speedModifier * 100}% for {duration} turns.",
+    public Blind(int duration) : base(
+        name: "Blind",
+        description: $"Reduces accuracy by {blindModifier * 100}% for {duration} turns.",
         totalDuration: duration,
-        effectType: StatusEffectType.Buff)
+        effectType: StatusEffectType.Debuff)
     {}
 
     public override void OnApply(BattleCharacter target)
     {
-        target.ModifyMultSpeed(1 + speedModifier);
+        target.ModifyMultAccuracy(1 - blindModifier);
     }
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)
@@ -29,6 +29,6 @@ public class Haste : BaseStatusEffect
 
     public override void OnExpire(BattleCharacter target)
     {
-        target.ModifyMultSpeed(1 / (1 + speedModifier)); // reverse the speed increase
+        target.ModifyMultAccuracy(1 / (1 - blindModifier)); // reverse the accuracy decrease
     }
 }

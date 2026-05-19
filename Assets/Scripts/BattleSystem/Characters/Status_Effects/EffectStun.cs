@@ -1,5 +1,6 @@
 using System;
 
+// Stun: Skips the character turn in the speed bucket and prevents them from taking any action.
 public class Stun : BaseStatusEffect
 {
     public Stun(int duration) : base(

@@ -1,5 +1,6 @@
 using System;
 
+// Shielded: Each shield stack absorbs one instance of damage, no matter how high.
 public class Shield : BaseStatusEffect
 {
     private int durability; // Number of attacks the shield can block before expiring
@@ -15,9 +16,11 @@ public class Shield : BaseStatusEffect
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)
     {
-        // If the same shield effect is reapplied, get the highest durability
+        // add durabilities
         if (newEffect is Shield newShield)
-            durability = Math.Max(durability, newShield.durability);
+        {
+            durability += newShield.durability;
+        }
     }
 
     public void ReduceDurability()

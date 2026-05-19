@@ -1,17 +1,16 @@
 using System;
 
+// Slow: Changes the characters speed stat by x% for x turns.
 public class Slow : BaseStatusEffect
 {
-    private float speedModifier;
+    private const float speedModifier = 0.3f; // 30% speed decrease
 
-    public Slow(int duration, float speedModifier) : base(
+    public Slow(int duration) : base(
         name: "Slow",
         description: $"Reduces speed by {speedModifier * 100}% for {duration} turns.",
         totalDuration: duration,
         effectType: StatusEffectType.Debuff)
-    {
-        this.speedModifier = speedModifier;
-    }
+    {}
 
     public override void OnApply(BattleCharacter target)
     {

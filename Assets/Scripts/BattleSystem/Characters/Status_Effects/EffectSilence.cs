@@ -1,5 +1,6 @@
 using System;
 
+// Silence: Prevents the affected character from using mana based skills, forcing them to use basic attacks.
 public class Silence : BaseStatusEffect
 {
     public Silence(int duration) : base(
@@ -12,8 +13,7 @@ public class Silence : BaseStatusEffect
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)
     {
-        // If the same silence effect is reapplied, refresh the duration to the new effect's duration
-        RemainingDuration = Math.Max(RemainingDuration, newEffect.RemainingDuration);
+        RemainingDuration = Math.Max(RemainingDuration, newEffect.RemainingDuration); // refresh duration to the max of the two
     }
 
     public override void OnTurnStart(BattleCharacter target)
