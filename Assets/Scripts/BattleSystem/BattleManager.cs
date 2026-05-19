@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 // Singleton class that handles all battle logic
@@ -21,7 +20,7 @@ public class BattleManager : MonoBehaviour
     // ----- BATTLE NUMBERS -----
 
     public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
-    public const float DefenseConstant = 100f;
+    public const float DefenseConstant = 5000f;
 
     // ----- BATTLE STATE -----
 
@@ -184,6 +183,7 @@ public class BattleManager : MonoBehaviour
             case AllyActionType.Attack:
                 // Check target validity and perform accuracy check
                 if (action.Target == null) { Log("[*] No target!"); return; }
+                ally.OnNormalAttack();
                 if (accuracyRoll >= ally.Accuracy)
                 {
                     Log($"[*] {ally.Name} attacks {action.Target.Name} but misses!");
@@ -200,6 +200,7 @@ public class BattleManager : MonoBehaviour
                 ISkill skill = action.SkillUsed;
                 if (!ally.CanAffordSkill(skill)) { Log($"[*] {ally.Name} does not have enough mana!"); return; }
                 // Spend mana and perform accuracy check if applicable
+                ally.OnSkilluse();
                 ally.SpendMana(skill.ManaCost);
                 bool skillHits = skill.BypassAccuracy || accuracyRoll < ally.Accuracy;
                 if (!skillHits)
@@ -213,8 +214,9 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case AllyActionType.Defend:
+                ally.OnDefend();
                 ally.StartDefend();
-                Log($"[+] {ally.Name} defends — damage reduced by {ally.Defense}% this round.");
+                Log($"[+] {ally.Name} defends");
                 break;
         }
     }
@@ -275,7 +277,7 @@ public class BattleManager : MonoBehaviour
     // RawDamage = (SkillPower + (Attack * AttackModifier)) * (isCrit ? CritDamage : 1)
     public static float CalculatePreMitigationSkillDamage(BattleCharacter attacker, ISkill skill, bool isGuaranteedCrit = false)
     {
-        float dmg = (int)skill.Power + (attacker.Attack * attacker.AttackModifier);
+        float dmg = skill.Power * Mathf.Pow(ISkill.SkillPowerScale, AllyParty.Instance.LevelScale) + (attacker.Attack * attacker.AttackModifier);
         if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
             dmg *= attacker.CritDamage;
         return dmg;

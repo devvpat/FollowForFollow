@@ -1,12 +1,14 @@
 using UnityEngine;
 
+public enum AllyRole { DPS, Support, Tank, Toxic }
+
 // Represents an ally character
 public class Ally : BattleCharacter
 {
     // ----- STATS -----
     
     public AllyRole Role { get; private set; }
-    public IRole RoleDefintion { get; private set;}
+    public CharacterSkillSet charSkillSet { get; private set;}
     public ISkill[] Skills { get; private set; }
 
     public float MaxMana { get; private set; }
@@ -14,19 +16,19 @@ public class Ally : BattleCharacter
 
     private float levelScaleMod = 1.15f; // Each level scale increases stats by 15%
 
-    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role, int level)
+    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role, int level, CharacterSkillSet skillSet)
         : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage, level)
     {
         MaxMana = maxMana;
         CurrentMana = maxMana;
         Role = role;
-        RoleDefintion = RoleFactory.GetRole(role);
-        Skills = RoleDefintion.GetSkills();
+        charSkillSet = skillSet;
+        Skills = CharSkillSetFactory.GetSkills(skillSet);
     }
 
     public static Ally CreateFromData(AllyData data)
     {
-        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role, data.Level);
+        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role, data.Level, data.charSkillSet);
     }
 
     // ----- ACTIONS -----
@@ -56,16 +58,15 @@ public class Ally : BattleCharacter
     public void UpdateRole(AllyRole newRole)
     {
         Role = newRole;
-        RoleDefintion = RoleFactory.GetRole(newRole);
-        Skills = RoleDefintion.GetSkills();
     }
 
     public void IncreaseLevel()
     {
+        Level += 1;
         MaxHP *= levelScaleMod;
         Attack *= levelScaleMod;
         Defense *= levelScaleMod;
-        // Speed *= levelScaleMod;
+        Speed *= levelScaleMod;
         // Accuracy *= levelScaleMod;
         // CritChance *= levelScaleMod;
         // CritDamage *= levelScaleMod;

@@ -9,13 +9,13 @@ public class BattleCharacter
     public string Name { get; protected set; }
     public float MaxHP { get; protected set; } = 100f;
     public float CurrentHP { get; protected set; }
-    public float Attack { get; protected set; } = 15f;
+    public float Attack { get; protected set; } = 100f;
     public float AttackModifier { get; protected set; } = 1f; // Multiplier for attack damage
-    public float Defense { get; protected set; } = 0.25f; // % damage reduction
+    public float Defense { get; protected set; } = 100f;
     public float DefenseModifier { get; protected set; } = 1f; // Multiplier for defense effectiveness
-    public float Speed { get; protected set; } = 5000f; // Higher speed means earlier turn order
+    public float Speed { get; protected set; } = 100; // Higher speed means earlier turn order
     public float Accuracy { get; protected set; } = 0.75f; // % chance to hit
-    public float CritChance { get; protected set; } = 0.1f; // % chance to deal critical hit
+    public float CritChance { get; protected set; } = 0.25f; // % chance to deal critical hit
     public float CritDamage { get; protected set; } = 1.5f; // % damage multiplier for critical hits
     public int Level { get; protected set; } = 95; // Character level, used for scaling
     public float Blur { get; protected set; } = 0.0f; // % chance to evade attacks
@@ -43,7 +43,7 @@ public class BattleCharacter
         DefenseModifier = 1f;
         Speed = speed;
         Accuracy = accuracy; // 0.75 = 75% chance to hit
-        CritChance = critChance; // 0.1 = 10%
+        CritChance = critChance; // 0.25 = 25%
         CritDamage = critDamage; // 1.5 = 150% damage
         Level = level;
         
@@ -145,6 +145,10 @@ public class BattleCharacter
     }
     
     // ----- MODIFIERS -----
+
+    public virtual void OnNormalAttack() {}
+    public virtual void OnSkilluse() {}
+    public virtual void OnDefend() {}
 
     public void StartDefend()
     {
