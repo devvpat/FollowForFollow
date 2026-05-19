@@ -61,10 +61,22 @@ public class AllyParty : MonoBehaviour
     public bool IsAnyAllyAlive() => GetLivingAllies().Count > 0;
 
     // Resets stats of all allies to their initial values
-    public void ResetAllAlliesStats()
+    public void ResetAllAlliesHealthAndMana()
     {
         foreach (var a in Allies)
             a.ResetFully();
+    }
+
+    public void HealAllAlliesToFull()
+    {
+        foreach (var a in Allies)
+            a.RestoreHP(a.MaxHP);
+    }
+
+    public void RestoreAllAlliesManaToFull()
+    {
+        foreach (var a in Allies)
+            a.RestoreMana(a.MaxMana);
     }
 
     public void RemoveAllStatusEffectsFromAllAllies()

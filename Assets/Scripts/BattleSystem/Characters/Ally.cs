@@ -126,7 +126,7 @@ public class Ally : BattleCharacter
     // Full reset to max stats
     public void ResetFully()
     {
-        SetHP(MaxHP);
+        CurrentHP = MaxHP;
         CurrentMana = MaxMana;
     }
 
