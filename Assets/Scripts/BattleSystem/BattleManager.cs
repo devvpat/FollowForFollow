@@ -326,17 +326,6 @@ public class BattleManager : MonoBehaviour
         foreach (var e in Enemies) if (e.IsAlive) list.Add(e);
         return list;
     }
-
-    // ----- TEMP -----
-    [Header("TEMP")]
-    public GameObject TestStartButton;
-    public EnemyParty EnemyPartyRef;
-    public void OnClickTest()
-    {
-        TestStartButton.SetActive(false);
-        StartNewFight(EnemyPartyRef.Enemies);
-    }
-    // ----- TEMP -----
 }
 
 // ----- ALLY ACTION STRUCTURE -----

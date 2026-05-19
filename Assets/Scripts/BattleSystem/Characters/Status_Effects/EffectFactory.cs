@@ -1,5 +1,10 @@
 public static class EffectFactory
 {
+    public static AttackModifier MakeAttackModifier(int duration, float multiplier)
+    {
+        return new AttackModifier(duration, multiplier);
+    }
+
     public static Blind MakeBlind(int duration)
     {
         return new Blind(duration);
@@ -8,6 +13,16 @@ public static class EffectFactory
     public static Blur MakeBlur(int duration)
     {
         return new Blur(duration);
+    }
+
+    public static CritRateModifier MakeCritRateModifier(int duration, float amount)
+    {
+        return new CritRateModifier(duration, amount);
+    }
+
+    public static DefenseModifier MakeDefenseModifier(int duration, float multiplier)
+    {
+        return new DefenseModifier(duration, multiplier);
     }
 
     public static Haste MakeHaste(int duration)
