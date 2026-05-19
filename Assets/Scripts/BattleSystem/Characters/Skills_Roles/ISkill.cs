@@ -15,5 +15,5 @@ public interface ISkill
     // Executes the skill - has logic for applying the skill's effects
     // Accuracy check is handled by BattleManager before this is called
     // Returns a SkillResult
-    SkillResult Execute(Ally ally, BattleCharacter target);
+    SkillResult Execute(BattleCharacter caster, BattleCharacter target);
 }

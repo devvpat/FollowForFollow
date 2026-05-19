@@ -7,10 +7,10 @@ public static class BookwyrmSkills
         public int ManaCost => 100;
         public float Power => 1;
         
-        public SkillResult Execute(Ally ally, BattleCharacter target)
+        public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             target.TakeDamage(1);
-            return SkillResult.Hit($"[+] {ally.Name} poked {target.Name} for 1 damage", 1);
+            return SkillResult.Hit($"[+] {caster.Name} poked {target.Name} for 1 damage", 1);
         }
     }
 }

@@ -1137,6 +1137,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyParty
       objectReference: {fileID: 0}
+    - target: {fileID: 8666705751206427736, guid: b4f7e13d9baca634f8d18c56b084ed33, type: 3}
+      propertyPath: EnemyDataList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666705751206427736, guid: b4f7e13d9baca634f8d18c56b084ed33, type: 3}
+      propertyPath: 'EnemyDataList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 284299c1ca1e51c46843a4f9926f308b, type: 2}
+    - target: {fileID: 8666705751206427736, guid: b4f7e13d9baca634f8d18c56b084ed33, type: 3}
+      propertyPath: 'EnemyDataList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f0e79ed21c930824aa82c51b5214c580, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

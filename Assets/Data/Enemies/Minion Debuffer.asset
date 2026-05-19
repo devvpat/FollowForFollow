@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a9909e73908f894eaf09712ac044467, type: 3}
-  m_Name: Minion
+  m_Name: Minion Debuffer
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  Name: Minion
+  Name: Minion (Debuffer)
   MaxHP: 12000
   Attack: 1
   Defense: 0
@@ -21,4 +21,5 @@ MonoBehaviour:
   CritChance: 0.25
   CritDamage: 1.5
   Level: 95
-  Behavior: 0
+  Type: 0
+  Behavior: 1

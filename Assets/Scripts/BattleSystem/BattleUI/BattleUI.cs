@@ -115,7 +115,7 @@ public class BattleUI : MonoBehaviour
         // Update action area
         actionPanel.SetActive(true);
         skillPanel.SetActive(false);
-        skillButton.interactable = !ally.IsSilenced; // disable skill button if silenced
+        skillButton.interactable = !ally.IsSilenced && !ally.IsForceSilenced; // disable skill button if silenced
 
         // Clear enemy targeting highlights
         foreach (var card in _enemyCharsUI)
@@ -194,7 +194,7 @@ public class BattleUI : MonoBehaviour
         {
             ISkill skill = ally.Skills[i];
             skillButtonsTexts[i].text = $"{skill.Name}\n({skill.ManaCost} MP)";
-            skillButtons[i].interactable = ally.CanAffordSkill(skill);
+            skillButtons[i].interactable = ally.CanAffordSkill(skill) && !ally.IsSilenced && !ally.IsForceSilenced;
         }
     }
 

@@ -4,6 +4,8 @@ using UnityEngine;
 // Simple enemy behavior that randomly chooses to attack or defend each turn.
 public class RandomEnemyBehavior : IEnemyBehavior
 {
+    public Enemy Self { get; set; }
+    
     // Attack 60%, Defend 40%
     private const float AttackWeight  = 0.60f;
 

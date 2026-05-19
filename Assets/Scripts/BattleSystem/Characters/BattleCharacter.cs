@@ -32,6 +32,8 @@ public class BattleCharacter
     public bool IsPoisoned => StatusEffects.Exists(e => e is Poison);
     public bool HasPoisonedWeapon => StatusEffects.Exists(e => e is PoisonWeapon);
 
+    public bool IsForceSilenced { get; set; } // used to force silence regardless of status effects
+
     public BattleCharacter(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, int level)
     {
         Name = name;
