@@ -6,10 +6,23 @@ using UnityEngine.UI;
 public class DeployButton : MonoBehaviour
 {
     [SerializeField] private string targetSceneName = "Floor1";
+    [SerializeField] private bool startDisabled = true;
+
+    Button button;
 
     void Awake()
     {
-        GetComponent<Button>().onClick.AddListener(Deploy);
+        button = GetComponent<Button>();
+        button.onClick.AddListener(Deploy);
+        if (startDisabled)
+            button.interactable = false;
+    }
+
+    public void EnableDeploy()
+    {
+        if (button == null)
+            button = GetComponent<Button>();
+        button.interactable = true;
     }
 
     public void Deploy()
