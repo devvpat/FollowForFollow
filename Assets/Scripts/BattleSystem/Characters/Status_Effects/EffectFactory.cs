@@ -15,6 +15,16 @@ public static class EffectFactory
         return new Haste(duration);
     }
 
+    public static Poison MakePoison(int stacks)
+    {
+        return new Poison(stacks);
+    }
+
+    public static PoisonWeapon MakePoisonWeapon(int duration, int stacksToApply)
+    {
+        return new PoisonWeapon(duration, stacksToApply);
+    }
+
     public static Shield MakeShield(int durability)
     {
         return new Shield(durability);

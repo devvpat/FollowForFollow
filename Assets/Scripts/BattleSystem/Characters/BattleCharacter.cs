@@ -17,6 +17,7 @@ public class BattleCharacter
     public float Accuracy { get; protected set; } = 0.75f; // % chance to hit
     public float CritChance { get; protected set; } = 0.1f; // % chance to deal critical hit
     public float CritDamage { get; protected set; } = 1.5f; // % damage multiplier for critical hits
+    public int Level { get; protected set; } = 95; // Character level, used for scaling
     public float Blur { get; protected set; } = 0.0f; // % chance to evade attacks
 
     public float TickTimer { get; private set; } // Accumulates over time based on Speed, upon reaching the threshold the character can act
@@ -28,8 +29,10 @@ public class BattleCharacter
     public bool IsStunned => StatusEffects.Exists(e => e is Stun);
     public bool IsSilenced => StatusEffects.Exists(e => e is Silence);
     public bool IsShielded => StatusEffects.Exists(e => e is Shield);
+    public bool IsPoisoned => StatusEffects.Exists(e => e is Poison);
+    public bool HasPoisonedWeapon => StatusEffects.Exists(e => e is PoisonWeapon);
 
-    public BattleCharacter(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage)
+    public BattleCharacter(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, int level)
     {
         Name = name;
         MaxHP = maxHP;
@@ -42,7 +45,8 @@ public class BattleCharacter
         Accuracy = accuracy; // 0.75 = 75% chance to hit
         CritChance = critChance; // 0.1 = 10%
         CritDamage = critDamage; // 1.5 = 150% damage
-
+        Level = level;
+        
         TickTimer = 0;
         StatusEffects = new List<BaseStatusEffect>();
     }

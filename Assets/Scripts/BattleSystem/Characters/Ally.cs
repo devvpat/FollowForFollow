@@ -12,8 +12,10 @@ public class Ally : BattleCharacter
     public float MaxMana { get; private set; }
     public float CurrentMana { get; private set; }
 
-    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role)
-        : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage)
+    private float levelScaleMod = 1.15f; // Each level scale increases stats by 15%
+
+    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role, int level)
+        : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage, level)
     {
         MaxMana = maxMana;
         CurrentMana = maxMana;
@@ -24,7 +26,7 @@ public class Ally : BattleCharacter
 
     public static Ally CreateFromData(AllyData data)
     {
-        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role);
+        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role, data.Level);
     }
 
     // ----- ACTIONS -----
@@ -57,4 +59,17 @@ public class Ally : BattleCharacter
         RoleDefintion = RoleFactory.GetRole(newRole);
         Skills = RoleDefintion.GetSkills();
     }
+
+    public void IncreaseLevel()
+    {
+        MaxHP *= levelScaleMod;
+        Attack *= levelScaleMod;
+        Defense *= levelScaleMod;
+        // Speed *= levelScaleMod;
+        // Accuracy *= levelScaleMod;
+        // CritChance *= levelScaleMod;
+        // CritDamage *= levelScaleMod;
+        MaxMana *= levelScaleMod;
+    }
+
 }

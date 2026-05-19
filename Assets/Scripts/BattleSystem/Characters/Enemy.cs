@@ -8,8 +8,8 @@ public class Enemy : BattleCharacter
 
     private IEnemyBehavior behavior;
 
-    public Enemy(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, EnemyBehaviorType behaviorType)
-        : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage)
+    public Enemy(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, EnemyBehaviorType behaviorType, int level)
+        : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage, level)
     {
         behavior = EnemyBehaviorFactory.GetBehavior(behaviorType);
     }
@@ -21,7 +21,7 @@ public class Enemy : BattleCharacter
 
     public static Enemy CreateFromData(EnemyData data)
     {
-        return new Enemy(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.Behavior);
+        return new Enemy(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.Behavior, data.Level);
     }
 
     // ----- ACTIONS -----

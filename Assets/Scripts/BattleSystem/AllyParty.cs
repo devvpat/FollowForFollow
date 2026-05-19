@@ -14,6 +14,8 @@ public class AllyParty : MonoBehaviour
     // Should be initialized at the start of the game. Persists across scene, keeping track of current ally stats.
     public List<Ally> Allies { get; private set; }
 
+    public int LevelScale { get; private set; } = 0;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -81,6 +83,15 @@ public class AllyParty : MonoBehaviour
         } else
         {
             ally.UpdateRole(newRole);
+        }
+    }
+
+    public void IncreaseLevelScale()
+    {
+        LevelScale += 1;
+        foreach (var ally in Allies)
+        {
+            ally.IncreaseLevel();
         }
     }
 }

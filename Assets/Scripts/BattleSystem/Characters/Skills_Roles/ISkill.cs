@@ -7,6 +7,7 @@ public interface ISkill
     bool BypassAccuracy => false;
     bool NeedsTarget => true;
     SkillPower Power { get; }
+    const float SkillPowerScale = 1.15f; // total power scale = skillPowerScale ^ AllyParty.LevelScale
 
     // Executes the skill - has logic for applying the skill's effects
     // Accuracy check is handled by BattleManager before this is called

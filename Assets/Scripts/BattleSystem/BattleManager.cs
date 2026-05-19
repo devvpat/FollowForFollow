@@ -238,6 +238,11 @@ public class BattleManager : MonoBehaviour
     {
         float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense, isPercentHealthDamage, maxHealthPercentDamage);
         defender.TakeDamage(damage);
+        if (attacker.HasPoisonedWeapon)
+        {
+            var weapon = attacker.StatusEffects.First(e => e is PoisonWeapon) as PoisonWeapon;
+            defender.ApplyStatusEffect(EffectFactory.MakePoison(weapon.StacksToApply));
+        }
         return damage;
     }
 
