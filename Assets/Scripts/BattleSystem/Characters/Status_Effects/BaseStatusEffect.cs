@@ -8,21 +8,18 @@ public abstract class BaseStatusEffect
     public int RemainingDuration { get; protected set; } // Remaining duration in turns
     public bool HasExpired => RemainingDuration <= 0;
     public StatusEffectType EffectType { get; protected set; } // Type of the status effect (buff, debuff, etc.)
-    public StatusEffectReapplyType ReapplyType { get; protected set; } // Determines how the status effect behaves when reapplied
 
-    public BaseStatusEffect(string name, string description, int totalDuration, StatusEffectType effectType, StatusEffectReapplyType reapplyType)
+    public BaseStatusEffect(string name, string description, int totalDuration, StatusEffectType effectType)
     {
         Name = name;
         Description = description;
         TotalDuration = totalDuration;
         RemainingDuration = totalDuration;
         EffectType = effectType;
-        ReapplyType = reapplyType;
     }
 
     public virtual void OnApply(BattleCharacter target) {} // Called when the status effect is applied for the first time
-    public virtual void OnReset(BattleCharacter target) {} // Called when the status effect is reapplied (if ReapplyType is Reset)
-    public virtual void OnStack(BattleCharacter target) {} // Called when the status effect is reapplied (if ReapplyType is Stack)
+    public virtual void OnReapply(BattleCharacter target, BaseStatusEffect newEffect) {} // Called when the status effect is reapplied (if ReapplyType is ApplyAgain, this will be called for each application)
     public virtual void OnTurnStart(BattleCharacter target) {} // Called at the start of the target's turn
     public virtual void OnTurnEnd(BattleCharacter target) {} // Called at the end of the target's turn
     public virtual void OnExpire(BattleCharacter target) {} // Called when the status effect expires
@@ -33,12 +30,4 @@ public enum StatusEffectType
     Buff,
     Debuff,
     Other,
-}
-
-public enum StatusEffectReapplyType
-{
-    Reset,
-    Stack,
-    IgnoreNew,
-    ApplyAgain,
 }

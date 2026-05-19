@@ -24,9 +24,9 @@ public class BattleCharacter
     public bool IsDefending { get; private set; }
     public bool IsAlive => CurrentHP > 0;
     
-    public bool IsStunned => StatusEffects.Exists(e => e.Name == "Stun");
-    public bool IsSilenced => StatusEffects.Exists(e => e.Name == "Silence");
-    public bool IsShielded => StatusEffects.Exists(e => e.Name == "Shield");
+    public bool IsStunned => StatusEffects.Exists(e => e is Stun);
+    public bool IsSilenced => StatusEffects.Exists(e => e is Silence);
+    public bool IsShielded => StatusEffects.Exists(e => e is Shield);
 
     public BattleCharacter(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage)
     {
@@ -77,29 +77,14 @@ public class BattleCharacter
 
     // ----- STATUS EFFECTS -----
 
-    // Adds a status effect to the character. If the character already has the same status effect, handles it based on the effect's ReapplyType
-    public void AddStatusEffect(BaseStatusEffect effect)
+    // Applies a status effect to the character. If the character already has the same status effect, handles it based on the effect's ReapplyType
+    public void ApplyStatusEffect(BaseStatusEffect effect)
     {
-        var existingEffect = StatusEffects.Find(e => e.Name == effect.Name);
+        var existingEffect = StatusEffects.Find(e => e.GetType() == effect.GetType());
         // status effect already exists
         if (existingEffect != null)
         {
-            switch (effect.ReapplyType)
-            {
-                case StatusEffectReapplyType.Reset:
-                    existingEffect.OnReset(this); // reset the existing effect
-                    break;
-                case StatusEffectReapplyType.Stack:
-                    existingEffect.OnStack(this); // stack new effect on existing effect
-                    break;
-                case StatusEffectReapplyType.IgnoreNew:
-                    // do nothing
-                    break;
-                case StatusEffectReapplyType.ApplyAgain:
-                    effect.OnApply(this);
-                    StatusEffects.Add(effect); // apply new effect again (allows duplicates)
-                    break;
-            }
+            existingEffect.OnReapply(this, effect);
         }
         // status effect does not exist
         else
@@ -107,6 +92,12 @@ public class BattleCharacter
             effect.OnApply(this);
             StatusEffects.Add(effect);
         }
+    }
+
+    // Adds a status effect to the character without calling OnApply or OnReapply
+    public void AddStatusEffectToList(BaseStatusEffect effect)
+    {
+        StatusEffects.Add(effect);
     }
 
     // Gets all expired status effects, calls their OnExpire method, and removes them from the character's status effect list
@@ -164,6 +155,13 @@ public class BattleCharacter
     // Reduces HP by specified damage amount (HP clamped to 0)
     public void TakeDamage(float damage)
     {
+        if (IsShielded)
+        {
+            // If shielded, ignore the damage and reduce shield durability by 1
+            Shield shield = StatusEffects.Find(e => e is Shield) as Shield;
+            shield.ReduceDurability();
+            return;
+        }
         CurrentHP = Mathf.Max(0, CurrentHP - damage);
     }
 

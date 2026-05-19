@@ -115,6 +115,7 @@ public class BattleUI : MonoBehaviour
         // Update action area
         actionPanel.SetActive(true);
         skillPanel.SetActive(false);
+        skillButton.interactable = !ally.IsSilenced; // disable skill button if silenced
 
         // Clear enemy targeting highlights
         foreach (var card in _enemyCharsUI)

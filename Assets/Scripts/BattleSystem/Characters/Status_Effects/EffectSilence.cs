@@ -1,10 +1,10 @@
 using System;
 
-public class Stun : BaseStatusEffect
+public class Silence : BaseStatusEffect
 {
-    public Stun(int duration) : base(
-        name: "Stun",
-        description: $"Prevents all actions for {duration} turns.",
+    public Silence(int duration) : base(
+        name: "Silence",
+        description: $"Prevents skill usage for {duration} turns.",
         totalDuration: duration,
         effectType: StatusEffectType.Debuff)
     {
@@ -12,6 +12,7 @@ public class Stun : BaseStatusEffect
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)
     {
+        // If the same silence effect is reapplied, refresh the duration to the new effect's duration
         RemainingDuration = Math.Max(RemainingDuration, newEffect.RemainingDuration);
     }
 
