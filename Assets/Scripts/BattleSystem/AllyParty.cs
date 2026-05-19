@@ -65,6 +65,12 @@ public class AllyParty : MonoBehaviour
             a.ResetFully();
     }
 
+    public void RemoveAllStatusEffectsFromAllAllies()
+    {
+        foreach (var a in Allies)
+            a.RemoveAllStatusEffects();
+    }
+
     public void UpdateAllyRole(string allyName, AllyRole newRole)
     {
         var ally = Allies.Find(a => a.Name == allyName);

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 // Singleton class that handles all battle logic
@@ -90,22 +92,17 @@ public class BattleManager : MonoBehaviour
         while (_battleActive)
         {
             // Pass a tick for all characters and collect all characters that are ready to take an action
-            List<BattleCharacter> charactersTakingTurn = new List<BattleCharacter>();
-            foreach (var a in Allies) if (a.Tick()) charactersTakingTurn.Add(a);
-            foreach (var e in Enemies) if (e.Tick()) charactersTakingTurn.Add(e);
-
-            // Sort by TickTimer value so highest goes first
-            charactersTakingTurn.Sort((char1, char2) => char2.TickTimer.CompareTo(char1.TickTimer));
-            
-            // debug: list all characters taking a turn this round
-            if (charactersTakingTurn.Count > 0)
-            {
-                string charNames = string.Join(", ", charactersTakingTurn.ConvertAll(c => c.Name));
-                Debug.Log($"[*] Taking turns this round: {charNames}");
-            }
+            var tickComparer = Comparer<float>.Create((x, y) => y.CompareTo(x)); // comparer to sort floats in descending order
+            var charactersTakingTurn = new Utils.PriorityQueue<BattleCharacter, float>(tickComparer);
+            foreach (var a in Allies) if (a.Tick()) charactersTakingTurn.Enqueue(a, a.TickTimer);
+            foreach (var e in Enemies) if (e.Tick()) charactersTakingTurn.Enqueue(e, e.TickTimer);
+        
+            // print all allies ticks
+            Debug.Log($"Num char to turn = {charactersTakingTurn.Count}");
+            Debug.Log($"[Ally Ticks] {string.Join(", ", Allies.Select(a => $"{a.Name}: {a.TickTimer}"))} ||| [Enemy Ticks] {string.Join(", ", Enemies.Select(e => $"{e.Name}: {e.TickTimer}"))}");
 
             // Let each character take their turn in order
-            foreach (var currChar in charactersTakingTurn) {
+            while (charactersTakingTurn.TryDequeue(out BattleCharacter currChar, out float tickValue)) {
                 // Check battle state
                 if (!currChar.IsAlive) continue; // skip if character is dead
                 if (!IsAnyEnemyAlive() || !IsAnyAllyAlive()) break; // end battle if no one is alive
@@ -113,8 +110,12 @@ public class BattleManager : MonoBehaviour
                 // End current character's defend state
                 currChar.EndDefend();
 
+                // Process all status effects for start of turn
+                currChar.ProcessStatusEffectsOnTurnStart();
+                currChar.FindAndRemoveExpiredStatusEffects(); // check for expired effects after processing turn start effects in case any effects expire at the start of the turn
+
                 // Process ally character turn
-                if (currChar is Ally ally)
+                if (currChar is Ally ally && !ally.IsStunned)
                 {
                     // Log turn start and set waiting for player input
                     _currentAlly = ally;
@@ -132,7 +133,7 @@ public class BattleManager : MonoBehaviour
                         ExecuteAllyAction(ally, _pendingAction);
                 }
                 // Process enemy character turn
-                else if (currChar is Enemy enemy)
+                else if (currChar is Enemy enemy && !enemy.IsStunned)
                 {
                     // Log turn start, execute enemy action, and log result
                     OnEnemyTurnStart?.Invoke(enemy);
@@ -142,6 +143,10 @@ public class BattleManager : MonoBehaviour
 
                     yield return new WaitForSeconds(1f); // small delay after enemy action for log readability
                 }
+
+                // Process all status effects for end of turn (after action but before checking for expired effects)
+                currChar.ProcessStatusEffectsOnTurnEnd();
+                currChar.FindAndRemoveExpiredStatusEffects(); // check for expired effects after processing turn end effects
 
                 // Consume current character's ticks and update UI
                 currChar.ConsumeTickTurn();
@@ -158,6 +163,10 @@ public class BattleManager : MonoBehaviour
                     EndBattle(false);
                     yield break;
                 }
+
+                // check to requeue character if they have excess tick time (e.g. from haste)
+                if (currChar.TickTimer >= BattleTickThreshold)
+                    charactersTakingTurn.Enqueue(currChar, currChar.TickTimer);
             }
 
             // Wait until next frame to continue battle loop
@@ -216,6 +225,7 @@ public class BattleManager : MonoBehaviour
         _battleActive = false;
         string result = playerWon ? "Victory!" : "Defeat!";
         Log($"[*] {result}");
+        AllyParty.Instance.RemoveAllStatusEffectsFromAllAllies();
         OnBattleEnd?.Invoke(playerWon);
     }
 
