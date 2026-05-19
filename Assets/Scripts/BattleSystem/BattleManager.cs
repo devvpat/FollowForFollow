@@ -224,20 +224,24 @@ public class BattleManager : MonoBehaviour
     // Calculates damage from attacker to defender using the specified skill / normal attack
     // Applies the calculated damage to the defender
     // Returns the final damage dealt
-    public static float CalculateAndApplyDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
+    public static float CalculateAndApplyDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false, bool isPercentHealthDamage = false, float maxHealthPercentDamage = 0f)
     {
-        float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense);
+        float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense, isPercentHealthDamage, maxHealthPercentDamage);
         defender.TakeDamage(damage);
         return damage;
     }
 
     // Calculates and returns the final (post-mitigation) damage of a normal attack/skill
     // If skill is not null, applies the skill's power to the damage calculation
-    public static float CalculateDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
+    public static float CalculateDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false, bool isPercentHealthDamage = false, float maxHealthPercentDamage = 0f)
     {
-        float rawDamage = skill == null
-            ? CalculatePreMitigationAttackDamage(attacker, isGuaranteedCrit)
-            : CalculatePreMitigationSkillDamage(attacker, skill, isGuaranteedCrit);
+        float rawDamage;
+        if (isPercentHealthDamage)
+            rawDamage = CalculatePreMitigationPercentHealthDamage(defender, maxHealthPercentDamage);
+        else
+            rawDamage = skill == null
+                ? CalculatePreMitigationAttackDamage(attacker, isGuaranteedCrit)
+                : CalculatePreMitigationSkillDamage(attacker, skill, isGuaranteedCrit);
         float finalDamage = CalculatePostMitigationDamage(rawDamage, defender, bypassDefense);
         return finalDamage;
     }
@@ -260,6 +264,13 @@ public class BattleManager : MonoBehaviour
         if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
             dmg *= attacker.CritDamage;
         return dmg;
+    }
+
+    // Calculates raw damage for percent max health attacks
+    // RawDamage = TargetMaxHealth * PercentHealthDamage
+    public static float CalculatePreMitigationPercentHealthDamage(BattleCharacter defender, float percentHealthDamage)
+    {
+        return defender.MaxHP * percentHealthDamage;
     }
 
     // Calculates final damage after applying defense mitigation
