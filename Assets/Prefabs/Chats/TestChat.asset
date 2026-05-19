@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 041223d887356294a825e558bdca7840, type: 3}
+  m_Name: TestChat
+  m_EditorClassIdentifier: Assembly-CSharp::ChatScript
+  messages:
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: g eveing
+    delayBeforeMs: 600
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 063a05ddc5e696b4c9fc74d6ffee4663, type: 2}
+    text: good evening
+    delayBeforeMs: 600
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 942d308b9135ce84ea52cf067182a246, type: 2}
+    text: Hello!!
+    delayBeforeMs: 500
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 942d308b9135ce84ea52cf067182a246, type: 2}
+    text: How is everyone doin?
+    delayBeforeMs: 400
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 917cec5e14bb0194ea10a5b2396f6a23, type: 2}
+    text: Evening everyone, having a splendid night, especially with what we have lined up.
+    delayBeforeMs: 1200
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: ye
+    delayBeforeMs: 500
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: im super excited
+    delayBeforeMs: 600
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 063a05ddc5e696b4c9fc74d6ffee4663, type: 2}
+    text: whats the info for the new dungeon?
+    delayBeforeMs: 900
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 917cec5e14bb0194ea10a5b2396f6a23, type: 2}
+    text: "That's the fascinating part, there are no release notes."
+    delayBeforeMs: 1100
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 917cec5e14bb0194ea10a5b2396f6a23, type: 2}
+    text: It was just opened up on what I only surmise to be a whim by the devs.
+    delayBeforeMs: 700
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 063a05ddc5e696b4c9fc74d6ffee4663, type: 2}
+    text: that cant be. its always some type of stunt for player engagement
+    delayBeforeMs: 900
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 063a05ddc5e696b4c9fc74d6ffee4663, type: 2}
+    text: drum up theories and attention for next years plotline
+    delayBeforeMs: 600
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 942d308b9135ce84ea52cf067182a246, type: 2}
+    text: Like an ARG!
+    delayBeforeMs: 500
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 942d308b9135ce84ea52cf067182a246, type: 2}
+    text: Or a really weird bit!
+    delayBeforeMs: 400
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 063a05ddc5e696b4c9fc74d6ffee4663, type: 2}
+    text: maybe.
+    delayBeforeMs: 800
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 917cec5e14bb0194ea10a5b2396f6a23, type: 2}
+    text: "If it is a new ARG, I doubt they'd make it like the last one. I swear if they do that again, I am NEVER coming back to lore hunting."
+    delayBeforeMs: 1400
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: theories are interesting and all
+    delayBeforeMs: 800
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: "but none of these thoughts will be answered if we don't get into the dungeon."
+    delayBeforeMs: 700
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 917cec5e14bb0194ea10a5b2396f6a23, type: 2}
+    text: "You don't enjoy theorycrafting when you watch a good show, Apollo?"
+    delayBeforeMs: 1000
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: "there's nothing in making theories"
+    delayBeforeMs: 700
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: "it's more interesting seeing if you're right or not"
+    delayBeforeMs: 500
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: "it'll be more fun inside the dungeon instead of talking"
+    delayBeforeMs: 500
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 942d308b9135ce84ea52cf067182a246, type: 2}
+    text: "Then let's get going! What are our roles, dude?"
+    delayBeforeMs: 800
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 7c8b3d4a2e1f5a6b9c0d8e7f6a5b4c3d, type: 2}
+    text: "[ tutorial.exe initialized ]"
+    delayBeforeMs: 1200
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 7c8b3d4a2e1f5a6b9c0d8e7f6a5b4c3d, type: 2}
+    text: "Before entering the dungeon, assign a party role to each character."
+    delayBeforeMs: 800
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 7c8b3d4a2e1f5a6b9c0d8e7f6a5b4c3d, type: 2}
+    text: "Tap a character's portrait to open their profile."
+    delayBeforeMs: 900
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 7c8b3d4a2e1f5a6b9c0d8e7f6a5b4c3d, type: 2}
+    text: "Set their Party Role to match their Preferred Role for the best results."
+    delayBeforeMs: 1000
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: 7c8b3d4a2e1f5a6b9c0d8e7f6a5b4c3d, type: 2}
+    text: "When all four roles are assigned, log in to begin the run."
+    delayBeforeMs: 1000
+    typingDurationMs: 0
+  - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
+    text: "okay. i'm logging in."
+    delayBeforeMs: 900
+    typingDurationMs: 0
