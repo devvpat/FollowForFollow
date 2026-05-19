@@ -24,7 +24,7 @@ public class NPC : MonoBehaviour, IInteractable
 
         if (isDialogueActive)
         {
-            
+            NextLine();
         } else
         {
             StartDialogue();

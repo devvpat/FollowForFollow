@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestTeammateDialogue
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
   npcName: karaage??
-  npcPortrait: {fileID: 0}
+  npcPortrait: {fileID: 2551130072395904168, guid: f44c577c1342842c796be453489677b9, type: 3}
   dialogueLines:
   - we did it
   - we beat boss :D

@@ -7674,6 +7674,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4367836283986037908, guid: c71d1ac5085534f79a93184cfb90167c, type: 3}
+      propertyPath: m_DefaultControlScheme
+      value: Keyboard&Mouse
+      objectReference: {fileID: 0}
+    - target: {fileID: 4367836283986037908, guid: c71d1ac5085534f79a93184cfb90167c, type: 3}
+      propertyPath: m_NeverAutoSwitchControlSchemes
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6179034485276959117, guid: c71d1ac5085534f79a93184cfb90167c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
