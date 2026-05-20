@@ -154,9 +154,37 @@ public class BattleCharacter
     
     // ----- MODIFIERS -----
 
+    public virtual void OnBattleStart() {}
+    public virtual void OnTurnStart() {}
     public virtual void OnNormalAttack() {}
     public virtual void OnSkilluse() {}
     public virtual void OnDefend() {}
+    public virtual void OnTurnEnd() {}
+    public virtual void OnBattleEnd() {}
+
+    // Removes status effect at specified index
+    public void RemoveStatusEffect(int index)
+    {
+        if (index >= 0 && index < StatusEffects.Count)
+        {
+            StatusEffects[index].OnExpire(this);
+            StatusEffects.RemoveAt(index);
+        }
+    }
+
+    // Returns true if passed
+    public bool PerformAccuracyCheck()
+    {
+        float accuracyRoll = Random.Range(0, 100)/100f;
+        return accuracyRoll < Accuracy;
+    }
+
+    // Returns true if dodge
+    public bool PerformDodgeCheck()
+    {
+        float dodgeRoll = Random.Range(0, 100)/100f;
+        return dodgeRoll < Blur;
+    }
 
     public void StartDefend()
     {

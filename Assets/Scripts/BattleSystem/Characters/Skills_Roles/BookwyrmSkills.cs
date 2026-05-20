@@ -27,6 +27,8 @@ public static class BookwyrmSkills
         // [10% attack buff, 10% defense buff, 10% crit rate buff, haste] for 3 turns
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
+            if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
+
             foreach (var ally in BattleManager.Instance.GetLivingAllies())
             {
                 ally.ApplyStatusEffect(EffectFactory.MakeAttackModifier(3, 1.10f));
@@ -49,6 +51,9 @@ public static class BookwyrmSkills
         // Lowers target Defense by [20%] for [2 turns].
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
+            if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
+            if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
+
             target.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(2, 0.80f));
             return SkillResult.Success($"[+] {caster.Name} demonized {target.Name}, lowering their defense by 20% for 2 turns!", 1200);
         }
@@ -65,6 +70,9 @@ public static class BookwyrmSkills
         // Target ally gains [10,000] Speed Bucket progress
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
+            if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
+            if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
+
             target.AddToTickTimer(10000);
             if (target.TickTimer >= BattleManager.BattleTickThreshold)
                 BattleManager.Instance.AddToTakingTurnQueue(target, target.TickTimer);
@@ -83,6 +91,9 @@ public static class BookwyrmSkills
         // Target is Blinded ([50%] miss chance) for [2 turns].
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
+            if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
+            if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
+
             target.ApplyStatusEffect(EffectFactory.MakeBlind(2));
             return SkillResult.Success($"[+] {caster.Name} set a mouse trap, blinding {target.Name} for 2 turns!", 1800);
         }

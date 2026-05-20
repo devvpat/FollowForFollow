@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public enum AllyRole { GlassCannon, Bruiser, Tank, BurstDPS, BattleMage, Caster, AllRounder }
-public enum AllyCharacter { Bookwyrm, Karaage, JohnDreamblade, ApolloPhoebe }
 
 // Represents an ally character
 public class Ally : BattleCharacter
@@ -17,15 +16,14 @@ public class Ally : BattleCharacter
 
     public float SkillPowerMod { get; private set; } = 1f; // Multiplier for skill power in dmg formula
 
+    public int HitCount { get; private set; }
+
     private const float levelScaleMod = 1.15f; // Each level scale increases stats by 15%
 
-    private readonly AllyCharacter characterName;
-
-    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role, int level, CharacterSkillSet skillSet, AllyCharacter characterName)
+    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role, int level, CharacterSkillSet skillSet)
         : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage, level)
     {
         MaxMana = maxMana;
-        this.characterName = characterName;
         Role = role;
         CharSkillSet = skillSet;
         Skills = CharSkillSetFactory.GetSkills(skillSet);
@@ -38,7 +36,7 @@ public class Ally : BattleCharacter
 
     public static Ally CreateFromData(AllyData data)
     {
-        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role, data.Level, data.charSkillSet, data.CharacterName);
+        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role, data.Level, data.charSkillSet);
     }
 
     private void ApplyRoleBuff(AllyRole role)
@@ -128,15 +126,65 @@ public class Ally : BattleCharacter
         }
     }
 
+    public void IncreaseHitCount(int amount)
+    {
+        if (CharSkillSet != CharacterSkillSet.Karaage) return;
+
+        HitCount += amount;
+        // for every 10 hitcount, add 10000 tick timer
+        while (HitCount >= 10)
+        {
+            AddToTickTimer(10000);
+            HitCount -= 10;
+        }
+        if (TickTimer >= BattleManager.BattleTickThreshold)
+            BattleManager.Instance.AddToTakingTurnQueue(this, TickTimer);
+    }
+
+    public override void OnBattleStart()
+    {
+        if (!IsAlive) return;
+
+        // John dreamblade starts with blur for 2 turns
+        if (CharSkillSet == CharacterSkillSet.JohnDreamblade)
+        {
+            ApplyStatusEffect(EffectFactory.MakeBlur(2));
+        }
+
+        // Apollo / phoebe gain 25% skill dmg buff
+        if (CharSkillSet == CharacterSkillSet.ApolloPhoebe)
+        {
+            SkillPowerMod *= 1.25f;
+        }
+    }
+
+
     public override void OnNormalAttack()
     {
-        base.OnNormalAttack();
+        if (!IsAlive) return;
+
         // Bookwyrm restore 15% max mana on normal attack
-        if (characterName == AllyCharacter.Bookwyrm)
+        if (CharSkillSet == CharacterSkillSet.Bookwyrm)
         {
             RestoreMana(MaxMana * 0.15f);
         }
+
+        // Add 1 to hit count for Karaage
+        if (CharSkillSet == CharacterSkillSet.Karaage)
+        {
+            IncreaseHitCount(1);
+        }
     }
+
+    public override void OnBattleEnd()
+    {
+        // Apollo / phoebe lose 25% skill dmg buff
+        if (CharSkillSet == CharacterSkillSet.ApolloPhoebe)
+        {
+            SkillPowerMod /= 1.25f;
+        }
+    }
+
 
 
     // ----- ACTIONS -----

@@ -77,6 +77,8 @@ public class BattleManager : MonoBehaviour
 
         OnBattleStart?.Invoke();
         Log("[*] A new battle begins!");
+        foreach (var a in Allies) a.OnBattleStart();
+        foreach (var e in Enemies) e.OnBattleStart();
         OnStateChanged?.Invoke();
 
         StartCoroutine(RunBattle());
@@ -115,6 +117,7 @@ public class BattleManager : MonoBehaviour
                 // Process all status effects for start of turn
                 currChar.ProcessStatusEffectsOnTurnStart();
                 currChar.FindAndRemoveExpiredStatusEffects(); // check for expired effects after processing turn start effects in case any effects expire at the start of the turn
+                currChar.OnTurnStart();
 
                 // Process ally character turn
                 if (currChar is Ally ally && !ally.IsStunned)
@@ -147,6 +150,7 @@ public class BattleManager : MonoBehaviour
                 }
 
                 // Process all status effects for end of turn (after action but before checking for expired effects)
+                currChar.OnTurnEnd();
                 currChar.ProcessStatusEffectsOnTurnEnd();
                 currChar.FindAndRemoveExpiredStatusEffects(); // check for expired effects after processing turn end effects
 
@@ -193,12 +197,9 @@ public class BattleManager : MonoBehaviour
             case AllyActionType.Attack:
                 // Check target validity and perform accuracy check
                 if (action.Target == null) { Log("[*] No target!"); return; }
+                if (!ally.PerformAccuracyCheck()) { Log($"[+] {ally.Name} tried to attack {action.Target.Name} but missed"); return; }
+                if (action.Target.PerformDodgeCheck()) { Log($"[+] {ally.Name} tried to attack {action.Target.Name} but {action.Target.Name} dodged"); return; }
                 ally.OnNormalAttack();
-                if (accuracyRoll >= ally.Accuracy)
-                {
-                    Log($"[*] {ally.Name} attacks {action.Target.Name} but misses!");
-                    break;
-                }
                 // Attack enemy target
                 float atkDmg = CalculateAndApplyDamage(ally, action.Target);
                 Log($"[+] {ally.Name} attacks {action.Target.Name} for {atkDmg} damage!");
@@ -209,16 +210,9 @@ public class BattleManager : MonoBehaviour
                 if (action.Target == null) { Log("[*] No target!"); return; }
                 ISkill skill = action.SkillUsed;
                 if (!ally.CanAffordSkill(skill)) { Log($"[*] {ally.Name} does not have enough mana!"); return; }
-                // Spend mana and perform accuracy check if applicable
-                ally.OnSkilluse();
+                // Spend mana and perform accuracy check in skill then execute and log result
                 ally.SpendMana(skill.ManaCost);
-                bool skillHits = skill.BypassAccuracy || accuracyRoll < ally.Accuracy;
-                if (!skillHits)
-                {
-                    Log($"[*] {ally.Name} tried to use {skill.Name} on {action.Target.Name} but misses!");
-                    break;
-                }
-                // Execute skill and log result
+                ally.OnSkilluse();
                 SkillResult result = skill.Execute(ally, action.Target);
                 Log(result.LogMessage);
                 break;
@@ -235,6 +229,8 @@ public class BattleManager : MonoBehaviour
     private void EndBattle(bool playerWon)
     {
         _battleActive = false;
+        foreach (var a in Allies) a.OnBattleEnd();
+        foreach (var e in Enemies) e.OnBattleEnd();
         string result = playerWon ? "Victory!" : "Defeat!";
         Log($"[*] {result}");
         AllyParty.Instance.RemoveAllStatusEffectsFromAllAllies();

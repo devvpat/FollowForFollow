@@ -19,26 +19,26 @@ public static class CharSkillSetFactory
 
             CharacterSkillSet.Karaage => new ISkill[]
             {
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
+                new KaraageSkills.Yabai(),
+                new KaraageSkills.WingClipper(),
+                new KaraageSkills.FeatherStitch(),
+                new KaraageSkills.ClipFarm(),
             },
 
             CharacterSkillSet.JohnDreamblade => new ISkill[]
             {
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
+                new JohnDreambladeSkills.AllKill(),
+                new JohnDreambladeSkills.BiasWrecker(),
+                new JohnDreambladeSkills.Aegyo(),
+                new JohnDreambladeSkills.VacantVoid(),
             },
 
             CharacterSkillSet.ApolloPhoebe => new ISkill[]
             {
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
+                new ApolloPhoebeSkills.WorldCuttingSlash(),
+                new ApolloPhoebeSkills.Riposte(),
+                new ApolloPhoebeSkills.Instigation(),
+                new ApolloPhoebeSkills.Blackout(),
             },
 
             _ => throw new System.ArgumentException($"Invalid skill set: {set}")
