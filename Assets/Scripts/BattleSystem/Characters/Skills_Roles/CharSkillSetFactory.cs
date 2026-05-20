@@ -11,10 +11,10 @@ public static class CharSkillSetFactory
         {
             CharacterSkillSet.Bookwyrm => new ISkill[]
             {
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
-                new BookwyrmSkills.TrueTest(),
+                new BookwyrmSkills.LoreDump(),
+                new BookwyrmSkills.Demonization(),
+                new BookwyrmSkills.FrameManipulation(),
+                new BookwyrmSkills.MouseTrap(),
             },
 
             CharacterSkillSet.Karaage => new ISkill[]

@@ -41,6 +41,7 @@ public class BossMimicBehavior : IEnemyBehavior
             skillToUse.Execute(Self, skillTarget);
 
             turnCount++;
+            actor.OnSkilluse();
             return $"[-] {Self.Name} copies {target.Name}'s skills and uses {skillToUse.Name} on {skillTarget.Name}!";
         }
         // otherwise, use a random copied skill on a random target and increase counter
@@ -56,6 +57,7 @@ public class BossMimicBehavior : IEnemyBehavior
             skillToUse.Execute(Self, skillTarget);
 
             turnCount++;
+            actor.OnSkilluse();
             return $"[-] {Self.Name} uses copied skill {skillToUse.Name} on {skillTarget.Name}!";
         }
     }

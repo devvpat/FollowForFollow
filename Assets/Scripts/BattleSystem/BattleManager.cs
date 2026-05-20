@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utils;
 
 // Singleton class that handles all battle logic
 public class BattleManager : MonoBehaviour
@@ -34,12 +35,18 @@ public class BattleManager : MonoBehaviour
     private bool _waitingForPlayerInput;
     private PendingAllyAction _pendingAction;
 
+    private Comparer<float> tickComparer; // comparer to sort floats in descending order
+    private PriorityQueue<BattleCharacter, float> charactersTakingTurn;
+
     // ----- SETUP -----
 
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        tickComparer = Comparer<float>.Create((x, y) => y.CompareTo(x));
+        charactersTakingTurn = new PriorityQueue<BattleCharacter, float>(tickComparer);
+        charactersTakingTurn.Clear();
     }
 
     // ----- PUBLIC API -----
@@ -91,15 +98,15 @@ public class BattleManager : MonoBehaviour
         while (_battleActive)
         {
             // Pass a tick for all characters and collect all characters that are ready to take an action
-            var tickComparer = Comparer<float>.Create((x, y) => y.CompareTo(x)); // comparer to sort floats in descending order
-            var charactersTakingTurn = new Utils.PriorityQueue<BattleCharacter, float>(tickComparer);
+            charactersTakingTurn.Clear();
             foreach (var a in Allies) if (a.Tick()) charactersTakingTurn.Enqueue(a, a.TickTimer);
             foreach (var e in Enemies) if (e.Tick()) charactersTakingTurn.Enqueue(e, e.TickTimer);
 
             // Let each character take their turn in order
-            while (charactersTakingTurn.TryDequeue(out BattleCharacter currChar, out float tickValue)) {
+            while (charactersTakingTurn.TryDequeue(out BattleCharacter currChar, out float _)) {
                 // Check battle state
                 if (!currChar.IsAlive) continue; // skip if character is dead
+                if (currChar.TickTimer < BattleTickThreshold) continue; // skip if character is not ready to take a turn
                 if (!IsAnyEnemyAlive() || !IsAnyAllyAlive()) break; // end battle if no one is alive
 
                 // End current character's defend state
@@ -167,6 +174,13 @@ public class BattleManager : MonoBehaviour
             // Wait until next frame to continue battle loop
             yield return null;
         }
+    }
+
+    public void AddToTakingTurnQueue(BattleCharacter character, float tickTimer)
+    {
+        // since the battle loop checks the TickTimer each time a character takes a turn,
+        // there isnt a need to remove and requeue
+        charactersTakingTurn.Enqueue(character, tickTimer);
     }
 
     // Executes the given ally action, applying its effects to the target enemy if applicable.

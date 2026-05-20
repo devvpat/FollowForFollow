@@ -16,6 +16,8 @@ public class MinionDebufferBehavior : IEnemyBehavior
         else if (validTargets.Count > 0) target = validTargets[Random.Range(0, validTargets.Count)];
         else return $"{Self.Name} has no targets to debuff!";
 
+        actor.OnSkilluse();
+
         // randomly choose one of the skills to use on the target
         int skillChoice = Random.Range(0, 3);
         return skillChoice switch

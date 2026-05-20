@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public enum AllyRole { GlassCannon, Bruiser, Tank, BurstDPS, BattleMage, Caster, AllRounder }
+public enum AllyCharacter { Bookwyrm, Karaage, JohnDreamblade, ApolloPhoebe }
 
 // Represents an ally character
 public class Ally : BattleCharacter
@@ -8,7 +9,7 @@ public class Ally : BattleCharacter
     // ----- STATS -----
     
     public AllyRole Role { get; private set; }
-    public CharacterSkillSet charSkillSet { get; private set;}
+    public CharacterSkillSet CharSkillSet { get; private set;}
     public ISkill[] Skills { get; private set; }
 
     public float MaxMana { get; private set; }
@@ -16,15 +17,17 @@ public class Ally : BattleCharacter
 
     public float SkillPowerMod { get; private set; } = 1f; // Multiplier for skill power in dmg formula
 
-    private float levelScaleMod = 1.15f; // Each level scale increases stats by 15%
+    private const float levelScaleMod = 1.15f; // Each level scale increases stats by 15%
 
-    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role, int level, CharacterSkillSet skillSet)
+    private readonly AllyCharacter characterName;
+
+    public Ally(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, float maxMana, AllyRole role, int level, CharacterSkillSet skillSet, AllyCharacter characterName)
         : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage, level)
     {
         MaxMana = maxMana;
-        
+        this.characterName = characterName;
         Role = role;
-        charSkillSet = skillSet;
+        CharSkillSet = skillSet;
         Skills = CharSkillSetFactory.GetSkills(skillSet);
         ApplyRoleBuff(role);
 
@@ -35,7 +38,7 @@ public class Ally : BattleCharacter
 
     public static Ally CreateFromData(AllyData data)
     {
-        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role, data.Level, data.charSkillSet);
+        return new Ally(data.Name, data.MaxHP, data.Attack, data.Defense, data.Speed, data.Accuracy, data.CritChance, data.CritDamage, data.MaxMana, data.Role, data.Level, data.charSkillSet, data.CharacterName);
     }
 
     private void ApplyRoleBuff(AllyRole role)
@@ -124,6 +127,17 @@ public class Ally : BattleCharacter
                 break;
         }
     }
+
+    public override void OnNormalAttack()
+    {
+        base.OnNormalAttack();
+        // Bookwyrm restore 15% max mana on normal attack
+        if (characterName == AllyCharacter.Bookwyrm)
+        {
+            RestoreMana(MaxMana * 0.15f);
+        }
+    }
+
 
     // ----- ACTIONS -----
 

@@ -14,6 +14,7 @@ public class MinionSupporterBehavior : IEnemyBehavior
         // randomly choose one of the skills to use on the boss
         float boss_hp_perc = boss.CurrentHP / boss.MaxHP;
         int totalSkills = (boss_hp_perc < 0.3f || boss_hp_perc > 0.5f) ? 3 : 2; // If boss HP is below 30% or above 50%, all 3 skills are available. Otherwise, only the first 2 skills are available.
+        actor.OnSkilluse();
         int skillChoice = Random.Range(0, totalSkills);
         switch (skillChoice)
         {

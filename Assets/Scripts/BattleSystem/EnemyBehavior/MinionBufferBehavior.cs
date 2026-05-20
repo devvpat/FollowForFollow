@@ -10,7 +10,7 @@ public class MinionBufferBehavior : IEnemyBehavior
         // find the boss
         Enemy boss = enemies.Find(e => e.Type == EnemyType.Boss && e.IsAlive);
         if (boss == null) return $"{Self.Name} has no boss to buff!";
-
+        actor.OnSkilluse();
         // randomly choose one of the skills to use on the boss
         int skillChoice = Random.Range(0, 3);
         switch (skillChoice)

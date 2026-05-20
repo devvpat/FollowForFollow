@@ -64,6 +64,12 @@ public class BattleCharacter
         return TickTimer >= BattleManager.BattleTickThreshold;
     }
 
+    // Add a flat amount to TickTimer
+    public void AddToTickTimer(float amount)
+    {
+        TickTimer += amount;
+    }
+
     // Minuses the TickThreshold from the TickTimer. Should be called after character takes an action
     // and keeps excess tick time
     public void ConsumeTickTurn()
