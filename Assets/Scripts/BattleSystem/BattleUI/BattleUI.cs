@@ -241,6 +241,10 @@ public class BattleUI : MonoBehaviour
         };
         AppendLog($"[*] Select {targetTypeNames[targetType]} as the target…");
 
+        foreach (var card in _allyCharsUI)
+            card.SetHighlighted(false);
+        foreach (var card in _enemyCharsUI)
+            card.SetHighlighted(false);
         if (targetType == SkillTargetType.Enemy || targetType == SkillTargetType.Any)
         {
             foreach (var card in _enemyCharsUI)
@@ -301,6 +305,11 @@ public class BattleUI : MonoBehaviour
         _selectedSkill = skill;
 
         skillPanel.SetActive(false);
+
+        foreach (var card in _allyCharsUI)
+            card.SetHighlighted(false);
+        foreach (var card in _enemyCharsUI)
+            card.SetHighlighted(false);
 
         if (skill.TargetType != SkillTargetType.None && skill.TargetType != SkillTargetType.Self)
         {

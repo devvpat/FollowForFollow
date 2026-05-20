@@ -22,11 +22,15 @@ public class Ally : BattleCharacter
         : base(name, maxHP, attack, defense, speed, accuracy, critChance, critDamage, level)
     {
         MaxMana = maxMana;
-        CurrentMana = maxMana;
+        
         Role = role;
         charSkillSet = skillSet;
         Skills = CharSkillSetFactory.GetSkills(skillSet);
         ApplyRoleBuff(role);
+
+        // refresh health and mana in case stats have changed from roles
+        CurrentMana = MaxMana;
+        CurrentHP = MaxHP;
     }
 
     public static Ally CreateFromData(AllyData data)
