@@ -13,6 +13,8 @@ public class NPC : MonoBehaviour, IInteractable
     private int dialogueIndex ;
     private bool isTyping, isDialogueActive;
 
+    private DialogueLine CurrentLine => dialogueData.dialogueLines[dialogueIndex];
+
     public bool CanInteract()
     {
         return !isDialogueActive;
@@ -33,11 +35,13 @@ public class NPC : MonoBehaviour, IInteractable
 
     void StartDialogue()
     {
+        if (dialogueData.dialogueLines == null || dialogueData.dialogueLines.Length == 0)
+        {
+            return;
+        }
+
         isDialogueActive = true;
         dialogueIndex = 0;
-
-        nameText.SetText(dialogueData.npcName);
-        portraitImage.sprite = dialogueData.npcPortrait;
 
         dialoguePanel.SetActive(true);
         PauseController.SetPause(true);
@@ -50,7 +54,7 @@ public class NPC : MonoBehaviour, IInteractable
         if (isTyping)
         {
             StopAllCoroutines();
-            dialogueText.SetText(dialogueData.dialogueLines[dialogueIndex]);
+            dialogueText.SetText(CurrentLine.text);
             isTyping = false;
         } else if (++dialogueIndex < dialogueData.dialogueLines.Length)
         {
@@ -66,7 +70,12 @@ public class NPC : MonoBehaviour, IInteractable
         isTyping = true;
         dialogueText.SetText("");
 
-        foreach(char letter in dialogueData.dialogueLines[dialogueIndex])
+        Speaker speaker = dialogueData.GetSpeaker(CurrentLine.speakerIndex);
+
+        nameText.SetText(speaker != null ? speaker.name : "");
+        portraitImage.sprite = speaker != null ? speaker.portrait : null;
+
+        foreach(char letter in CurrentLine.text)
         {
             dialogueText.text += letter;
             yield return new WaitForSeconds(dialogueData.typingSpeed);
@@ -74,9 +83,10 @@ public class NPC : MonoBehaviour, IInteractable
 
         isTyping = false;
 
-        if(dialogueData.autoProgressLines.Length > dialogueIndex && dialogueData.autoProgressLines[dialogueIndex])
+        if(CurrentLine.autoProgress)
         {
             yield return new WaitForSeconds(dialogueData.autoProgressDelay);
+            NextLine();
         }
     }
 
