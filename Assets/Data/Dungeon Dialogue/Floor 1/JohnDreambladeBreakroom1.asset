@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7df0971f0144696a13d9b83fd58476, type: 3}
+  m_Name: JohnDreambladeBreakroom1
+  m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
+  speakers:
+  - name: "Apo11o\u2727\u02D6\xB0."
+    portrait: {fileID: 7451469615984823181, guid: 2fb21f77094d54c41888390cea042695, type: 3}
+  - name: "John Dreamblade :\xDE"
+    portrait: {fileID: -4511362441317746440, guid: a1707f77fac71489ba8e797fb437f31e, type: 3}
+  dialogueLines:
+  - speakerIndex: 0
+    text: what have you thought about the dungeon so far?
+    autoProgress: 0
+  - speakerIndex: 1
+    text: its weird. i feel like there should be more people around.
+    autoProgress: 0
+  - speakerIndex: 0
+    text: "more loot for us. i can\u2019t complain."
+    autoProgress: 0
+  - speakerIndex: 0
+    text: oh wait I heard that youre working on a new comback. is it true?
+    autoProgress: 0
+  - speakerIndex: 1
+    text: lol yeah but i cant say much yet. im under nda.
+    autoProgress: 0
+  - speakerIndex: 0
+    text: aw cmon you can share a little bit you know how much of a huge fan i am
+    autoProgress: 0
+  - speakerIndex: 1
+    text: idk :/
+    autoProgress: 0
+  - speakerIndex: 0
+    text: plz  0_0
+    autoProgress: 0
+  - speakerIndex: 0
+    text: ill trade you some loot.
+    autoProgress: 0
+  - speakerIndex: 1
+    text: tempting but no sorry i have to keep my mouth shut. if my agents found
+      out about it idk if i would have a job afterward.
+    autoProgress: 0
+  - speakerIndex: 0
+    text: lame.
+    autoProgress: 0
+  - speakerIndex: 1
+    text: dw when it releases we will have a listening party. I promise.
+    autoProgress: 0
+  - speakerIndex: 0
+    text: "you better. i\u2019m basically your no1 fan."
+    autoProgress: 0
+  - speakerIndex: 1
+    text: you might be but i know this one listener that has more hours listening
+      to my music than my entire family. you would have to beat them.
+    autoProgress: 0
+  - speakerIndex: 0
+    text: hehe i guess i will ;)
+    autoProgress: 0
+  autoProgressDelay: 1.5
+  typingSpeed: 0.05
