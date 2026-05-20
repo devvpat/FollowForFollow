@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Utils;
 
 // Singleton class that handles all battle logic
 public class BattleManager : MonoBehaviour
@@ -19,7 +21,7 @@ public class BattleManager : MonoBehaviour
     // ----- BATTLE NUMBERS -----
 
     public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
-    public const float DefenseConstant = 100f;
+    public const float DefenseConstant = 5000f;
 
     // ----- BATTLE STATE -----
 
@@ -33,12 +35,18 @@ public class BattleManager : MonoBehaviour
     private bool _waitingForPlayerInput;
     private PendingAllyAction _pendingAction;
 
+    private Comparer<float> tickComparer; // comparer to sort floats in descending order
+    private PriorityQueue<BattleCharacter, float> charactersTakingTurn;
+
     // ----- SETUP -----
 
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        tickComparer = Comparer<float>.Create((x, y) => y.CompareTo(x));
+        charactersTakingTurn = new PriorityQueue<BattleCharacter, float>(tickComparer);
+        charactersTakingTurn.Clear();
     }
 
     // ----- PUBLIC API -----
@@ -69,6 +77,8 @@ public class BattleManager : MonoBehaviour
 
         OnBattleStart?.Invoke();
         Log("[*] A new battle begins!");
+        foreach (var a in Allies) a.OnBattleStart();
+        foreach (var e in Enemies) e.OnBattleStart();
         OnStateChanged?.Invoke();
 
         StartCoroutine(RunBattle());
@@ -90,31 +100,27 @@ public class BattleManager : MonoBehaviour
         while (_battleActive)
         {
             // Pass a tick for all characters and collect all characters that are ready to take an action
-            List<BattleCharacter> charactersTakingTurn = new List<BattleCharacter>();
-            foreach (var a in Allies) if (a.Tick()) charactersTakingTurn.Add(a);
-            foreach (var e in Enemies) if (e.Tick()) charactersTakingTurn.Add(e);
-
-            // Sort by TickTimer value so highest goes first
-            charactersTakingTurn.Sort((char1, char2) => char2.TickTimer.CompareTo(char1.TickTimer));
-            
-            // debug: list all characters taking a turn this round
-            if (charactersTakingTurn.Count > 0)
-            {
-                string charNames = string.Join(", ", charactersTakingTurn.ConvertAll(c => c.Name));
-                Debug.Log($"[*] Taking turns this round: {charNames}");
-            }
+            charactersTakingTurn.Clear();
+            foreach (var a in Allies) if (a.Tick()) charactersTakingTurn.Enqueue(a, a.TickTimer);
+            foreach (var e in Enemies) if (e.Tick()) charactersTakingTurn.Enqueue(e, e.TickTimer);
 
             // Let each character take their turn in order
-            foreach (var currChar in charactersTakingTurn) {
+            while (charactersTakingTurn.TryDequeue(out BattleCharacter currChar, out float _)) {
                 // Check battle state
                 if (!currChar.IsAlive) continue; // skip if character is dead
+                if (currChar.TickTimer < BattleTickThreshold) continue; // skip if character is not ready to take a turn
                 if (!IsAnyEnemyAlive() || !IsAnyAllyAlive()) break; // end battle if no one is alive
 
                 // End current character's defend state
                 currChar.EndDefend();
 
+                // Process all status effects for start of turn
+                currChar.ProcessStatusEffectsOnTurnStart();
+                currChar.FindAndRemoveExpiredStatusEffects(); // check for expired effects after processing turn start effects in case any effects expire at the start of the turn
+                currChar.OnTurnStart();
+
                 // Process ally character turn
-                if (currChar is Ally ally)
+                if (currChar is Ally ally && !ally.IsStunned)
                 {
                     // Log turn start and set waiting for player input
                     _currentAlly = ally;
@@ -132,7 +138,7 @@ public class BattleManager : MonoBehaviour
                         ExecuteAllyAction(ally, _pendingAction);
                 }
                 // Process enemy character turn
-                else if (currChar is Enemy enemy)
+                else if (currChar is Enemy enemy && !enemy.IsStunned)
                 {
                     // Log turn start, execute enemy action, and log result
                     OnEnemyTurnStart?.Invoke(enemy);
@@ -142,6 +148,11 @@ public class BattleManager : MonoBehaviour
 
                     yield return new WaitForSeconds(1f); // small delay after enemy action for log readability
                 }
+
+                // Process all status effects for end of turn (after action but before checking for expired effects)
+                currChar.OnTurnEnd();
+                currChar.ProcessStatusEffectsOnTurnEnd();
+                currChar.FindAndRemoveExpiredStatusEffects(); // check for expired effects after processing turn end effects
 
                 // Consume current character's ticks and update UI
                 currChar.ConsumeTickTurn();
@@ -158,11 +169,22 @@ public class BattleManager : MonoBehaviour
                     EndBattle(false);
                     yield break;
                 }
+
+                // check to requeue character if they have excess tick time (e.g. from haste)
+                if (currChar.TickTimer >= BattleTickThreshold)
+                    charactersTakingTurn.Enqueue(currChar, currChar.TickTimer);
             }
 
             // Wait until next frame to continue battle loop
             yield return null;
         }
+    }
+
+    public void AddToTakingTurnQueue(BattleCharacter character, float tickTimer)
+    {
+        // since the battle loop checks the TickTimer each time a character takes a turn,
+        // there isnt a need to remove and requeue
+        charactersTakingTurn.Enqueue(character, tickTimer);
     }
 
     // Executes the given ally action, applying its effects to the target enemy if applicable.
@@ -175,11 +197,9 @@ public class BattleManager : MonoBehaviour
             case AllyActionType.Attack:
                 // Check target validity and perform accuracy check
                 if (action.Target == null) { Log("[*] No target!"); return; }
-                if (accuracyRoll >= ally.Accuracy)
-                {
-                    Log($"[*] {ally.Name} attacks {action.Target.Name} but misses!");
-                    break;
-                }
+                if (!ally.PerformAccuracyCheck()) { Log($"[+] {ally.Name} tried to attack {action.Target.Name} but missed"); return; }
+                if (action.Target.PerformDodgeCheck()) { Log($"[+] {ally.Name} tried to attack {action.Target.Name} but {action.Target.Name} dodged"); return; }
+                ally.OnNormalAttack();
                 // Attack enemy target
                 float atkDmg = CalculateAndApplyDamage(ally, action.Target);
                 Log($"[+] {ally.Name} attacks {action.Target.Name} for {atkDmg} damage!");
@@ -190,22 +210,17 @@ public class BattleManager : MonoBehaviour
                 if (action.Target == null) { Log("[*] No target!"); return; }
                 ISkill skill = action.SkillUsed;
                 if (!ally.CanAffordSkill(skill)) { Log($"[*] {ally.Name} does not have enough mana!"); return; }
-                // Spend mana and perform accuracy check if applicable
+                // Spend mana and perform accuracy check in skill then execute and log result
                 ally.SpendMana(skill.ManaCost);
-                bool skillHits = skill.BypassAccuracy || accuracyRoll < ally.Accuracy;
-                if (!skillHits)
-                {
-                    Log($"[*] {ally.Name} tried to use {skill.Name} on {action.Target.Name} but misses!");
-                    break;
-                }
-                // Execute skill and log result
+                ally.OnSkilluse();
                 SkillResult result = skill.Execute(ally, action.Target);
                 Log(result.LogMessage);
                 break;
 
             case AllyActionType.Defend:
+                ally.OnDefend();
                 ally.StartDefend();
-                Log($"[+] {ally.Name} defends — damage reduced by {ally.Defense}% this round.");
+                Log($"[+] {ally.Name} defends");
                 break;
         }
     }
@@ -214,8 +229,11 @@ public class BattleManager : MonoBehaviour
     private void EndBattle(bool playerWon)
     {
         _battleActive = false;
+        foreach (var a in Allies) a.OnBattleEnd();
+        foreach (var e in Enemies) e.OnBattleEnd();
         string result = playerWon ? "Victory!" : "Defeat!";
         Log($"[*] {result}");
+        AllyParty.Instance.RemoveAllStatusEffectsFromAllAllies();
         OnBattleEnd?.Invoke(playerWon);
     }
 
@@ -224,20 +242,29 @@ public class BattleManager : MonoBehaviour
     // Calculates damage from attacker to defender using the specified skill / normal attack
     // Applies the calculated damage to the defender
     // Returns the final damage dealt
-    public static float CalculateAndApplyDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
+    public static float CalculateAndApplyDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false, bool isPercentHealthDamage = false, float maxHealthPercentDamage = 0f)
     {
-        float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense);
+        float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense, isPercentHealthDamage, maxHealthPercentDamage);
         defender.TakeDamage(damage);
+        if (attacker.HasPoisonedWeapon)
+        {
+            var weapon = attacker.StatusEffects.First(e => e is PoisonWeapon) as PoisonWeapon;
+            defender.ApplyStatusEffect(EffectFactory.MakePoison(weapon.StacksToApply));
+        }
         return damage;
     }
 
     // Calculates and returns the final (post-mitigation) damage of a normal attack/skill
     // If skill is not null, applies the skill's power to the damage calculation
-    public static float CalculateDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false)
+    public static float CalculateDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false, bool isPercentHealthDamage = false, float maxHealthPercentDamage = 0f)
     {
-        float rawDamage = skill == null
-            ? CalculatePreMitigationAttackDamage(attacker, isGuaranteedCrit)
-            : CalculatePreMitigationSkillDamage(attacker, skill, isGuaranteedCrit);
+        float rawDamage;
+        if (isPercentHealthDamage)
+            rawDamage = CalculatePreMitigationPercentHealthDamage(defender, maxHealthPercentDamage);
+        else
+            rawDamage = skill == null
+                ? CalculatePreMitigationAttackDamage(attacker, isGuaranteedCrit)
+                : CalculatePreMitigationSkillDamage(attacker, skill, isGuaranteedCrit);
         float finalDamage = CalculatePostMitigationDamage(rawDamage, defender, bypassDefense);
         return finalDamage;
     }
@@ -256,10 +283,17 @@ public class BattleManager : MonoBehaviour
     // RawDamage = (SkillPower + (Attack * AttackModifier)) * (isCrit ? CritDamage : 1)
     public static float CalculatePreMitigationSkillDamage(BattleCharacter attacker, ISkill skill, bool isGuaranteedCrit = false)
     {
-        float dmg = (int)skill.Power + (attacker.Attack * attacker.AttackModifier);
+        float dmg = skill.Power * Mathf.Pow(ISkill.SkillPowerScale, AllyParty.Instance.LevelScale) * (attacker is Ally ? (attacker as Ally).SkillPowerMod : 1f) + (attacker.Attack * attacker.AttackModifier);
         if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
             dmg *= attacker.CritDamage;
         return dmg;
+    }
+
+    // Calculates raw damage for percent max health attacks
+    // RawDamage = TargetMaxHealth * PercentHealthDamage
+    public static float CalculatePreMitigationPercentHealthDamage(BattleCharacter defender, float percentHealthDamage)
+    {
+        return defender.MaxHP * percentHealthDamage;
     }
 
     // Calculates final damage after applying defense mitigation
@@ -298,17 +332,6 @@ public class BattleManager : MonoBehaviour
         foreach (var e in Enemies) if (e.IsAlive) list.Add(e);
         return list;
     }
-
-    // ----- TEMP -----
-    [Header("TEMP")]
-    public GameObject TestStartButton;
-    public EnemyParty EnemyPartyRef;
-    public void OnClickTest()
-    {
-        TestStartButton.SetActive(false);
-        StartNewFight(EnemyPartyRef.Enemies);
-    }
-    // ----- TEMP -----
 }
 
 // ----- ALLY ACTION STRUCTURE -----

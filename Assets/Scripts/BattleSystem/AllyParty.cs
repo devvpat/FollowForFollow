@@ -14,6 +14,8 @@ public class AllyParty : MonoBehaviour
     // Should be initialized at the start of the game. Persists across scene, keeping track of current ally stats.
     public List<Ally> Allies { get; private set; }
 
+    public int LevelScale { get; private set; } = 0;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -59,10 +61,28 @@ public class AllyParty : MonoBehaviour
     public bool IsAnyAllyAlive() => GetLivingAllies().Count > 0;
 
     // Resets stats of all allies to their initial values
-    public void ResetAllAlliesStats()
+    public void ResetAllAlliesHealthAndMana()
     {
         foreach (var a in Allies)
             a.ResetFully();
+    }
+
+    public void HealAllAlliesToFull()
+    {
+        foreach (var a in Allies)
+            a.RestoreHP(a.MaxHP);
+    }
+
+    public void RestoreAllAlliesManaToFull()
+    {
+        foreach (var a in Allies)
+            a.RestoreMana(a.MaxMana);
+    }
+
+    public void RemoveAllStatusEffectsFromAllAllies()
+    {
+        foreach (var a in Allies)
+            a.RemoveAllStatusEffects();
     }
 
     public void UpdateAllyRole(string allyName, AllyRole newRole)
@@ -75,6 +95,15 @@ public class AllyParty : MonoBehaviour
         } else
         {
             ally.UpdateRole(newRole);
+        }
+    }
+
+    public void IncreaseLevelScale()
+    {
+        LevelScale += 1;
+        foreach (var ally in Allies)
+        {
+            ally.IncreaseLevel();
         }
     }
 }

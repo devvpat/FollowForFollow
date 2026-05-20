@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a42ead85d01fbb43b3359f6318099c9, type: 3}
   m_Name: Ally 3
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
-  Name: Celia
-  MaxHP: 100
-  Attack: 25
-  Defense: 0.1
-  Speed: 7500
-  Accuracy: 0.85
-  CritChance: 0.15
+  Name: JOHN DREAMBLADE
+  MaxHP: 8800
+  Attack: 950
+  Defense: 750
+  Speed: 110
+  Accuracy: 0.75
+  CritChance: 0.25
   CritDamage: 1.5
-  MaxMana: 120
+  Level: 95
+  MaxMana: 750
+  charSkillSet: 2
   Role: 2
