@@ -6,9 +6,9 @@ public class SkillResult
     public float DamageDealt;
     public bool HitTarget;
 
-    public static SkillResult Miss(string msg) =>
+    public static SkillResult Fail(string msg) =>
         new SkillResult { LogMessage = msg, HitTarget = false, DamageDealt = 0 };
 
-    public static SkillResult Hit(string msg, float damage) =>
+    public static SkillResult Success(string msg, float damage) =>
         new SkillResult { LogMessage = msg, HitTarget = true, DamageDealt = damage };
 }
