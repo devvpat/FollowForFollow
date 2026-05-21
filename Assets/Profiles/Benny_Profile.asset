@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1a2b3c4d5e6f70819203a4b5c6d7e80, type: 3}
-  m_Name: Tutorial_Profile
+  m_Name: Benny_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
-  realName: 
-  ign: tutorial.exe
+  realName: Benjamin
+  ign: Benny
   portraitSprite: {fileID: 0}
-  themeColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  alignment: 0
-  energyLevel: 1
-  likes: 
-  dislikes: 
-  statusMessage: System tutorial agent
-  preferredRole: 
-  partyRole: 0
+  themeColor: {r: 0.26, g: 0.45, b: 0.75, a: 1}
+  alignment: 2
+  energyLevel: 2
+  likes: Dreamblade, being right, intellectual debates, video games
+  dislikes: 'Being proven wrong, losing arguments, "slacking"'
+  statusMessage: Currently dominating Dreamblade rankings. Cope.
+  preferredRole: Attacker / Damage
+  partyRole: 1
   allyData: {fileID: 0}
+  textSound: {fileID: 0}

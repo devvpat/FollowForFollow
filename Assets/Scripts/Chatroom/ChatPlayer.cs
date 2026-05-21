@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))]
 public class ChatPlayer : MonoBehaviour
 {
     [Header("Content")]
@@ -32,15 +33,26 @@ public class ChatPlayer : MonoBehaviour
     public KeyCode sendHotkey = KeyCode.Return;
     public SendButtonFlasher sendButtonFlasher;
 
+    [Header("Audio")]
+    [Tooltip("Play a text-blip sound every Nth typed character (skipping whitespace).")]
+    public int charsPerSound = 3;
+
     [Header("Playback")]
     public bool playOnStart = true;
 
     [Header("Events")]
     public UnityEvent OnChatFinished;
 
+    AudioSource audioSource;
     bool skipRequested;
     bool isPlaying;
     bool waitingForSend;
+
+    void Awake()
+    {
+        if (!TryGetComponent(out audioSource))
+            audioSource = gameObject.AddComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -149,7 +161,7 @@ public class ChatPlayer : MonoBehaviour
             ChatBubble bubble = bubbleGO != null ? bubbleGO.GetComponent<ChatBubble>() : null;
             ScrollToBottom();
 
-            yield return TypeText(bubble, msg.text ?? "", typingSec);
+            yield return TypeText(bubble, msg.sender, msg.text ?? "", typingSec);
             ScrollToBottom();
         }
 
@@ -187,7 +199,7 @@ public class ChatPlayer : MonoBehaviour
         skipRequested = false;
     }
 
-    IEnumerator TypeText(ChatBubble bubble, string fullText, float totalSeconds)
+    IEnumerator TypeText(ChatBubble bubble, CharacterProfile sender, string fullText, float totalSeconds)
     {
         if (bubble == null || string.IsNullOrEmpty(fullText))
         {
@@ -198,6 +210,7 @@ public class ChatPlayer : MonoBehaviour
         skipRequested = false;
         float perChar = totalSeconds / fullText.Length;
         int shown = 0;
+        int step = Mathf.Max(1, charsPerSound);
 
         while (shown < fullText.Length)
         {
@@ -207,8 +220,18 @@ public class ChatPlayer : MonoBehaviour
                 break;
             }
 
+            char ch = fullText[shown];
             shown++;
             bubble.SetText(fullText.Substring(0, shown));
+
+            if (!char.IsWhiteSpace(ch)
+                && sender != null && sender.textSound != null
+                && audioSource != null
+                && shown % step == 0)
+            {
+                audioSource.PlayOneShot(sender.textSound);
+            }
+
             yield return new WaitForSeconds(perChar);
         }
 

@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1a2b3c4d5e6f70819203a4b5c6d7e80, type: 3}
-  m_Name: Tutorial_Profile
+  m_Name: Caitlyn_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
-  realName: 
-  ign: tutorial.exe
+  realName: Caitlyn
+  ign: Cait
   portraitSprite: {fileID: 0}
-  themeColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  themeColor: {r: 0.85, g: 0.45, b: 0.7, a: 1}
   alignment: 0
-  energyLevel: 1
-  likes: 
-  dislikes: 
-  statusMessage: System tutorial agent
-  preferredRole: 
+  energyLevel: 2
+  likes: K-pop, drawing, music, her friends
+  dislikes: Conflict, seeing people feeling down
+  statusMessage: "♪ vibing to the latest comeback ♪"
+  preferredRole: Support / Healer
   partyRole: 0
   allyData: {fileID: 0}
+  textSound: {fileID: 0}

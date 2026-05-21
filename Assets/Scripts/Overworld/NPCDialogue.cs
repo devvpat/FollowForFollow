@@ -5,10 +5,12 @@ public class Speaker
 {
     public string name;
     public Sprite portrait;
+    public Color themeColor = Color.white;
+    public AudioClip voiceBlip;
 }
 
 [System.Serializable]
-public class DialogueLine
+public class NPCDialogueLine
 {
     [Min(0)]
     public int speakerIndex;
@@ -23,7 +25,7 @@ public class DialogueLine
 public class NPCDialogue : ScriptableObject
 {
     public Speaker[] speakers;
-    public DialogueLine[] dialogueLines;
+    public NPCDialogueLine[] dialogueLines;
     public float autoProgressDelay = 1.5f;
     public float typingSpeed = 0.05f;
 
