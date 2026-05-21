@@ -13,7 +13,7 @@ public class NPC : MonoBehaviour, IInteractable
     private int dialogueIndex ;
     private bool isTyping, isDialogueActive;
 
-    private DialogueLine CurrentLine => dialogueData.dialogueLines[dialogueIndex];
+    private NPCDialogueLine CurrentLine => dialogueData.dialogueLines[dialogueIndex];
 
     public bool CanInteract()
     {
