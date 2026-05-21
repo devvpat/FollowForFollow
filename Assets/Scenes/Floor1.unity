@@ -13178,6 +13178,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4598641789520594270, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4598641789520594270, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
       propertyPath: m_Color.g
       value: 1
       objectReference: {fileID: 0}
