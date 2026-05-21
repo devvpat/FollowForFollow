@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class BossTrigger : MonoBehaviour
 {
@@ -13,6 +12,7 @@ public class BossTrigger : MonoBehaviour
         PauseController.SetPause(true);
         battleUI.SetActive(true);
         BattleManager.Instance.StartNewFight(enemyParty.Enemies);
+        MusicManager.Instance.PlayMusic(MusicManager.Instance.battleTheme);
         BattleManager.Instance.OnBattleEnd += BattleEnd;
     }
 
@@ -22,10 +22,11 @@ public class BossTrigger : MonoBehaviour
 
         AllyParty.Instance.ResetAllAlliesHealthAndMana();
         PauseController.SetPause(false);
+        MusicManager.Instance.StopMusic();
 
         if (playerWon)
         {
-            gameObject.SetActive(false);   
+            gameObject.SetActive(false);
         }
     }
 }
