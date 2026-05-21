@@ -2,11 +2,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChatBubble : MonoBehaviour
+public class DialogueBox : MonoBehaviour
 {
     public TMP_Text bodyText;
     public TMP_Text nameText;
     public Image portraitImage;
+    public Image nameBackground;
 
     Sprite defaultPortraitSprite;
 
@@ -19,17 +20,19 @@ public class ChatBubble : MonoBehaviour
     public void Setup(CharacterProfile sender, string initialText)
     {
         if (nameText != null)
-            nameText.text = sender != null ? sender.ign : "";
+            nameText.text = sender != null
+                ? (!string.IsNullOrEmpty(sender.realName) ? sender.realName : sender.ign)
+                : "";
 
         if (portraitImage != null)
         {
-            bool hasPortrait = sender != null && sender.portraitSprite != null;
-            portraitImage.sprite = hasPortrait ? sender.portraitSprite : defaultPortraitSprite;
+            portraitImage.sprite = defaultPortraitSprite;
             portraitImage.enabled = true;
-            portraitImage.color = hasPortrait
-                ? Color.white
-                : (sender != null ? sender.themeColor : Color.white);
+            portraitImage.color = sender != null ? sender.themeColor : Color.white;
         }
+
+        if (nameBackground != null)
+            nameBackground.color = sender != null ? sender.themeColor : Color.white;
 
         SetText(initialText);
     }

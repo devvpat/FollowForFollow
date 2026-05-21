@@ -15,6 +15,7 @@ MonoBehaviour:
   realName: Park Minseong
   ign: "John Vaporblade :\xDE"
   portraitSprite: {fileID: -7299135560115144247, guid: b2c5044b0027b8d48b3f333507b7be8f, type: 3}
+  themeColor: {r: 0.726, g: 0.257, b: 0.257, a: 1}
   alignment: 0
   energyLevel: 0
   likes: Cooking, Supporting, Teamwork
@@ -23,3 +24,4 @@ MonoBehaviour:
   preferredRole: Support/Healer
   partyRole: 0
   allyData: {fileID: 11400000, guid: 95c32208b06714b4dacd5d8b11c1c591, type: 2}
+  textSound: {fileID: 8300000, guid: 8c15c351a579c37409198b65070fd741, type: 3}

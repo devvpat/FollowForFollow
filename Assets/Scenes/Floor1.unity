@@ -655,7 +655,7 @@ PrefabInstance:
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: nameText
       value: 
-      objectReference: {fileID: 924582355}
+      objectReference: {fileID: 9100100006}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialogueData
       value: 
@@ -663,15 +663,19 @@ PrefabInstance:
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialogueText
       value: 
-      objectReference: {fileID: 1559534315}
+      objectReference: {fileID: 9100100005}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialoguePanel
       value: 
-      objectReference: {fileID: 873870187}
+      objectReference: {fileID: 9100100003}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: portraitImage
       value: 
-      objectReference: {fileID: 248374766}
+      objectReference: {fileID: 9100100004}
+    - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
+      propertyPath: nameBackground
+      value: 
+      objectReference: {fileID: 9100100007}
     - target: {fileID: 5778571672850542289, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6
@@ -939,7 +943,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757857832}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1000,7 +1004,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757857832}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cebb63eeffc0643eea167e055bf4140c, type: 3}
   m_Name: 
@@ -9145,7 +9149,7 @@ PrefabInstance:
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: nameText
       value: 
-      objectReference: {fileID: 924582355}
+      objectReference: {fileID: 9100100006}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialogueData
       value: 
@@ -9153,15 +9157,19 @@ PrefabInstance:
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialogueText
       value: 
-      objectReference: {fileID: 1559534315}
+      objectReference: {fileID: 9100100005}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialoguePanel
       value: 
-      objectReference: {fileID: 873870187}
+      objectReference: {fileID: 9100100003}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: portraitImage
       value: 
-      objectReference: {fileID: 248374766}
+      objectReference: {fileID: 9100100004}
+    - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
+      propertyPath: nameBackground
+      value: 
+      objectReference: {fileID: 9100100007}
     - target: {fileID: 5778571672850542289, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6
@@ -12787,6 +12795,7 @@ RectTransform:
   m_Children:
   - {fileID: 1423804169}
   - {fileID: 873870188}
+  - {fileID: 9100100002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -13156,6 +13165,109 @@ RectTransform:
   m_AnchoredPosition: {x: 650, y: -50}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &9100100001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1902246401}
+    m_Modifications:
+    - target: {fileID: 4598641789520594270, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4598641789520594270, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4598641789520594270, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4598641789520594270, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5861652187903796037, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5861652187903796037, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -228
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221383782482432223, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_Name
+      value: DialougeBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 8870341215925774277, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8870341215925774277, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -240
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+--- !u!224 &9100100002 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8456601730029835562, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+  m_PrefabInstance: {fileID: 9100100001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9100100003 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8221383782482432223, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+  m_PrefabInstance: {fileID: 9100100001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9100100004 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4598641789520594270, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+  m_PrefabInstance: {fileID: 9100100001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &9100100005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6102886721779769533, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+  m_PrefabInstance: {fileID: 9100100001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &9100100006 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8353216076149354352, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+  m_PrefabInstance: {fileID: 9100100001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &9100100007 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8284885065140682631, guid: 68389f0b3e38bcf48b8140277f0b2ef2, type: 3}
+  m_PrefabInstance: {fileID: 9100100001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &1149455234045206614
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13187,7 +13299,7 @@ PrefabInstance:
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: nameText
       value: 
-      objectReference: {fileID: 924582355}
+      objectReference: {fileID: 9100100006}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialogueData
       value: 
@@ -13195,15 +13307,19 @@ PrefabInstance:
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialogueText
       value: 
-      objectReference: {fileID: 1559534315}
+      objectReference: {fileID: 9100100005}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: dialoguePanel
       value: 
-      objectReference: {fileID: 873870187}
+      objectReference: {fileID: 9100100003}
     - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: portraitImage
       value: 
-      objectReference: {fileID: 248374766}
+      objectReference: {fileID: 9100100004}
+    - target: {fileID: 5083930884382616722, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
+      propertyPath: nameBackground
+      value: 
+      objectReference: {fileID: 9100100007}
     - target: {fileID: 5778571672850542289, guid: 6fc10903807e04cbeb211900ff8394f5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6
