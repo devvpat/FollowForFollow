@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a42ead85d01fbb43b3359f6318099c9, type: 3}
   m_Name: Ally 4
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
-  Name: Doric
-  MaxHP: 140
-  Attack: 15
-  Defense: 0.65
-  Speed: 3000
+  Name: APOLLO / PHOEBE
+  MaxHP: 10500
+  Attack: 1200
+  Defense: 650
+  Speed: 125
   Accuracy: 0.75
-  CritChance: 0.4
+  CritChance: 0.25
   CritDamage: 1.5
-  MaxMana: 80
+  Level: 95
+  MaxMana: 550
+  charSkillSet: 3
   Role: 3

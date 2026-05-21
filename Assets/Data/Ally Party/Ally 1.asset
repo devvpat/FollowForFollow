@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a42ead85d01fbb43b3359f6318099c9, type: 3}
   m_Name: Ally 1
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
-  Name: Aria
-  MaxHP: 120
-  Attack: 20
-  Defense: 0.2
-  Speed: 6500
-  Accuracy: 0.9
-  CritChance: 0.05
+  Name: BOOKWYRM
+  MaxHP: 6500
+  Attack: 500
+  Defense: 900
+  Speed: 95
+  Accuracy: 0.75
+  CritChance: 0.25
   CritDamage: 1.5
-  MaxMana: 100
-  Role: 1
+  Level: 95
+  MaxMana: 1000
+  charSkillSet: 0
+  Role: 0
