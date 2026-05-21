@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7df0971f0144696a13d9b83fd58476, type: 3}
+  m_Name: BookwyrmBreakroom1
+  m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
+  speakers:
+  - name: "Apo11o\u2727\u02D6\xB0."
+    portrait: {fileID: 7451469615984823181, guid: 2fb21f77094d54c41888390cea042695, type: 3}
+  - name: Bookwyrm
+    portrait: {fileID: -184693960786962222, guid: 85e3c73ee41d345359853fe605fb7935, type: 3}
+  dialogueLines:
+  - speakerIndex: 1
+    text: "Can you believe that a dev was able to make all of this secretly? I heavily
+      doubt any of the others didn\u2019t see the changes being made."
+    autoProgress: 0
+  - speakerIndex: 0
+    text: they probably didnt care. are you gonna make a video about it?
+    autoProgress: 0
+  - speakerIndex: 1
+    text: Oh, without a doubt, I have to! This is a GOLD mine! I could make an entire
+      series for this dungeon. You have been paying attention to it, right?
+    autoProgress: 0
+  - speakerIndex: 0
+    text: ye
+    autoProgress: 0
+  - speakerIndex: 1
+    text: "Ugh, it\u2019s so good. I love it."
+    autoProgress: 0
+  - speakerIndex: 0
+    text: lemme be a part of your vid!
+    autoProgress: 0
+  - speakerIndex: 1
+    text: You wanna be in my video? How come?
+    autoProgress: 0
+  - speakerIndex: 0
+    text: cuz its awesome duh. the attention we could get by showcasing the best
+      player in dreamblade could help you a lot.
+    autoProgress: 0
+  - speakerIndex: 1
+    text: "I guess, that\u2019s true\u2026"
+    autoProgress: 0
+  - speakerIndex: 0
+    text: also i watched your recent video a couple of times and i have some complaints.
+    autoProgress: 0
+  - speakerIndex: 1
+    text: Er, what?
+    autoProgress: 0
+  - speakerIndex: 0
+    text: i made a few comments under the video. you should check it out.
+    autoProgress: 0
+  - speakerIndex: 1
+    text: I, uh, get a lot of comments.
+    autoProgress: 0
+  - speakerIndex: 0
+    text: you dont read all of your comments?
+    autoProgress: 0
+  - speakerIndex: 1
+    text: "There\u2019s too many! It would take waaaay too long. But, I\u2019ll try
+      to find yours!"
+    autoProgress: 0
+  - speakerIndex: 0
+    text: thx.
+    autoProgress: 0
+  - speakerIndex: 1
+    text: No problem, bro!
+    autoProgress: 0
+  autoProgressDelay: 1.5
+  typingSpeed: 0.05
