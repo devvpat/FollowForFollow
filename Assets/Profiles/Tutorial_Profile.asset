@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
   realName: 
   ign: tutorial.exe
-  portraitSprite: {fileID: -5256508804588260846, guid: bc6d74647457044bb8b551694eb6c92f, type: 3}
+  portraitSprite: {fileID: 0}
+  themeColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   alignment: 0
   energyLevel: 1
   likes: 

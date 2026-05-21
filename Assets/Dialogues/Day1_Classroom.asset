@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueScript
   lines:
   - sender: {fileID: 11400000, guid: b3791e7d8a0e4f2b9c1d2e3f4a5b6c7d, type: 2}
-    text: 'Salutations, Blythe, I can only assume you weren''t paying attention to class again.'
+    text: Salutations, Blythe, I can only assume you weren't paying attention to
+      class again.
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
@@ -22,11 +23,12 @@ MonoBehaviour:
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: b3791e7d8a0e4f2b9c1d2e3f4a5b6c7d, type: 2}
-    text: 'Oh, really? You''ve had your head in the clouds since the beginning of class, you have bags under your eyes, and you look as stiff as a board!'
+    text: Oh, really? You've had your head in the clouds since the beginning of class,
+      you have bags under your eyes, and you look as stiff as a board!
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
-    text: 'Why are you watching me? Shouldn''t you be paying attention in class?'
+    text: Why are you watching me? Shouldn't you be paying attention in class?
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: b3791e7d8a0e4f2b9c1d2e3f4a5b6c7d, type: 2}
@@ -34,15 +36,15 @@ MonoBehaviour:
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: b3791e7d8a0e4f2b9c1d2e3f4a5b6c7d, type: 2}
-    text: 'That''s not important! What''s important is your education!'
+    text: That's not important! What's important is your education!
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
-    text: 'I''ll keep that in mind.'
+    text: I'll keep that in mind.
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: b3791e7d8a0e4f2b9c1d2e3f4a5b6c7d, type: 2}
-    text: 'Pfft, yeah right. You''re probably thinking about stupid girl stuff like...'
+    text: Pfft, yeah right. You're probably thinking about stupid girl stuff like...
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: b3791e7d8a0e4f2b9c1d2e3f4a5b6c7d, type: 2}
@@ -62,7 +64,7 @@ MonoBehaviour:
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
-    text: '...'
+    text: ...
     delayBeforeMs: 800
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
@@ -70,10 +72,10 @@ MonoBehaviour:
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
-    text: I just want to go home.
+    text: Just need to make it through the rest of the day.
     delayBeforeMs: 0
     typingDurationMs: 0
   - sender: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
-    text: '...maybe I''ll check the GC on the way. I''ve been quiet too long.'
+    text: The dungeon drops tonight. I'm not missing it.
     delayBeforeMs: 600
     typingDurationMs: 0

@@ -8,6 +8,14 @@ public class ChatBubble : MonoBehaviour
     public TMP_Text nameText;
     public Image portraitImage;
 
+    Sprite defaultPortraitSprite;
+
+    void Awake()
+    {
+        if (portraitImage != null)
+            defaultPortraitSprite = portraitImage.sprite;
+    }
+
     public void Setup(CharacterProfile sender, string initialText)
     {
         if (nameText != null)
@@ -15,15 +23,12 @@ public class ChatBubble : MonoBehaviour
 
         if (portraitImage != null)
         {
-            if (sender != null && sender.portraitSprite != null)
-            {
-                portraitImage.sprite = sender.portraitSprite;
-                portraitImage.enabled = true;
-            }
-            else
-            {
-                portraitImage.enabled = false;
-            }
+            bool hasPortrait = sender != null && sender.portraitSprite != null;
+            portraitImage.sprite = hasPortrait ? sender.portraitSprite : defaultPortraitSprite;
+            portraitImage.enabled = true;
+            portraitImage.color = hasPortrait
+                ? Color.white
+                : (sender != null ? sender.themeColor : Color.white);
         }
 
         SetText(initialText);
