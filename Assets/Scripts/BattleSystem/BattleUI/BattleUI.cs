@@ -35,18 +35,18 @@ public class BattleUI : MonoBehaviour
     public TMP_Text battleLogText;
 
     [Header("Prefabs")]
-    public GameObject allyCardPrefab;
-    public GameObject enemyCardPrefab;
+    public GameObject charCardPrefab;
 
     // ----- INTERNAL STATE -----
 
-    private List<AllyCharUI> _allyCharsUI = new();
-    private List<EnemyCharUI> _enemyCharsUI = new();
+    private List<CharUI> _allyCharsUI = new();
+    private List<CharUI> _enemyCharsUI = new();
 
     private AllyActionType _selectedAction;
     private ISkill _selectedSkill;
     private BattleCharacter _selectedTarget;
     private bool _targetingMode; // true when player must click an enemy
+    private SkillTargetType _currentTargetType; // used to determine which characters can be targeted when in targeting mode
 
     // ----- EVENT SUBSCRIPTIONS -----
 
@@ -105,8 +105,10 @@ public class BattleUI : MonoBehaviour
     private void HandleAllyTurnStart(Ally ally)
     {
         _selectedAction = AllyActionType.Attack;
+        _selectedSkill = null;
         _selectedTarget = null;
         _targetingMode = false;
+        _currentTargetType = SkillTargetType.None;
 
         // Highlight active ally card
         for (int i = 0; i < _allyCharsUI.Count; i++)
@@ -115,9 +117,12 @@ public class BattleUI : MonoBehaviour
         // Update action area
         actionPanel.SetActive(true);
         skillPanel.SetActive(false);
+        skillButton.interactable = !ally.IsSilenced && !ally.IsForceSilenced; // disable skill button if silenced
 
-        // Clear enemy targeting highlights
+        // Clear targeting highlights
         foreach (var card in _enemyCharsUI)
+            card.SetHighlighted(false);
+        foreach (var card in _allyCharsUI)
             card.SetHighlighted(false);
     }
 
@@ -126,6 +131,7 @@ public class BattleUI : MonoBehaviour
         // Disable action panel + set all ally cards to inactive and all enemy cards to non-highlighted
         actionPanel.SetActive(false);
         foreach (var card in _allyCharsUI) card.SetActive(false);
+        foreach (var card in _allyCharsUI) card.SetHighlighted(false);
         foreach (var card in _enemyCharsUI) card.SetHighlighted(false);
     }
 
@@ -162,9 +168,9 @@ public class BattleUI : MonoBehaviour
         // Create an ally char ui for each ally
         foreach (var ally in BattleManager.Instance.Allies)
         {
-            var go = Instantiate(allyCardPrefab, allyPanel);
-            var card = go.GetComponent<AllyCharUI>();
-            card.Bind(ally);
+            var go = Instantiate(charCardPrefab, allyPanel);
+            var card = go.GetComponent<CharUI>();
+            card.Bind(ally, OnCardClicked);
             _allyCharsUI.Add(card);
         }
     }
@@ -177,9 +183,9 @@ public class BattleUI : MonoBehaviour
         // Create an enemy char ui for each enemy
         foreach (var enemy in BattleManager.Instance.Enemies)
         {
-            var go = Instantiate(enemyCardPrefab, enemyPanel);
-            var card = go.GetComponent<EnemyCharUI>();
-            card.Bind(enemy, OnEnemyCardClicked);
+            var go = Instantiate(charCardPrefab, enemyPanel);
+            var card = go.GetComponent<CharUI>();
+            card.Bind(enemy, OnCardClicked);
             _enemyCharsUI.Add(card);
         }
     }
@@ -193,7 +199,7 @@ public class BattleUI : MonoBehaviour
         {
             ISkill skill = ally.Skills[i];
             skillButtonsTexts[i].text = $"{skill.Name}\n({skill.ManaCost} MP)";
-            skillButtons[i].interactable = ally.CanAffordSkill(skill);
+            skillButtons[i].interactable = ally.CanAffordSkill(skill) && !ally.IsSilenced && !ally.IsForceSilenced;
         }
     }
 
@@ -210,7 +216,8 @@ public class BattleUI : MonoBehaviour
     private void OnAttackPressed()
     {
         _selectedAction = AllyActionType.Attack;
-        EnterTargetingMode();
+        _currentTargetType = SkillTargetType.Enemy;
+        EnterTargetingMode(SkillTargetType.Enemy);
     }
 
     private void OnDefendPressed()
@@ -221,22 +228,52 @@ public class BattleUI : MonoBehaviour
         _targetingMode = false;
     }
 
-    private void EnterTargetingMode()
+    private void EnterTargetingMode(SkillTargetType targetType)
     {
         _targetingMode = true;
-        AppendLog("[*] Select a target…");
+
+        Dictionary<SkillTargetType, string> targetTypeNames = new()
+        {
+            { SkillTargetType.Enemy, "an Enemy" },
+            { SkillTargetType.Ally, "an Ally" },
+            { SkillTargetType.Self, "Self" },
+            { SkillTargetType.Any, "an Enemy or Ally" }
+        };
+        AppendLog($"[*] Select {targetTypeNames[targetType]} as the target…");
+
+        foreach (var card in _allyCharsUI)
+            card.SetHighlighted(false);
         foreach (var card in _enemyCharsUI)
-            card.SetHighlighted(card.Enemy.IsAlive);
+            card.SetHighlighted(false);
+        if (targetType == SkillTargetType.Enemy || targetType == SkillTargetType.Any)
+        {
+            foreach (var card in _enemyCharsUI)
+                card.SetHighlighted(card.Char.IsAlive);
+        }
+        if (targetType == SkillTargetType.Ally || targetType == SkillTargetType.Any)
+        {
+            foreach (var card in _allyCharsUI)
+                card.SetHighlighted(card.Char.IsAlive);
+        }
     }
 
-    private void OnEnemyCardClicked(BattleCharacter enemy)
+    private void OnCardClicked(BattleCharacter character)
     {
-        if (!_targetingMode || !enemy.IsAlive) return;
+        if (!_targetingMode || !character.IsAlive) return;
 
-        _selectedTarget = enemy;
+        // check if character is a valid target based on current targeting mode
+        if (_currentTargetType == SkillTargetType.Enemy && character is not Enemy
+            || _currentTargetType == SkillTargetType.Ally && character is not Ally) {
+                AppendLog($"[!] Invalid target. Please select a valid target.");
+                return;
+        }
+        AppendLog($"[*] Selected {character.Name} as target.");
+
+        _selectedTarget = character;
         _targetingMode  = false;
 
         foreach (var card in _enemyCharsUI) card.SetHighlighted(false);
+        foreach (var card in _allyCharsUI) card.SetHighlighted(false);
 
         // Create appropriate action based on selected action type and submit to battle manager
         PendingAllyAction action = _selectedAction switch
@@ -266,12 +303,18 @@ public class BattleUI : MonoBehaviour
 
         _selectedAction = AllyActionType.Skill;
         _selectedSkill = skill;
+        _currentTargetType = skill.TargetType;
 
         skillPanel.SetActive(false);
 
-        if (skill.NeedsTarget)
+        foreach (var card in _allyCharsUI)
+            card.SetHighlighted(false);
+        foreach (var card in _enemyCharsUI)
+            card.SetHighlighted(false);
+
+        if (skill.TargetType != SkillTargetType.None && skill.TargetType != SkillTargetType.Self)
         {
-            EnterTargetingMode();
+            EnterTargetingMode(skill.TargetType);
         } else
         {
             // If skill doesn't need target, submit action immediately with ally as target

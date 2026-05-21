@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a42ead85d01fbb43b3359f6318099c9, type: 3}
   m_Name: Ally 2
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
-  Name: Brom
-  MaxHP: 160
-  Attack: 18
-  Defense: 0.5
-  Speed: 4000
-  Accuracy: 0.8
-  CritChance: 0.1
+  Name: KARAAGE
+  MaxHP: 5400
+  Attack: 850
+  Defense: 450
+  Speed: 145
+  Accuracy: 0.75
+  CritChance: 0.25
   CritDamage: 1.5
-  MaxMana: 60
-  Role: 0
+  Level: 95
+  MaxMana: 600
+  charSkillSet: 1
+  Role: 1

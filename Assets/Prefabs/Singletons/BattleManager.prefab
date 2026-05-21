@@ -44,7 +44,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03966dc949cd29489e465b2a9b17e0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
-  minEnemies: 1
-  maxEnemies: 4
-  TestStartButton: {fileID: 0}
-  EnemyPartyRef: {fileID: 0}
