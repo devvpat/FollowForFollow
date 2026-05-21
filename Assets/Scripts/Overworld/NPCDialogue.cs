@@ -5,6 +5,8 @@ public class Speaker
 {
     public string name;
     public Sprite portrait;
+    public Color themeColor = Color.white;
+    public AudioClip voiceBlip;
 }
 
 [System.Serializable]
