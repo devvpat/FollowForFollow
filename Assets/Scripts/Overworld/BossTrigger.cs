@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BossTrigger : MonoBehaviour
 {
@@ -12,5 +13,19 @@ public class BossTrigger : MonoBehaviour
         PauseController.SetPause(true);
         battleUI.SetActive(true);
         BattleManager.Instance.StartNewFight(enemyParty.Enemies);
+        BattleManager.Instance.OnBattleEnd += BattleEnd;
+    }
+
+    private void BattleEnd(bool playerWon)
+    {
+        BattleManager.Instance.OnBattleEnd -= BattleEnd;
+
+        AllyParty.Instance.ResetAllAlliesHealthAndMana();
+        PauseController.SetPause(false);
+
+        if (playerWon)
+        {
+            gameObject.SetActive(false);   
+        }
     }
 }
