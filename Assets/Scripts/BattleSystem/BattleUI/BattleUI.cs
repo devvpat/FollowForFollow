@@ -303,6 +303,7 @@ public class BattleUI : MonoBehaviour
 
         _selectedAction = AllyActionType.Skill;
         _selectedSkill = skill;
+        _currentTargetType = skill.TargetType;
 
         skillPanel.SetActive(false);
 

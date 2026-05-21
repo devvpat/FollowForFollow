@@ -88,7 +88,7 @@ public static class BookwyrmSkills
         public float Power => 1800;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
 
-        // Target is Blinded ([50%] miss chance) for [2 turns].
+        // Target is Blinded for [2 turns].
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
