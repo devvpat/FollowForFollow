@@ -15,6 +15,7 @@ MonoBehaviour:
   realName: Winston
   ign: Bookwyrm
   portraitSprite: {fileID: -184693960786962222, guid: 229fe7d985645f846bf5614bfdb25cf2, type: 3}
+  themeColor: {r: 0.726, g: 0.257, b: 0.257, a: 1}
   alignment: 3
   energyLevel: 0
   likes: Vaporblade Lore, Youtubing
@@ -23,3 +24,4 @@ MonoBehaviour:
   preferredRole: 
   partyRole: 0
   allyData: {fileID: 11400000, guid: 711b9514a48c35847be4e1bf1807113b, type: 2}
+  textSound: {fileID: 8300000, guid: 60f2e93a3e02b7a4e9100e7a3b50ff4f, type: 3}
