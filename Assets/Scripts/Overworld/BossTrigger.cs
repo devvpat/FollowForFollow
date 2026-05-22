@@ -4,15 +4,38 @@ public class BossTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject battleUI;
     [SerializeField] private EnemyParty enemyParty;
+    [SerializeField] private GameObject boss;
+
+    private bool hasTriggered;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Player")) return;
+        if (hasTriggered || !collision.CompareTag("Player")) return;
+        hasTriggered = true;
+
+        if (TryGetComponent(out NPC npc))
+        {
+            Debug.Log("Starting boss dialogue");
+            npc.OnDialogueEnded += StartBossFight;
+            npc.Interact();
+            return;
+        }
+
+        StartBossFight();
+    }
+
+    private void StartBossFight()
+    {
+        if (TryGetComponent(out NPC npc))
+        {
+            npc.OnDialogueEnded -= StartBossFight;
+        }
 
         PauseController.SetPause(true);
         battleUI.SetActive(true);
         BattleManager.Instance.StartNewFight(enemyParty.Enemies);
         MusicManager.Instance.PlayMusic(MusicManager.Instance.battleTheme);
+
         BattleManager.Instance.OnBattleEnd += BattleEnd;
     }
 
@@ -26,6 +49,10 @@ public class BossTrigger : MonoBehaviour
 
         if (playerWon)
         {
+            if (boss != null)
+            {
+                boss.SetActive(false);
+            }
             gameObject.SetActive(false);
         }
     }
