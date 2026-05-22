@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c7df0971f0144696a13d9b83fd58476, type: 3}
-  m_Name: PreBossDialogue
+  m_Name: PreBossDialogue2
   m_EditorClassIdentifier: Assembly-CSharp::NPCDialogue
   speakers:
   - name: "Apo11o\u2727\u02D6\xB0."
@@ -30,70 +30,6 @@ MonoBehaviour:
     themeColor: {r: 0.95, g: 0.7, b: 0.3, a: 1}
     voiceBlip: {fileID: 0}
   dialogueLines:
-  - speakerIndex: 2
-    text: "Guys, wait. There\u2019s a big fight coming up, I can feel it."
-    autoProgress: 0
-  - speakerIndex: 0
-    text: huh?
-    autoProgress: 0
-  - speakerIndex: 1
-    text: how can you tell?
-    autoProgress: 0
-  - speakerIndex: 2
-    text: "Come on, I can\u2019t be the only one who has that feeling"
-    autoProgress: 0
-  - speakerIndex: 3
-    text: Iunno, I think you are lol :p
-    autoProgress: 0
-  - speakerIndex: 2
-    text: "Small enemies aren\u2019t around, we\u2019re in a big, open area\u2026"
-    autoProgress: 0
-  - speakerIndex: 1
-    text: yeah, but nobody else is here, either
-    autoProgress: 0
-  - speakerIndex: 0
-    text: cuz we got here first!
-    autoProgress: 0
-  - speakerIndex: 3
-    text: yay :D
-    autoProgress: 0
-  - speakerIndex: 2
-    text: "It\u2019s weird tho, usually there\u2019s at least some clue about what
-      we\u2019re about to fight\u2026"
-    autoProgress: 0
-  - speakerIndex: 0
-    text: now that you mention it
-    autoProgress: 0
-  - speakerIndex: 0
-    text: "i haven\u2019t seen anything"
-    autoProgress: 0
-  - speakerIndex: 2
-    text: Were you looking?
-    autoProgress: 0
-  - speakerIndex: 0
-    text: no
-    autoProgress: 0
-  - speakerIndex: 2
-    text: "That\u2019s why."
-    autoProgress: 0
-  - speakerIndex: 1
-    text: maybe we need to leave and come back
-    autoProgress: 0
-  - speakerIndex: 3
-    text: John makes a good point. This seems like a trap.
-    autoProgress: 0
-  - speakerIndex: 0
-    text: WHAT
-    autoProgress: 0
-  - speakerIndex: 2
-    text: "Don\u2019t back out now, we just got here!"
-    autoProgress: 0
-  - speakerIndex: 0
-    text: DUDE WE JUST GOT HERE
-    autoProgress: 0
-  - speakerIndex: 2
-    text: "Yeah, we\u2019ll find something in a sec"
-    autoProgress: 0
   - speakerIndex: 2
     text: "See? There\u2019s something"
     autoProgress: 0
