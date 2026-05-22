@@ -20,7 +20,7 @@ MonoBehaviour:
   - name: "KaraageOfCrane\u2022\u1D17\u2022"
     portrait: {fileID: 2551130072395904168, guid: f44c577c1342842c796be453489677b9, type: 3}
     themeColor: {r: 0.95, g: 0.7, b: 0.3, a: 1}
-    voiceBlip: {fileID: 0}
+    voiceBlip: {fileID: 8300000, guid: 94bd249af10b6ed43a6d54f249f1ef5a, type: 3}
   dialogueLines:
   - speakerIndex: 1
     text: "Heeey, what\u2019s up!?"

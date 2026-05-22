@@ -15,6 +15,7 @@ MonoBehaviour:
   realName: Hataori Tsuruha
   ign: "KaraageOfCrane\u2022\u1D17\u2022"
   portraitSprite: {fileID: -6870989451288669640, guid: e2ebc4a1c0f67c745b38899ea20a0472, type: 3}
+  themeColor: {r: 0.726, g: 0.257, b: 0.257, a: 1}
   alignment: 2
   energyLevel: 2
   likes: Action RPGs, Vtubing, Open World RPGs, Sandbox Games
@@ -23,3 +24,4 @@ MonoBehaviour:
   preferredRole: 
   partyRole: 0
   allyData: {fileID: 11400000, guid: a08381af9e8e1954e8d91bc1d6b7acdd, type: 2}
+  textSound: {fileID: 8300000, guid: 94bd249af10b6ed43a6d54f249f1ef5a, type: 3}

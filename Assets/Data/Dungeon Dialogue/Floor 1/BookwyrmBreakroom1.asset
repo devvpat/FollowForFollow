@@ -20,7 +20,7 @@ MonoBehaviour:
   - name: Bookwyrm
     portrait: {fileID: -184693960786962222, guid: 85e3c73ee41d345359853fe605fb7935, type: 3}
     themeColor: {r: 0.4, g: 0.55, b: 0.85, a: 1}
-    voiceBlip: {fileID: 0}
+    voiceBlip: {fileID: 8300000, guid: 60f2e93a3e02b7a4e9100e7a3b50ff4f, type: 3}
   dialogueLines:
   - speakerIndex: 1
     text: "Can you believe that a dev was able to make all of this secretly? I heavily
