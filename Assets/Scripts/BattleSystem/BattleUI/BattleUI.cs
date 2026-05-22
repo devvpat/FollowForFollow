@@ -342,4 +342,10 @@ public class BattleUI : MonoBehaviour
         // Reload current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public GameObject InfoText;
+    public void ToggleInfoText()
+    {
+        InfoText.SetActive(!InfoText.activeSelf);
+    }
 }
