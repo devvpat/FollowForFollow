@@ -576,12 +576,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8666705751206427736, guid: b4f7e13d9baca634f8d18c56b084ed33, type: 3}
       propertyPath: EnemyDataList.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8666705751206427736, guid: b4f7e13d9baca634f8d18c56b084ed33, type: 3}
       propertyPath: 'EnemyDataList.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 313f9e0e24725314c9acdf6f90703aa9, type: 2}
+      objectReference: {fileID: 11400000, guid: 284299c1ca1e51c46843a4f9926f308b, type: 2}
+    - target: {fileID: 8666705751206427736, guid: b4f7e13d9baca634f8d18c56b084ed33, type: 3}
+      propertyPath: 'EnemyDataList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f0e79ed21c930824aa82c51b5214c580, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1656,13 +1660,14 @@ GameObject:
   - component: {fileID: 757857834}
   - component: {fileID: 757857833}
   - component: {fileID: 757857835}
+  - component: {fileID: 757857836}
   m_Layer: 0
   m_Name: BossTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &757857833
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1670,7 +1675,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757857832}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1697,7 +1702,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.42270553}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1707,7 +1712,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.08390048}
   m_EdgeRadius: 0
 --- !u!4 &757857834
 Transform:
@@ -1731,13 +1736,33 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757857832}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cebb63eeffc0643eea167e055bf4140c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
   battleUI: {fileID: 1652274948}
   enemyParty: {fileID: 1187449611}
+  boss: {fileID: 881771510}
+--- !u!114 &757857836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757857832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b38b5e2c8d89a4559a9ae9e79ce39765, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPC
+  dialogueData: {fileID: 11400000, guid: d22353850579240c2abc6da0fcda2af9, type: 2}
+  dialoguePanel: {fileID: 9100100003}
+  dialogueText: {fileID: 9100100005}
+  nameText: {fileID: 9100100006}
+  portraitImage: {fileID: 9100100004}
+  nameBackground: {fileID: 9100100007}
+  charsPerSound: 3
 --- !u!1 &767690401
 GameObject:
   m_ObjectHideFlags: 0
@@ -2114,13 +2139,14 @@ GameObject:
   m_Component:
   - component: {fileID: 881771512}
   - component: {fileID: 881771511}
+  - component: {fileID: 881771513}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &881771511
 SpriteRenderer:
   serializedVersion: 2
@@ -2170,12 +2196,12 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4723107735738678597, guid: 5b2f1fe2470d549c4a3f349418006260, type: 3}
+  m_Sprite: {fileID: -1161129017461989057, guid: 5302349f28b8e444c989ffdbc8f7c286, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.86, y: 5.02}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2189,12 +2215,31 @@ Transform:
   m_GameObject: {fileID: 881771510}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 20, z: 0}
+  m_LocalPosition: {x: 0, y: 19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &881771513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881771510}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b38b5e2c8d89a4559a9ae9e79ce39765, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPC
+  dialogueData: {fileID: 11400000, guid: d22353850579240c2abc6da0fcda2af9, type: 2}
+  dialoguePanel: {fileID: 9100100003}
+  dialogueText: {fileID: 9100100005}
+  nameText: {fileID: 9100100006}
+  portraitImage: {fileID: 9100100004}
+  nameBackground: {fileID: 9100100007}
+  charsPerSound: 3
 --- !u!1 &904238367
 GameObject:
   m_ObjectHideFlags: 0
