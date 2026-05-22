@@ -24,4 +24,4 @@ MonoBehaviour:
   preferredRole: Support/Healer
   partyRole: 0
   allyData: {fileID: 11400000, guid: 95c32208b06714b4dacd5d8b11c1c591, type: 2}
-  textSound: {fileID: 8300000, guid: 8c15c351a579c37409198b65070fd741, type: 3}
+  textSound: {fileID: 8300000, guid: 154e62bec78edc747bf04795e426e44d, type: 3}

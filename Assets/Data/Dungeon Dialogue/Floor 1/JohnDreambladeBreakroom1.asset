@@ -20,7 +20,7 @@ MonoBehaviour:
   - name: "John Dreamblade :\xDE"
     portrait: {fileID: -4511362441317746440, guid: a1707f77fac71489ba8e797fb437f31e, type: 3}
     themeColor: {r: 0.94, g: 0.55, b: 0.75, a: 1}
-    voiceBlip: {fileID: 8300000, guid: 8c15c351a579c37409198b65070fd741, type: 3}
+    voiceBlip: {fileID: 8300000, guid: 154e62bec78edc747bf04795e426e44d, type: 3}
   dialogueLines:
   - speakerIndex: 0
     text: what have you thought about the dungeon so far?
