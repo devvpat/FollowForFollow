@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: The Mimic
   MaxHP: 160000
   Attack: 250
-  Defense: 700
+  Defense: 0
   Speed: 115
   Accuracy: 0.75
   CritChance: 0.25

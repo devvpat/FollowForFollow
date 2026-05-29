@@ -7,7 +7,7 @@ public static class ApolloPhoebeSkills
         public string Name => "World Cutting Slash";
         public string Type => "Burst";
         public int ManaCost => 0;
-        public float Power => 6500;
+        public float Power => 5000;
         public SkillTargetType TargetType => SkillTargetType.None;
         
         // Deals high damage to all targets
