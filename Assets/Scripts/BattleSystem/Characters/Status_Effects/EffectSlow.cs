@@ -10,7 +10,9 @@ public class Slow : BaseStatusEffect
         description: $"Reduces speed by {speedModifier * 100}% for {duration} turns.",
         totalDuration: duration,
         effectType: StatusEffectType.Debuff)
-    {}
+    {
+        Icon = StatusEffectIcon.Slow;
+    }
 
     public override void OnApply(BattleCharacter target)
     {

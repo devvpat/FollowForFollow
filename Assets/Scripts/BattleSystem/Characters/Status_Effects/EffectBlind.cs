@@ -10,7 +10,9 @@ public class Blind : BaseStatusEffect
         description: $"Reduces accuracy by {blindModifier * 100}% for {duration} turns.",
         totalDuration: duration,
         effectType: StatusEffectType.Debuff)
-    {}
+    {
+        Icon = StatusEffectIcon.Blind;
+    }
 
     public override void OnApply(BattleCharacter target)
     {

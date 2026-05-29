@@ -4,6 +4,7 @@ public static class BookwyrmSkills
     {
         public string Name => "True Test";
         public string Type => "Single Target Damage";
+        public string Description => "A simple poke to test the waters.";
         public int ManaCost => 100;
         public float Power => 1;
         public SkillTargetType TargetType => SkillTargetType.Any;
@@ -19,6 +20,7 @@ public static class BookwyrmSkills
     {
         public string Name => "Lore Dump";
         public string Type => "Group Buff";
+        public string Description => "Buff all allies' ATK, DEF, crit rate, and speed for 3 turns.";
         public int ManaCost => 120;
         public float Power => 0;
         public SkillTargetType TargetType => SkillTargetType.None;
@@ -44,6 +46,7 @@ public static class BookwyrmSkills
     {
         public string Name => "Demonization";
         public string Type => "Single Target Debuff";
+        public string Description => "Lower target's defense by 20% for 2 turns.";
         public int ManaCost => 80;
         public float Power => 1200;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
@@ -63,6 +66,7 @@ public static class BookwyrmSkills
     {
         public string Name => "Frame Manipulation";
         public string Type => "Turn Manipulation";
+        public string Description => "Grant an ally a full turn's worth of speed gauge.";
         public int ManaCost => 200;
         public float Power => 0;
         public SkillTargetType TargetType => SkillTargetType.Ally;
@@ -84,6 +88,7 @@ public static class BookwyrmSkills
     {
         public string Name => "Mouse Trap";
         public string Type => "Trap";
+        public string Description => "Blind an enemy for 2 turns, reducing their accuracy.";
         public int ManaCost => 150;
         public float Power => 1800;
         public SkillTargetType TargetType => SkillTargetType.Enemy;

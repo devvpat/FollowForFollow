@@ -305,6 +305,42 @@ public class BattleManager : MonoBehaviour
         return mitigatedDamage;
     }
 
+    public List<BattleCharacter> GetPredictedTurnOrder(int maxSlots = 8)
+    {
+        var result = new List<BattleCharacter>(maxSlots);
+        var allChars = new List<BattleCharacter>();
+        foreach (var a in Allies) if (a.IsAlive) allChars.Add(a);
+        foreach (var e in Enemies) if (e.IsAlive) allChars.Add(e);
+        if (allChars.Count == 0) return result;
+
+        var simTimers = new float[allChars.Count];
+        for (int i = 0; i < allChars.Count; i++)
+            simTimers[i] = allChars[i].TickTimer;
+
+        int safety = 0;
+        while (result.Count < maxSlots && safety < 10000)
+        {
+            safety++;
+            int bestIdx = -1;
+            float bestTimer = -1f;
+            for (int i = 0; i < allChars.Count; i++)
+            {
+                simTimers[i] += allChars[i].Speed;
+                if (simTimers[i] >= BattleTickThreshold && simTimers[i] > bestTimer)
+                {
+                    bestTimer = simTimers[i];
+                    bestIdx = i;
+                }
+            }
+            if (bestIdx >= 0)
+            {
+                result.Add(allChars[bestIdx]);
+                simTimers[bestIdx] -= BattleTickThreshold;
+            }
+        }
+        return result;
+    }
+
     private void Log(string msg) => OnLogMessage?.Invoke(msg);
 
     public bool IsAnyEnemyAlive()

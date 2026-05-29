@@ -12,6 +12,7 @@ public class Shield : BaseStatusEffect
         effectType: StatusEffectType.Buff)
     {
         this.durability = durability;
+        Icon = StatusEffectIcon.Shield;
     }
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)

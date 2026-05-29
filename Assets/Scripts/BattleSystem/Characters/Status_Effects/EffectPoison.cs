@@ -15,6 +15,7 @@ public class Poison : BaseStatusEffect
         effectType: StatusEffectType.Debuff)
     {
         this.stacks = stacks;
+        Icon = StatusEffectIcon.Poison;
     }
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)

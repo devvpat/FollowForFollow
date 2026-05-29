@@ -9,6 +9,7 @@ public class Stun : BaseStatusEffect
         totalDuration: duration,
         effectType: StatusEffectType.Debuff)
     {
+        Icon = StatusEffectIcon.Stun;
     }
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)

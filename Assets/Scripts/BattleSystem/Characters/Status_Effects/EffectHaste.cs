@@ -10,7 +10,9 @@ public class Haste : BaseStatusEffect
         description: $"Increases speed by {speedModifier * 100}% for {duration} turns.",
         totalDuration: duration,
         effectType: StatusEffectType.Buff)
-    {}
+    {
+        Icon = StatusEffectIcon.Haste;
+    }
 
     public override void OnApply(BattleCharacter target)
     {

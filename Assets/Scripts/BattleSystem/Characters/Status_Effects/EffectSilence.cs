@@ -9,6 +9,7 @@ public class Silence : BaseStatusEffect
         totalDuration: duration,
         effectType: StatusEffectType.Debuff)
     {
+        Icon = StatusEffectIcon.Silence;
     }
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)

@@ -4,56 +4,67 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-// Handles all functionality related to the battle UI:
 public class BattleUI : MonoBehaviour
 {
-    // ----- REFERENCES -----
+    [Header("Ally Panel")]
+    public Transform allyCardContainer;
+    public GameObject allyCardPrefab;
 
-    [Header("Panels")]
-    public Transform allyPanel;
-    public Transform enemyPanel;
+    [Header("Battlefield")]
+    public RectTransform battlefieldArea;
+    public GameObject enemyFieldPrefab;
+
+    [Header("Enemy Detail")]
+    public EnemyDetailPanelUI enemyDetailPanel;
+
+    [Header("Turn Order")]
+    public TurnOrderUI turnOrderUI;
+
+    [Header("Action Panel")]
     public GameObject actionPanel;
-    public GameObject resultOverlay;
-
-    [Header("Action Buttons")]
     public Button attackButton;
     public Button skillButton;
     public Button defendButton;
 
-    [Header("Skill Submenu")]
-    public GameObject skillPanel;
-    public Button[] skillButtons; // should have 4
-    public TMP_Text[] skillButtonsTexts; // should have 4
-    public Button backButton;
-
-    [Header("Result Overlay")]
-    public TMP_Text resultTitleText;
-    public Button   resultButton;
-    public TMP_Text resultButtonLabel;
+    [Header("Skill Panel")]
+    public SkillPanelUI skillPanelUI;
 
     [Header("Battle Log")]
-    public TMP_Text battleLogText;
+    public BattleLogPanel battleLogPanel;
 
-    [Header("Prefabs")]
-    public GameObject charCardPrefab;
+    [Header("Result Overlay")]
+    public GameObject resultOverlay;
+    public TMP_Text resultTitleText;
+    public Button resultButton;
+    public TMP_Text resultButtonLabel;
 
-    // ----- INTERNAL STATE -----
+    [Header("Ally Portrait Colors")]
+    public Color[] allyColors = {
+        new Color(0.60f, 0.35f, 0.85f, 1f),
+        new Color(0.85f, 0.45f, 0.25f, 1f),
+        new Color(0.25f, 0.70f, 0.85f, 1f),
+        new Color(0.85f, 0.25f, 0.45f, 1f)
+    };
 
-    private List<CharUI> _allyCharsUI = new();
-    private List<CharUI> _enemyCharsUI = new();
+    private List<AllyCardUI> _allyCards = new();
+    private List<EnemyFieldUI> _enemyFields = new();
 
     private AllyActionType _selectedAction;
     private ISkill _selectedSkill;
-    private BattleCharacter _selectedTarget;
-    private bool _targetingMode; // true when player must click an enemy
-    private SkillTargetType _currentTargetType; // used to determine which characters can be targeted when in targeting mode
+    private bool _targetingMode;
+    private SkillTargetType _currentTargetType;
 
-    // ----- EVENT SUBSCRIPTIONS -----
+    private static readonly Vector2[][] EnemyPositions = {
+        new[] { new Vector2(0.5f, 0.6f) },
+        new[] { new Vector2(0.35f, 0.6f), new Vector2(0.65f, 0.6f) },
+        new[] { new Vector2(0.25f, 0.55f), new Vector2(0.5f, 0.65f), new Vector2(0.75f, 0.55f) },
+        new[] { new Vector2(0.2f, 0.55f), new Vector2(0.4f, 0.65f), new Vector2(0.6f, 0.65f), new Vector2(0.8f, 0.55f) }
+    };
 
     private void OnEnable()
     {
         BattleManager.Instance.OnBattleStart += HandleBattleStart;
-        BattleManager.Instance.OnLogMessage += AppendLog;
+        BattleManager.Instance.OnLogMessage += HandleLogMessage;
         BattleManager.Instance.OnStateChanged += Refresh;
         BattleManager.Instance.OnAllyTurnStart += HandleAllyTurnStart;
         BattleManager.Instance.OnEnemyTurnStart += HandleEnemyTurnStart;
@@ -62,19 +73,16 @@ public class BattleUI : MonoBehaviour
         attackButton.onClick.AddListener(OnAttackPressed);
         skillButton.onClick.AddListener(OnSkillMenuPressed);
         defendButton.onClick.AddListener(OnDefendPressed);
-        backButton.onClick.AddListener(OnBackPressed);
-        for (int i = 0; i < skillButtons.Length; i++)
-        {
-            int index = i;
-            skillButtons[i].onClick.AddListener(() => OnSkillPressed(index));
-        }
+
+        skillPanelUI.OnSkillSelected += OnSkillSelected;
+        skillPanelUI.OnBackPressed += OnSkillBackPressed;
     }
 
     private void OnDisable()
     {
         if (BattleManager.Instance == null) return;
         BattleManager.Instance.OnBattleStart -= HandleBattleStart;
-        BattleManager.Instance.OnLogMessage -= AppendLog;
+        BattleManager.Instance.OnLogMessage -= HandleLogMessage;
         BattleManager.Instance.OnStateChanged -= Refresh;
         BattleManager.Instance.OnAllyTurnStart -= HandleAllyTurnStart;
         BattleManager.Instance.OnEnemyTurnStart -= HandleEnemyTurnStart;
@@ -83,74 +91,70 @@ public class BattleUI : MonoBehaviour
         attackButton.onClick.RemoveListener(OnAttackPressed);
         skillButton.onClick.RemoveListener(OnSkillMenuPressed);
         defendButton.onClick.RemoveListener(OnDefendPressed);
-        backButton.onClick.RemoveListener(OnBackPressed);
-        for (int i = 0; i < skillButtons.Length; i++)
-        {
-            skillButtons[i].onClick.RemoveListener(() => OnSkillPressed(i));
-        }
 
+        skillPanelUI.OnSkillSelected -= OnSkillSelected;
+        skillPanelUI.OnBackPressed -= OnSkillBackPressed;
     }
-
-    // ----- EVENT HANDLERS -----
 
     private void HandleBattleStart()
     {
         resultOverlay.SetActive(false);
-        battleLogText.text = "";
-        BuildAllyCharsUI();
-        BuildEnemyCharsUI();
+        battleLogPanel.Clear();
         actionPanel.SetActive(false);
+        skillPanelUI.Hide();
+        enemyDetailPanel.Hide();
+
+        BuildAllyCards();
+        BuildEnemyField();
+        turnOrderUI.Refresh();
+
+        if (_enemyFields.Count > 0)
+            FocusEnemy(_enemyFields[0].BoundEnemy);
     }
 
     private void HandleAllyTurnStart(Ally ally)
     {
         _selectedAction = AllyActionType.Attack;
         _selectedSkill = null;
-        _selectedTarget = null;
         _targetingMode = false;
         _currentTargetType = SkillTargetType.None;
 
-        // Highlight active ally card
-        for (int i = 0; i < _allyCharsUI.Count; i++)
-            _allyCharsUI[i].SetActive(BattleManager.Instance.Allies[i] == ally);
+        for (int i = 0; i < _allyCards.Count; i++)
+            _allyCards[i].SetActive(BattleManager.Instance.Allies[i] == ally);
 
-        // Update action area
         actionPanel.SetActive(true);
-        skillPanel.SetActive(false);
-        skillButton.interactable = !ally.IsSilenced && !ally.IsForceSilenced; // disable skill button if silenced
+        skillPanelUI.Hide();
+        skillButton.interactable = !ally.IsSilenced && !ally.IsForceSilenced;
 
-        // Clear targeting highlights
-        foreach (var card in _enemyCharsUI)
-            card.SetHighlighted(false);
-        foreach (var card in _allyCharsUI)
-            card.SetHighlighted(false);
+        ClearAllHighlights();
+        turnOrderUI.Refresh();
     }
 
-    private void HandleEnemyTurnStart(BattleCharacter enemy)
+    private void HandleEnemyTurnStart(Enemy enemy)
     {
-        // Disable action panel + set all ally cards to inactive and all enemy cards to non-highlighted
         actionPanel.SetActive(false);
-        foreach (var card in _allyCharsUI) card.SetActive(false);
-        foreach (var card in _allyCharsUI) card.SetHighlighted(false);
-        foreach (var card in _enemyCharsUI) card.SetHighlighted(false);
+        skillPanelUI.Hide();
+        foreach (var card in _allyCards) card.SetActive(false);
+        ClearAllHighlights();
+        FocusEnemy(enemy);
+        turnOrderUI.Refresh();
     }
 
     private void HandleBattleEnd(bool playerWon)
     {
         actionPanel.SetActive(false);
+        skillPanelUI.Hide();
         resultOverlay.SetActive(true);
 
         if (playerWon)
         {
-            // Show victory message and set button to start next fight
             resultTitleText.text = "Victory!";
             resultButtonLabel.text = "Continue";
             resultButton.onClick.RemoveAllListeners();
-            resultButton.onClick.AddListener(() => gameObject.SetActive(false)); // Hide the UI
+            resultButton.onClick.AddListener(() => gameObject.SetActive(false));
         }
         else
         {
-            // Show defeat message and set button to restart
             resultTitleText.text = "Defeat!";
             resultButtonLabel.text = "Replay";
             resultButton.onClick.RemoveAllListeners();
@@ -158,74 +162,117 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    // ----- UI BUILDING METHODS -----
-
-    private void BuildAllyCharsUI()
+    private void BuildAllyCards()
     {
-        foreach (Transform t in allyPanel) Destroy(t.gameObject);
-        _allyCharsUI.Clear();
+        foreach (Transform t in allyCardContainer) Destroy(t.gameObject);
+        _allyCards.Clear();
 
-        // Create an ally char ui for each ally
-        foreach (var ally in BattleManager.Instance.Allies)
+        var allies = BattleManager.Instance.Allies;
+        for (int i = 0; i < allies.Count; i++)
         {
-            var go = Instantiate(charCardPrefab, allyPanel);
-            var card = go.GetComponent<CharUI>();
-            card.Bind(ally, OnCardClicked);
-            _allyCharsUI.Add(card);
+            var go = Instantiate(allyCardPrefab, allyCardContainer);
+            var card = go.GetComponent<AllyCardUI>();
+            Color color = i < allyColors.Length ? allyColors[i] : Color.gray;
+            card.Bind(allies[i], color, OnTargetClicked);
+            _allyCards.Add(card);
         }
     }
 
-    private void BuildEnemyCharsUI()
+    private void BuildEnemyField()
     {
-        foreach (Transform t in enemyPanel) Destroy(t.gameObject);
-        _enemyCharsUI.Clear();
+        foreach (Transform t in battlefieldArea) Destroy(t.gameObject);
+        _enemyFields.Clear();
 
-        // Create an enemy char ui for each enemy
-        foreach (var enemy in BattleManager.Instance.Enemies)
+        var enemies = BattleManager.Instance.Enemies;
+        int count = Mathf.Min(enemies.Count, 4);
+        Vector2[] positions = count > 0 ? EnemyPositions[count - 1] : new Vector2[0];
+
+        for (int i = 0; i < enemies.Count; i++)
         {
-            var go = Instantiate(charCardPrefab, enemyPanel);
-            var card = go.GetComponent<CharUI>();
-            card.Bind(enemy, OnCardClicked);
-            _enemyCharsUI.Add(card);
+            var go = Instantiate(enemyFieldPrefab, battlefieldArea);
+            var field = go.GetComponent<EnemyFieldUI>();
+            field.Bind(enemies[i], OnTargetClicked);
+
+            if (i < positions.Length)
+            {
+                var rt = go.GetComponent<RectTransform>();
+                rt.anchorMin = positions[i];
+                rt.anchorMax = positions[i];
+                rt.anchoredPosition = Vector2.zero;
+            }
+
+            _enemyFields.Add(field);
         }
     }
-
-    private void PopulateSkillPanel()
-    {
-        Ally ally = BattleManager.Instance.CurrentAlly;
-        if (ally == null) return;
-
-        for (int i = 0; i < skillButtons.Length; i++)
-        {
-            ISkill skill = ally.Skills[i];
-            skillButtonsTexts[i].text = $"{skill.Name}\n({skill.ManaCost} MP)";
-            skillButtons[i].interactable = ally.CanAffordSkill(skill) && !ally.IsSilenced && !ally.IsForceSilenced;
-        }
-    }
-
-    // ----- UI UPDATE METHOD -----
 
     private void Refresh()
     {
-        foreach (var card in _allyCharsUI) card.Refresh();
-        foreach (var card in _enemyCharsUI) card.Refresh();
+        foreach (var card in _allyCards) card.Refresh();
+        foreach (var field in _enemyFields) field.Refresh();
+        enemyDetailPanel.Refresh();
+        turnOrderUI.Refresh();
     }
 
-    // ----- ACTION BUTTON HANDLERS -----
+    private void FocusEnemy(Enemy enemy)
+    {
+        foreach (var field in _enemyFields)
+            field.SetSelected(field.BoundEnemy == enemy);
+        enemyDetailPanel.Show(enemy);
+    }
 
     private void OnAttackPressed()
     {
         _selectedAction = AllyActionType.Attack;
         _currentTargetType = SkillTargetType.Enemy;
+        skillPanelUI.Hide();
         EnterTargetingMode(SkillTargetType.Enemy);
     }
 
     private void OnDefendPressed()
     {
-        // No need for a target when defending
         BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeDefend());
         actionPanel.SetActive(false);
+        skillPanelUI.Hide();
         _targetingMode = false;
+    }
+
+    private void OnSkillMenuPressed()
+    {
+        Ally ally = BattleManager.Instance.CurrentAlly;
+        if (ally == null) return;
+        skillPanelUI.Populate(ally);
+        skillPanelUI.Show();
+    }
+
+    private void OnSkillSelected(int index)
+    {
+        Ally ally = BattleManager.Instance.CurrentAlly;
+        if (ally == null) return;
+
+        ISkill skill = ally.Skills[index];
+        if (!ally.CanAffordSkill(skill)) return;
+
+        _selectedAction = AllyActionType.Skill;
+        _selectedSkill = skill;
+        _currentTargetType = skill.TargetType;
+        skillPanelUI.Hide();
+
+        ClearAllHighlights();
+
+        if (skill.TargetType != SkillTargetType.None && skill.TargetType != SkillTargetType.Self)
+        {
+            EnterTargetingMode(skill.TargetType);
+        }
+        else
+        {
+            BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeSkill(ally, skill));
+            actionPanel.SetActive(false);
+        }
+    }
+
+    private void OnSkillBackPressed()
+    {
+        skillPanelUI.Hide();
     }
 
     private void EnterTargetingMode(SkillTargetType targetType)
@@ -239,107 +286,64 @@ public class BattleUI : MonoBehaviour
             { SkillTargetType.Self, "Self" },
             { SkillTargetType.Any, "an Enemy or Ally" }
         };
-        AppendLog($"[*] Select {targetTypeNames[targetType]} as the target…");
+        HandleLogMessage($"[*] Select {targetTypeNames[targetType]} as the target…");
 
-        foreach (var card in _allyCharsUI)
-            card.SetHighlighted(false);
-        foreach (var card in _enemyCharsUI)
-            card.SetHighlighted(false);
+        ClearAllHighlights();
+
         if (targetType == SkillTargetType.Enemy || targetType == SkillTargetType.Any)
         {
-            foreach (var card in _enemyCharsUI)
-                card.SetHighlighted(card.Char.IsAlive);
+            foreach (var field in _enemyFields)
+                field.SetHighlighted(field.BoundEnemy.IsAlive);
         }
         if (targetType == SkillTargetType.Ally || targetType == SkillTargetType.Any)
         {
-            foreach (var card in _allyCharsUI)
-                card.SetHighlighted(card.Char.IsAlive);
+            foreach (var card in _allyCards)
+                card.SetHighlighted(card.BoundAlly.IsAlive);
         }
     }
 
-    private void OnCardClicked(BattleCharacter character)
+    private void OnTargetClicked(BattleCharacter character)
     {
+        if (character is Enemy enemy)
+            FocusEnemy(enemy);
+
         if (!_targetingMode || !character.IsAlive) return;
 
-        // check if character is a valid target based on current targeting mode
         if (_currentTargetType == SkillTargetType.Enemy && character is not Enemy
-            || _currentTargetType == SkillTargetType.Ally && character is not Ally) {
-                AppendLog($"[!] Invalid target. Please select a valid target.");
-                return;
+            || _currentTargetType == SkillTargetType.Ally && character is not Ally)
+        {
+            HandleLogMessage("[!] Invalid target. Please select a valid target.");
+            return;
         }
-        AppendLog($"[*] Selected {character.Name} as target.");
 
-        _selectedTarget = character;
-        _targetingMode  = false;
+        HandleLogMessage($"[*] Selected {character.Name} as target.");
+        _targetingMode = false;
+        ClearAllHighlights();
 
-        foreach (var card in _enemyCharsUI) card.SetHighlighted(false);
-        foreach (var card in _allyCharsUI) card.SetHighlighted(false);
-
-        // Create appropriate action based on selected action type and submit to battle manager
         PendingAllyAction action = _selectedAction switch
         {
-            AllyActionType.Attack => PendingAllyAction.MakeAttack(_selectedTarget),
-            AllyActionType.Skill => PendingAllyAction.MakeSkill(_selectedTarget, _selectedSkill),
-            _ => PendingAllyAction.MakeAttack(_selectedTarget)
+            AllyActionType.Attack => PendingAllyAction.MakeAttack(character),
+            AllyActionType.Skill => PendingAllyAction.MakeSkill(character, _selectedSkill),
+            _ => PendingAllyAction.MakeAttack(character)
         };
 
         BattleManager.Instance.SubmitAllyAction(action);
         actionPanel.SetActive(false);
     }
 
-    private void OnSkillMenuPressed()
+    private void ClearAllHighlights()
     {
-        skillPanel.SetActive(true);
-        PopulateSkillPanel();
+        foreach (var card in _allyCards) card.SetHighlighted(false);
+        foreach (var field in _enemyFields) field.SetHighlighted(false);
     }
 
-    private void OnSkillPressed(int index)
+    private void HandleLogMessage(string msg)
     {
-        Ally ally = BattleManager.Instance.CurrentAlly;
-        if (ally == null) return;
-
-        ISkill skill = ally.Skills[index];
-        if (!ally.CanAffordSkill(skill)) return;
-
-        _selectedAction = AllyActionType.Skill;
-        _selectedSkill = skill;
-        _currentTargetType = skill.TargetType;
-
-        skillPanel.SetActive(false);
-
-        foreach (var card in _allyCharsUI)
-            card.SetHighlighted(false);
-        foreach (var card in _enemyCharsUI)
-            card.SetHighlighted(false);
-
-        if (skill.TargetType != SkillTargetType.None && skill.TargetType != SkillTargetType.Self)
-        {
-            EnterTargetingMode(skill.TargetType);
-        } else
-        {
-            // If skill doesn't need target, submit action immediately with ally as target
-            BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeSkill(ally, skill));
-            actionPanel.SetActive(false);
-        }
+        battleLogPanel.AppendLog(msg);
     }
-
-    private void OnBackPressed()
-    {
-        skillPanel.SetActive(false);
-    }
-
-    // ----- LOG -----
-
-    private void AppendLog(string msg)
-    {
-        battleLogText.text += msg + "\n";
-    }
-
-    // ----- RESTART (DEFEAT) -----
 
     private void OnRestart()
     {
-        // Reload current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

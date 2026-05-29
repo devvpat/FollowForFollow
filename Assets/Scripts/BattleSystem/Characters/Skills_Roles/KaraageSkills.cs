@@ -4,6 +4,7 @@ public static class KaraageSkills
     {
         public string Name => "Yabai!";
         public string Type => "Multi-Hit";
+        public string Description => "Strike an enemy 4 times in rapid succession.";
         public int ManaCost => 70;
         public float Power => 350;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
@@ -31,6 +32,7 @@ public static class KaraageSkills
     {
         public string Name => "Wing Clipper";
         public string Type => "Utility/Burst";
+        public string Description => "Deal heavy damage and slow the target for 1 turn.";
         public int ManaCost => 90;
         public float Power => 2200;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
@@ -55,6 +57,7 @@ public static class KaraageSkills
     {
         public string Name => "Feather Stitch";
         public string Type => "Single Target Heal";
+        public string Description => "Restore 25% of an ally's max HP.";
         public int ManaCost => 100;
         public float Power => 0;
         public SkillTargetType TargetType => SkillTargetType.Ally;
@@ -75,6 +78,7 @@ public static class KaraageSkills
     {
         public string Name => "Clip Farm";
         public string Type => "RNG Multi-Hit";
+        public string Description => "Hit an enemy 1-8 times at random.";
         public int ManaCost => 130;
         public float Power => 300;
         public SkillTargetType TargetType => SkillTargetType.Enemy;

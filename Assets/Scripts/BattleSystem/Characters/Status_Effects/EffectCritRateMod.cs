@@ -12,6 +12,7 @@ public class CritRateModifier : BaseStatusEffect
         effectType: StatusEffectType.Buff)
     {
         critRateMod = modifier;
+        Icon = modifier >= 0 ? StatusEffectIcon.CritUp : StatusEffectIcon.CritDown;
     }
 
     public override void OnApply(BattleCharacter target)
