@@ -332,6 +332,36 @@ public class BattleManager : MonoBehaviour
         foreach (var e in Enemies) if (e.IsAlive) list.Add(e);
         return list;
     }
+
+    public List<BattleCharacter> GetLivingTeamOf(BattleCharacter character)
+    {
+        if (character is Ally)
+        {
+            return GetLivingAllies().Cast<BattleCharacter>().ToList();
+        }
+
+        if (character is Enemy)
+        {
+            return GetLivingEnemies().Cast<BattleCharacter>().ToList();
+        }
+
+        return new List<BattleCharacter>();
+    }
+
+    public List<BattleCharacter> GetLivingOpponentsOf(BattleCharacter character)
+    {
+        if (character is Ally)
+        {
+            return GetLivingEnemies().Cast<BattleCharacter>().ToList();
+        }
+
+        if (character is Enemy)
+        {
+            return GetLivingAllies().Cast<BattleCharacter>().ToList();
+        }
+
+        return new List<BattleCharacter>();
+    }
 }
 
 // ----- ALLY ACTION STRUCTURE -----

@@ -10,15 +10,15 @@ public static class JohnDreambladeSkills
         public int ManaCost => 110;
         public float Power => 1800;
         public SkillTargetType TargetType => SkillTargetType.None;
-        
+
         // Does damage to every enemy
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
-            
-            var alive_enemies = BattleManager.Instance.GetLivingEnemies();
+
+            var alive_enemies = BattleManager.Instance.GetLivingOpponentsOf(caster);
             float total = 0;
-            foreach (Enemy e in alive_enemies)
+            foreach (BattleCharacter e in alive_enemies)
             {
                 if (e.PerformDodgeCheck()) continue;
                 total += BattleManager.CalculateAndApplyDamage(caster, e, skill: this);
@@ -36,7 +36,7 @@ public static class JohnDreambladeSkills
         public int ManaCost => 90;
         public float Power => 4000;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
-        
+
         // Deals high damage to one target
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
@@ -55,13 +55,13 @@ public static class JohnDreambladeSkills
         public int ManaCost => 150;
         public float Power => 2500;
         public SkillTargetType TargetType => SkillTargetType.None;
-        
+
         // Gives all allies a 3 turn shield
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
-            
-            foreach (BattleCharacter ally in BattleManager.Instance.GetLivingAllies())
+
+            foreach (BattleCharacter ally in BattleManager.Instance.GetLivingTeamOf(caster))
             {
                 ally.ApplyStatusEffect(EffectFactory.MakeShield(3));
             }
@@ -76,7 +76,7 @@ public static class JohnDreambladeSkills
         public int ManaCost => 120;
         public float Power => 2000;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
-        
+
         // Removes [2] random buffs from the enemy
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
