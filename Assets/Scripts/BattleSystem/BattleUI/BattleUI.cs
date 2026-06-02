@@ -49,6 +49,18 @@ public class BattleUI : MonoBehaviour
     private List<AllyCardUI> _allyCards = new();
     private List<EnemyFieldUI> _enemyFields = new();
 
+    // Ally battlefield character sprites (static Canvas objects). Found by their art (sprite) name
+    // and mapped to the ally they represent, so they're robust to GameObject renames. Drive the
+    // hop (on action) and shake/flash (on damage) effects.
+    private readonly Dictionary<CharacterSkillSet, Image> _allyFieldSprites = new();
+    private static readonly Dictionary<string, CharacterSkillSet> FieldSpriteArt = new()
+    {
+        { "Minseong_Attack", CharacterSkillSet.JohnDreamblade },
+        { "Phoebe_Attack",   CharacterSkillSet.ApolloPhoebe },
+        { "Hatori_Attack",   CharacterSkillSet.Karaage },
+        { "Winston_Attack",  CharacterSkillSet.Bookwyrm },
+    };
+
     private AllyActionType _selectedAction;
     private ISkill _selectedSkill;
     private bool _targetingMode;
@@ -56,9 +68,9 @@ public class BattleUI : MonoBehaviour
 
     private static readonly Vector2[][] EnemyPositions = {
         new[] { new Vector2(0.5f, 0.6f) },
-        new[] { new Vector2(0.35f, 0.6f), new Vector2(0.65f, 0.6f) },
-        new[] { new Vector2(0.25f, 0.55f), new Vector2(0.5f, 0.65f), new Vector2(0.75f, 0.55f) },
-        new[] { new Vector2(0.2f, 0.55f), new Vector2(0.4f, 0.65f), new Vector2(0.6f, 0.65f), new Vector2(0.8f, 0.55f) }
+        new[] { new Vector2(0.40f, 0.6f), new Vector2(0.60f, 0.6f) },
+        new[] { new Vector2(0.35f, 0.55f), new Vector2(0.5f, 0.65f), new Vector2(0.65f, 0.55f) },
+        new[] { new Vector2(0.32f, 0.55f), new Vector2(0.44f, 0.65f), new Vector2(0.56f, 0.65f), new Vector2(0.68f, 0.55f) }
     };
 
     private void OnEnable()
@@ -68,6 +80,8 @@ public class BattleUI : MonoBehaviour
         BattleManager.Instance.OnStateChanged += Refresh;
         BattleManager.Instance.OnAllyTurnStart += HandleAllyTurnStart;
         BattleManager.Instance.OnEnemyTurnStart += HandleEnemyTurnStart;
+        BattleManager.Instance.OnActionPerformed += HandleActionPerformed;
+        BattleManager.Instance.OnDamageTaken += HandleDamageTaken;
         BattleManager.Instance.OnBattleEnd += HandleBattleEnd;
 
         attackButton.onClick.AddListener(OnAttackPressed);
@@ -86,6 +100,8 @@ public class BattleUI : MonoBehaviour
         BattleManager.Instance.OnStateChanged -= Refresh;
         BattleManager.Instance.OnAllyTurnStart -= HandleAllyTurnStart;
         BattleManager.Instance.OnEnemyTurnStart -= HandleEnemyTurnStart;
+        BattleManager.Instance.OnActionPerformed -= HandleActionPerformed;
+        BattleManager.Instance.OnDamageTaken -= HandleDamageTaken;
         BattleManager.Instance.OnBattleEnd -= HandleBattleEnd;
 
         attackButton.onClick.RemoveListener(OnAttackPressed);
@@ -106,10 +122,30 @@ public class BattleUI : MonoBehaviour
 
         BuildAllyCards();
         BuildEnemyField();
+        BuildFieldSpriteMap();
         turnOrderUI.Refresh();
 
         if (_enemyFields.Count > 0)
             FocusEnemy(_enemyFields[0].BoundEnemy);
+    }
+
+    // Locate the static ally battlefield sprites by their art name (clobber-proof vs renames).
+    private void BuildFieldSpriteMap()
+    {
+        _allyFieldSprites.Clear();
+        foreach (var img in FindObjectsOfType<Image>(true))
+        {
+            if (img.sprite == null) continue;
+            // Sprite sub-asset names carry a "_0" suffix (multi-sprite import), so match by prefix.
+            foreach (var kv in FieldSpriteArt)
+            {
+                if (img.sprite.name.StartsWith(kv.Key))
+                {
+                    _allyFieldSprites[kv.Value] = img;
+                    break;
+                }
+            }
+        }
     }
 
     private void HandleAllyTurnStart(Ally ally)
@@ -213,6 +249,35 @@ public class BattleUI : MonoBehaviour
         turnOrderUI.Refresh();
     }
 
+    // A character just attacked / used a skill — hop its field sprite.
+    private void HandleActionPerformed(BattleCharacter actor)
+    {
+        if (actor is Ally ally)
+        {
+            if (_allyFieldSprites.TryGetValue(ally.CharSkillSet, out var img) && img != null)
+                BattleSpriteFx.Hop(this, img.rectTransform);
+            return;
+        }
+        foreach (var field in _enemyFields)
+            if (field.BoundEnemy == actor) { field.PlayHop(); return; }
+    }
+
+    // A character just took damage — shake + flash red its field sprite.
+    private void HandleDamageTaken(BattleCharacter victim)
+    {
+        if (victim is Ally ally)
+        {
+            if (_allyFieldSprites.TryGetValue(ally.CharSkillSet, out var img) && img != null)
+            {
+                BattleSpriteFx.Shake(this, img.rectTransform);
+                BattleSpriteFx.Flash(this, img);
+            }
+            return;
+        }
+        foreach (var field in _enemyFields)
+            if (field.BoundEnemy == victim) { field.PlayHurt(); return; }
+    }
+
     private void FocusEnemy(Enemy enemy)
     {
         foreach (var field in _enemyFields)
@@ -240,6 +305,7 @@ public class BattleUI : MonoBehaviour
     {
         Ally ally = BattleManager.Instance.CurrentAlly;
         if (ally == null) return;
+        actionPanel.SetActive(false);
         skillPanelUI.Populate(ally);
         skillPanelUI.Show();
     }
@@ -273,6 +339,7 @@ public class BattleUI : MonoBehaviour
     private void OnSkillBackPressed()
     {
         skillPanelUI.Hide();
+        actionPanel.SetActive(true);
     }
 
     private void EnterTargetingMode(SkillTargetType targetType)

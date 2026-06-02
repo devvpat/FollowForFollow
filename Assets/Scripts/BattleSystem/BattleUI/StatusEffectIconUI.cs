@@ -11,13 +11,33 @@ public class StatusEffectIconUI : MonoBehaviour
     [Header("Icons")]
     public StatusEffectIconLibrary iconLibrary;
 
+    // Fallback library loaded from Resources when none is assigned in the Inspector. Lets the icons
+    // work without a serialized reference on the prefab (which Unity keeps clobbering while open).
+    private static StatusEffectIconLibrary _fallbackLibrary;
+    private static bool _fallbackLoaded;
+
+    private StatusEffectIconLibrary Library
+    {
+        get
+        {
+            if (iconLibrary != null) return iconLibrary;
+            if (!_fallbackLoaded)
+            {
+                _fallbackLibrary = Resources.Load<StatusEffectIconLibrary>("StatusEffectIconLibrary");
+                _fallbackLoaded = true;
+            }
+            return _fallbackLibrary;
+        }
+    }
+
     private static readonly Color BuffColor = new Color(0.3f, 0.7f, 0.4f, 1f);
     private static readonly Color DebuffColor = new Color(0.8f, 0.25f, 0.25f, 1f);
     private static readonly Color OtherColor = new Color(0.5f, 0.5f, 0.5f, 1f);
 
     public void Bind(BaseStatusEffect effect)
     {
-        Sprite sprite = iconLibrary != null ? iconLibrary.Get(effect.Icon) : null;
+        var library = Library;
+        Sprite sprite = library != null ? library.Get(effect.Icon) : null;
         if (sprite != null)
         {
             if (iconImage != null)

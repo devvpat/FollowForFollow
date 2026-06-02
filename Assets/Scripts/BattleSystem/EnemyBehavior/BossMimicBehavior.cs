@@ -5,7 +5,7 @@ public class BossMimicBehavior : IEnemyBehavior
 {
     public Enemy Self { get; set;}
 
-    Ally copiedAlly;
+    public Ally CopiedAlly { get; private set; }
     ISkill[] copiedSkills;
 
     private const int copyCooldown = 2;
@@ -16,9 +16,9 @@ public class BossMimicBehavior : IEnemyBehavior
         // if turncount is copycooldown, end silence and reset counter (fall through to turncount == 0 case)
         if (turnCount == copyCooldown)
         {
-            if (copiedAlly != null)
+            if (CopiedAlly != null)
             {
-                copiedAlly.IsForceSilenced = false;
+                CopiedAlly.IsForceSilenced = false;
             }
             turnCount = 0;
         }
@@ -31,7 +31,7 @@ public class BossMimicBehavior : IEnemyBehavior
 
             // copy target skills and silence
             Ally target = validTargets[Random.Range(0, validTargets.Count)];
-            copiedAlly = target;
+            CopiedAlly = target;
             copiedSkills = target.Skills;
             target.IsForceSilenced = true; // force silence the target for the rest of the fight
 

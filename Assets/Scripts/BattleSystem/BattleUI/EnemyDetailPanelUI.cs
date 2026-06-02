@@ -6,8 +6,6 @@ public class EnemyDetailPanelUI : MonoBehaviour
 {
     [Header("Display")]
     public TMP_Text nameText;
-    public Slider hpBar;
-    public TMP_Text hpText;
     public Transform statusEffectContainer;
     public Button closeButton;
 
@@ -40,9 +38,6 @@ public class EnemyDetailPanelUI : MonoBehaviour
         if (_enemy == null) return;
 
         nameText.text = _enemy.Name;
-        hpBar.value = _enemy.CurrentHP / _enemy.MaxHP;
-        if (hpText != null)
-            hpText.text = $"{_enemy.CurrentHP:F0} / {_enemy.MaxHP:F0}";
 
         RefreshStatusIcons();
     }

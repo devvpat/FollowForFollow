@@ -16,6 +16,8 @@ public class BattleManager : MonoBehaviour
     public event System.Action OnStateChanged; // redraw UI
     public event System.Action<Ally> OnAllyTurnStart; // ally taking turn
     public event System.Action<Enemy> OnEnemyTurnStart; // enemy taking turn
+    public event System.Action<BattleCharacter> OnActionPerformed; // a character just attacked / used a skill
+    public event System.Action<BattleCharacter> OnDamageTaken; // a character just took damage
     public event System.Action<bool> OnBattleEnd; // true = player won
 
     // ----- BATTLE NUMBERS -----
@@ -143,6 +145,7 @@ public class BattleManager : MonoBehaviour
                     // Log turn start, execute enemy action, and log result
                     OnEnemyTurnStart?.Invoke(enemy);
                     Log($"[*] {enemy.Name}'s turn.");
+                    OnActionPerformed?.Invoke(enemy);
                     string result = enemy.TakeTurn(GetLivingAllies(), GetLivingEnemies());
                     Log(result);
 
@@ -200,6 +203,7 @@ public class BattleManager : MonoBehaviour
                 if (!ally.PerformAccuracyCheck()) { Log($"[+] {ally.Name} tried to attack {action.Target.Name} but missed"); return; }
                 if (action.Target.PerformDodgeCheck()) { Log($"[+] {ally.Name} tried to attack {action.Target.Name} but {action.Target.Name} dodged"); return; }
                 ally.OnNormalAttack();
+                OnActionPerformed?.Invoke(ally);
                 // Attack enemy target
                 float atkDmg = CalculateAndApplyDamage(ally, action.Target);
                 Log($"[+] {ally.Name} attacks {action.Target.Name} for {atkDmg} damage!");
@@ -213,6 +217,7 @@ public class BattleManager : MonoBehaviour
                 // Spend mana and perform accuracy check in skill then execute and log result
                 ally.SpendMana(skill.ManaCost);
                 ally.OnSkilluse();
+                OnActionPerformed?.Invoke(ally);
                 SkillResult result = skill.Execute(ally, action.Target);
                 Log(result.LogMessage);
                 break;
@@ -246,6 +251,7 @@ public class BattleManager : MonoBehaviour
     {
         float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense, isPercentHealthDamage, maxHealthPercentDamage);
         defender.TakeDamage(damage);
+        if (damage > 0f && Instance != null) Instance.OnDamageTaken?.Invoke(defender);
         if (attacker.HasPoisonedWeapon)
         {
             var weapon = attacker.StatusEffects.First(e => e is PoisonWeapon) as PoisonWeapon;

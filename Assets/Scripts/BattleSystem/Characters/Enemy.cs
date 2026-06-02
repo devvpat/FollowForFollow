@@ -13,6 +13,9 @@ public class Enemy : BattleCharacter
 
     private IEnemyBehavior behavior;
 
+    // The ally this enemy has copied, if it's a mimic that has copied someone; null otherwise.
+    public Ally CopiedAlly => (behavior as BossMimicBehavior)?.CopiedAlly;
+
     private const float MinionLevelScale = 1.15f; // 15%
 
     public Enemy(string name, float maxHP, float attack, float defense, float speed, float accuracy, float critChance, float critDamage, EnemyBehaviorType behaviorType, int level, EnemyType enemyType)
