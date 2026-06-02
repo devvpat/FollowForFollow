@@ -7,7 +7,7 @@ public static class BookwyrmSkills
         public int ManaCost => 100;
         public float Power => 1;
         public SkillTargetType TargetType => SkillTargetType.Any;
-        
+
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             target.TakeDamage(1);
@@ -29,7 +29,7 @@ public static class BookwyrmSkills
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
 
-            foreach (var ally in BattleManager.Instance.GetLivingAllies())
+            foreach (var ally in BattleManager.Instance.GetLivingTeamOf(caster))
             {
                 ally.ApplyStatusEffect(EffectFactory.MakeAttackModifier(3, 1.10f));
                 ally.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(3, 1.10f));

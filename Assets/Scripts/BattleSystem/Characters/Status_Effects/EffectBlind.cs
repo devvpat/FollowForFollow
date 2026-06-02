@@ -3,7 +3,7 @@ using System;
 // Blinded: Reduces the hit chance of the attacker by X percent.
 public class Blind : BaseStatusEffect
 {
-    private const float blindModifier = 0.5f; // 50% accuracy reduction
+    private const float blindModifier = 0.25f; // 25% accuracy reduction
 
     public Blind(int duration) : base(
         name: "Blind",

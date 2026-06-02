@@ -98,12 +98,14 @@ public class BattleCharacter
         if (existingEffect != null)
         {
             existingEffect.OnReapply(this, effect);
+            Debug.Log($"[Status Effect] {Name} already has {effect.Name}. Resetting duration to {effect.RemainingDuration}");
         }
         // status effect does not exist
         else
         {
             effect.OnApply(this);
             StatusEffects.Add(effect);
+            Debug.Log($"[Status Effect] {Name} gains new status effect: {effect.Name}");
         }
     }
 
