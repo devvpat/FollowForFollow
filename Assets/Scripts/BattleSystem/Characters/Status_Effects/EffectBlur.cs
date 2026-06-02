@@ -3,7 +3,7 @@ using System;
 // Blurry: Grants the defender a X percent chance to dodge incoming attacks
 public class Blur : BaseStatusEffect
 {
-    private const float blurModifier = 0.5f; // 50% evasion chance increase
+    private const float blurModifier = 0.25f; // 25% evasion chance increase
 
     public Blur(int duration) : base(
         name: "Blur",

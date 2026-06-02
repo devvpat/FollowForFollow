@@ -17,7 +17,7 @@ MonoBehaviour:
   Attack: 500
   Defense: 900
   Speed: 95
-  Accuracy: 0.75
+  Accuracy: 1
   CritChance: 0.25
   CritDamage: 1.5
   Level: 95

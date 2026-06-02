@@ -20,26 +20,26 @@ public class MinionSupporterBehavior : IEnemyBehavior
         {
             case 0:
                 // applies 3 shield and 30% defense to all enemies for 2 turns
-                enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeShield(durability: 3)));
-                enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(duration: 2, multiplier: 0.3f)));
+                enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeShield(durability: 2)));
+                enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(duration: 2, multiplier: 0.15f)));
                 return $"[-] {Self.Name} applies shields and defense boost to all enemies!";
             case 1:
                 // heals the boss for 25% of its max hp
-                float healAmount = boss.MaxHP * 0.25f;
+                float healAmount = boss.MaxHP * 0.15f;
                 boss.RestoreHP(healAmount);
                 return $"[-] {Self.Name} heals {boss.Name} for {healAmount} HP!";
             case 2:
-                // if boss hp below 30%, heal the boss for 50% of its max hp
+                // if boss hp below 30%, heal the boss for 35% of its max hp
                 if (boss_hp_perc < 0.3f)
                 {
-                    float bigHealAmount = boss.MaxHP * 0.5f;
+                    float bigHealAmount = boss.MaxHP * 0.35f;
                     boss.RestoreHP(bigHealAmount);
                     return $"[-] {Self.Name} heals {boss.Name} for {bigHealAmount} HP!";
                 }
-                // else if the boss is above 50% hp, give the boss 5 durability shield
+                // else if the boss is above 50% hp, give the boss 3 durability shield
                 else if (boss_hp_perc > 0.5f)
                 {
-                    boss.ApplyStatusEffect(EffectFactory.MakeShield(durability: 5));
+                    boss.ApplyStatusEffect(EffectFactory.MakeShield(durability: 3));
                     return $"[-] {Self.Name} gives {boss.Name} a strong shield!";
                 }
                 else

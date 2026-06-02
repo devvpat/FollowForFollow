@@ -1,0 +1,1443 @@
+fileFormatVersion: 2
+guid: 1d459709d11774150940b18a1d5ada9c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6197895698342984746
+    second: showcase FfF pink outside tileset 1_0
+  - first:
+      213: -656145723770907103
+    second: showcase FfF pink outside tileset 1_1
+  - first:
+      213: 4607138043152837618
+    second: showcase FfF pink outside tileset 1_2
+  - first:
+      213: 7172053414722237080
+    second: showcase FfF pink outside tileset 1_3
+  - first:
+      213: 5524884073557897842
+    second: showcase FfF pink outside tileset 1_4
+  - first:
+      213: -1518447609998853957
+    second: showcase FfF pink outside tileset 1_5
+  - first:
+      213: 2728758175844147046
+    second: showcase FfF pink outside tileset 1_6
+  - first:
+      213: 7329828467671594981
+    second: showcase FfF pink outside tileset 1_7
+  - first:
+      213: -7010795873660856061
+    second: showcase FfF pink outside tileset 1_8
+  - first:
+      213: 8910546321944024838
+    second: showcase FfF pink outside tileset 1_9
+  - first:
+      213: 4197629230589401582
+    second: showcase FfF pink outside tileset 1_10
+  - first:
+      213: 1333343461910614725
+    second: showcase FfF pink outside tileset 1_11
+  - first:
+      213: 8813561813021173357
+    second: showcase FfF pink outside tileset 1_12
+  - first:
+      213: -7135168404195615643
+    second: showcase FfF pink outside tileset 1_13
+  - first:
+      213: 4531125161247849057
+    second: showcase FfF pink outside tileset 1_14
+  - first:
+      213: -3097416766746670466
+    second: showcase FfF pink outside tileset 1_15
+  - first:
+      213: 6282342112576489892
+    second: showcase FfF pink outside tileset 1_16
+  - first:
+      213: 5050641259085288905
+    second: showcase FfF pink outside tileset 1_17
+  - first:
+      213: 4034149220500296871
+    second: showcase FfF pink outside tileset 1_18
+  - first:
+      213: -1634429950118439542
+    second: showcase FfF pink outside tileset 1_19
+  - first:
+      213: -1628258013908288844
+    second: showcase FfF pink outside tileset 1_20
+  - first:
+      213: -1838986262637445799
+    second: showcase FfF pink outside tileset 1_21
+  - first:
+      213: -4516899438583147078
+    second: showcase FfF pink outside tileset 1_22
+  - first:
+      213: 8459018218083235216
+    second: showcase FfF pink outside tileset 1_23
+  - first:
+      213: 6997539727052902575
+    second: showcase FfF pink outside tileset 1_24
+  - first:
+      213: 3556734225240266613
+    second: showcase FfF pink outside tileset 1_25
+  - first:
+      213: 3010801203366864460
+    second: showcase FfF pink outside tileset 1_26
+  - first:
+      213: 498162702770958126
+    second: showcase FfF pink outside tileset 1_27
+  - first:
+      213: 472506824361714911
+    second: showcase FfF pink outside tileset 1_28
+  - first:
+      213: -1047343511815047993
+    second: showcase FfF pink outside tileset 1_29
+  - first:
+      213: -1479818466439088000
+    second: showcase FfF pink outside tileset 1_30
+  - first:
+      213: -277342780110217125
+    second: showcase FfF pink outside tileset 1_31
+  - first:
+      213: -5198225441537376096
+    second: showcase FfF pink outside tileset 1_32
+  - first:
+      213: -843493222361729776
+    second: showcase FfF pink outside tileset 1_33
+  - first:
+      213: 8746914812515908709
+    second: showcase FfF pink outside tileset 1_34
+  - first:
+      213: 4837417724407167906
+    second: showcase FfF pink outside tileset 1_35
+  - first:
+      213: 8866623079220174472
+    second: showcase FfF pink outside tileset 1_36
+  - first:
+      213: 731566009900123297
+    second: showcase FfF pink outside tileset 1_37
+  - first:
+      213: 2205047582492796689
+    second: showcase FfF pink outside tileset 1_38
+  - first:
+      213: -1274841389051959117
+    second: showcase FfF pink outside tileset 1_39
+  - first:
+      213: -4418703221088024882
+    second: showcase FfF pink outside tileset 1_40
+  - first:
+      213: 6269342741063787796
+    second: showcase FfF pink outside tileset 1_41
+  - first:
+      213: -1485183950609621849
+    second: showcase FfF pink outside tileset 1_42
+  - first:
+      213: -8485973788240308740
+    second: showcase FfF pink outside tileset 1_43
+  - first:
+      213: -7266050577263689960
+    second: showcase FfF pink outside tileset 1_44
+  - first:
+      213: 1803798342686295713
+    second: showcase FfF pink outside tileset 1_45
+  - first:
+      213: -8775227510465567001
+    second: showcase FfF pink outside tileset 1_46
+  - first:
+      213: 4954303133348151993
+    second: showcase FfF pink outside tileset 1_47
+  - first:
+      213: -7379718676453546317
+    second: showcase FfF pink outside tileset 1_48
+  - first:
+      213: 1929158402973749123
+    second: showcase FfF pink outside tileset 1_49
+  - first:
+      213: -6078607141548464257
+    second: showcase FfF pink outside tileset 1_50
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 259
+        width: 5
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2cb7aebc49530650800000000000000
+      internalID: 6197895698342984746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_1
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 291
+        width: 18
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1265ebdc0f6e4e6f0800000000000000
+      internalID: -656145723770907103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_2
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 291
+        width: 18
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fb205df3a7dfef30800000000000000
+      internalID: 4607138043152837618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_3
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 291
+        width: 18
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89275aed490488360800000000000000
+      internalID: 7172053414722237080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_4
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 291
+        width: 18
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 272b1a5fac45cac40800000000000000
+      internalID: 5524884073557897842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_5
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 291
+        width: 18
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb83afb91f36deae0800000000000000
+      internalID: -1518447609998853957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_6
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 291
+        width: 7
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66f12257a1f7ed520800000000000000
+      internalID: 2728758175844147046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_7
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 275
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e77c100828c8b560800000000000000
+      internalID: 7329828467671594981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_8
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 275
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3099ba53c46a4be90800000000000000
+      internalID: -7010795873660856061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_9
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 275
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60713227bae98ab70800000000000000
+      internalID: 8910546321944024838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_10
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 275
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee9d3149b89f04a30800000000000000
+      internalID: 4197629230589401582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_11
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 259
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c295c270dcf08210800000000000000
+      internalID: 1333343461910614725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_12
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 259
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d66231fc5cf005a70800000000000000
+      internalID: 8813561813021173357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_13
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 259
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56c545fd32acafc90800000000000000
+      internalID: -7135168404195615643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_14
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 259
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16a3305c35ac1ee30800000000000000
+      internalID: 4531125161247849057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_15
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 259
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7ac9b88cd3c305d0800000000000000
+      internalID: -3097416766746670466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_16
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 259
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a94999bddc5f2750800000000000000
+      internalID: 6282342112576489892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_17
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 243
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c5d5b7377b771640800000000000000
+      internalID: 5050641259085288905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 227
+        width: 5
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a4d6da975d2cf730800000000000000
+      internalID: 4034149220500296871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_19
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 227
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a855ee4be965159e0800000000000000
+      internalID: -1634429950118439542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_20
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 227
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ba305696f34769e0800000000000000
+      internalID: -1628258013908288844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_21
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 227
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95dfbacccbb9a76e0800000000000000
+      internalID: -1838986262637445799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_22
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 227
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab5171564efb051c0800000000000000
+      internalID: -4516899438583147078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_23
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 227
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 095b8656048746570800000000000000
+      internalID: 8459018218083235216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_24
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 211
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa01ca4ae414c1160800000000000000
+      internalID: 6997539727052902575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 195
+        width: 5
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5779be7feee0c5130800000000000000
+      internalID: 3556734225240266613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_26
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 195
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4620081eb388c920800000000000000
+      internalID: 3010801203366864460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_27
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 195
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2fe20bb654d9e600800000000000000
+      internalID: 498162702770958126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_28
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 195
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd4270c047eae8600800000000000000
+      internalID: 472506824361714911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_29
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 195
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c4347400a61771f0800000000000000
+      internalID: -1047343511815047993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_30
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 195
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 088b5d7f1f0a67be0800000000000000
+      internalID: -1479818466439088000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_31
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 179
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b50e28ef53ea62cf0800000000000000
+      internalID: -277342780110217125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 163
+        width: 5
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a044c690813cd7b0800000000000000
+      internalID: -5198225441537376096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_33
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 163
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 015fdae126f4b44f0800000000000000
+      internalID: -843493222361729776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_34
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 163
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56cfc98cda8436970800000000000000
+      internalID: 8746914812515908709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_35
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 163
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2abb7756ac5f12340800000000000000
+      internalID: 4837417724407167906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_36
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 163
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88ed23296b29c0b70800000000000000
+      internalID: 8866623079220174472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_37
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 163
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a4c8d5f86b072a00800000000000000
+      internalID: 731566009900123297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_38
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 131
+        width: 5
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 117215be717e99e10800000000000000
+      internalID: 2205047582492796689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_39
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 131
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b8a794d28ade4ee0800000000000000
+      internalID: -1274841389051959117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_40
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 131
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec68c2be4dc9da2c0800000000000000
+      internalID: -4418703221088024882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_41
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 131
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 415e740b10e210750800000000000000
+      internalID: 6269342741063787796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_42
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 131
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ac5dc5d011936be0800000000000000
+      internalID: -1485183950609621849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_43
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 111
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf519aadcc3cb3a80800000000000000
+      internalID: -8485973788240308740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_44
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 111
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81ffc264f7dc92b90800000000000000
+      internalID: -7266050577263689960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_45
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 111
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a641462901680910800000000000000
+      internalID: 1803798342686295713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_46
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 111
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e6e6778211283680800000000000000
+      internalID: -8775227510465567001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_47
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 111
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b242d4637831c440800000000000000
+      internalID: 4954303133348151993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_48
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 111
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b6aba396f8f59990800000000000000
+      internalID: -7379718676453546317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_49
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 111
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38fc5bca85fb5ca10800000000000000
+      internalID: 1929158402973749123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: showcase FfF pink outside tileset 1_50
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 89
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f77e9d6b20374aba0800000000000000
+      internalID: -6078607141548464257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      showcase FfF pink outside tileset 1_0: 6197895698342984746
+      showcase FfF pink outside tileset 1_1: -656145723770907103
+      showcase FfF pink outside tileset 1_10: 4197629230589401582
+      showcase FfF pink outside tileset 1_11: 1333343461910614725
+      showcase FfF pink outside tileset 1_12: 8813561813021173357
+      showcase FfF pink outside tileset 1_13: -7135168404195615643
+      showcase FfF pink outside tileset 1_14: 4531125161247849057
+      showcase FfF pink outside tileset 1_15: -3097416766746670466
+      showcase FfF pink outside tileset 1_16: 6282342112576489892
+      showcase FfF pink outside tileset 1_17: 5050641259085288905
+      showcase FfF pink outside tileset 1_18: 4034149220500296871
+      showcase FfF pink outside tileset 1_19: -1634429950118439542
+      showcase FfF pink outside tileset 1_2: 4607138043152837618
+      showcase FfF pink outside tileset 1_20: -1628258013908288844
+      showcase FfF pink outside tileset 1_21: -1838986262637445799
+      showcase FfF pink outside tileset 1_22: -4516899438583147078
+      showcase FfF pink outside tileset 1_23: 8459018218083235216
+      showcase FfF pink outside tileset 1_24: 6997539727052902575
+      showcase FfF pink outside tileset 1_25: 3556734225240266613
+      showcase FfF pink outside tileset 1_26: 3010801203366864460
+      showcase FfF pink outside tileset 1_27: 498162702770958126
+      showcase FfF pink outside tileset 1_28: 472506824361714911
+      showcase FfF pink outside tileset 1_29: -1047343511815047993
+      showcase FfF pink outside tileset 1_3: 7172053414722237080
+      showcase FfF pink outside tileset 1_30: -1479818466439088000
+      showcase FfF pink outside tileset 1_31: -277342780110217125
+      showcase FfF pink outside tileset 1_32: -5198225441537376096
+      showcase FfF pink outside tileset 1_33: -843493222361729776
+      showcase FfF pink outside tileset 1_34: 8746914812515908709
+      showcase FfF pink outside tileset 1_35: 4837417724407167906
+      showcase FfF pink outside tileset 1_36: 8866623079220174472
+      showcase FfF pink outside tileset 1_37: 731566009900123297
+      showcase FfF pink outside tileset 1_38: 2205047582492796689
+      showcase FfF pink outside tileset 1_39: -1274841389051959117
+      showcase FfF pink outside tileset 1_4: 5524884073557897842
+      showcase FfF pink outside tileset 1_40: -4418703221088024882
+      showcase FfF pink outside tileset 1_41: 6269342741063787796
+      showcase FfF pink outside tileset 1_42: -1485183950609621849
+      showcase FfF pink outside tileset 1_43: -8485973788240308740
+      showcase FfF pink outside tileset 1_44: -7266050577263689960
+      showcase FfF pink outside tileset 1_45: 1803798342686295713
+      showcase FfF pink outside tileset 1_46: -8775227510465567001
+      showcase FfF pink outside tileset 1_47: 4954303133348151993
+      showcase FfF pink outside tileset 1_48: -7379718676453546317
+      showcase FfF pink outside tileset 1_49: 1929158402973749123
+      showcase FfF pink outside tileset 1_5: -1518447609998853957
+      showcase FfF pink outside tileset 1_50: -6078607141548464257
+      showcase FfF pink outside tileset 1_6: 2728758175844147046
+      showcase FfF pink outside tileset 1_7: 7329828467671594981
+      showcase FfF pink outside tileset 1_8: -7010795873660856061
+      showcase FfF pink outside tileset 1_9: 8910546321944024838
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -413,4 +413,11 @@ public class BattleUI : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    // Info panel toggle (merged from main). Null-guarded since the classroom scene may not wire InfoText.
+    public GameObject InfoText;
+    public void ToggleInfoText()
+    {
+        if (InfoText != null) InfoText.SetActive(!InfoText.activeSelf);
+    }
 }

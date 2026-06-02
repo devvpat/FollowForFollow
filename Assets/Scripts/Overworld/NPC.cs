@@ -18,6 +18,8 @@ public class NPC : MonoBehaviour, IInteractable
     private bool isTyping, isDialogueActive;
     private AudioSource audioSource;
 
+    public event System.Action OnDialogueEnded;
+
     void Awake()
     {
         if (!TryGetComponent(out audioSource))
@@ -142,5 +144,7 @@ public class NPC : MonoBehaviour, IInteractable
         dialogueText.SetText("");
         dialoguePanel.SetActive(false);
         PauseController.SetPause(false);
+
+        OnDialogueEnded?.Invoke();
     }
 }
