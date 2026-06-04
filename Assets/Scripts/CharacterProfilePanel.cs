@@ -23,7 +23,9 @@ public class CharacterProfilePanel : MonoBehaviour
         if (roleDropdown != null)
         {
             roleDropdown.ClearOptions();
-            roleDropdown.AddOptions(new List<string> { "Warrior", "Mage", "Rogue", "Cleric" });
+            // Options are generated from the AllyRole enum (in declaration order) so dropdown index ==
+            // (AllyRole)index, which OnRoleChanged relies on. We only prettify the display label.
+            roleDropdown.AddOptions(BuildRoleLabels());
             roleDropdown.onValueChanged.AddListener(OnRoleChanged);
         }
 
@@ -106,5 +108,27 @@ public class CharacterProfilePanel : MonoBehaviour
 
         if (AllyParty.Instance != null)
             AllyParty.Instance.UpdateAllyRole(current.allyData.Name, newRole);
+    }
+
+    // Enum names in AllyRole declaration order, with camelCase split into words for display
+    // (e.g. "GlassCannon" -> "Glass Cannon", "BurstDPS" -> "Burst DPS"). Order is preserved so the
+    // option index still equals the enum value.
+    static List<string> BuildRoleLabels()
+    {
+        string[] names = System.Enum.GetNames(typeof(AllyRole));
+        var labels = new List<string>(names.Length);
+        foreach (string n in names)
+            labels.Add(Spacify(n));
+        return labels;
+    }
+
+    static string Spacify(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return name;
+        // Split lower/digit -> Upper boundaries ("BurstDPS" -> "Burst DPS"),
+        // then acronym -> Word boundaries ("DPSReport" -> "DPS Report"). Keeps acronyms intact.
+        string s = System.Text.RegularExpressions.Regex.Replace(name, "([a-z0-9])([A-Z])", "$1 $2");
+        s = System.Text.RegularExpressions.Regex.Replace(s, "([A-Z]+)([A-Z][a-z])", "$1 $2");
+        return s;
     }
 }
