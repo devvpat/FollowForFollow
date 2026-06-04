@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   Name: The Mimic
   MaxHP: 160000
-  Attack: 250
-  Defense: 0
+  Attack: 100
+  Defense: 50
   Speed: 115
-  Accuracy: 0.75
+  Accuracy: 1
   CritChance: 0.25
   CritDamage: 1.5
   Level: 95

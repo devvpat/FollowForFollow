@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ally 4
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
   Name: APOLLO / PHOEBE
-  MaxHP: 10500
+  MaxHP: 15000
   Attack: 1200
   Defense: 650
   Speed: 125
@@ -21,6 +21,6 @@ MonoBehaviour:
   CritChance: 0.25
   CritDamage: 1.5
   Level: 95
-  MaxMana: 550
+  MaxMana: 750
   charSkillSet: 3
   Role: 3

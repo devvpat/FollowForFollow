@@ -20,8 +20,8 @@ public class MinionSupporterBehavior : IEnemyBehavior
         {
             case 0:
                 // applies 3 shield and 30% defense to all enemies for 2 turns
-                enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeShield(durability: 2)));
-                enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(duration: 2, multiplier: 0.15f)));
+                // enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeShield(durability: 2)));
+                enemies.FindAll(e => e.IsAlive).ForEach(e => e.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(duration: 3, multiplier: 0.15f)));
                 return $"[-] {Self.Name} applies shields and defense boost to all enemies!";
             case 1:
                 // heals the boss for 25% of its max hp
@@ -39,7 +39,7 @@ public class MinionSupporterBehavior : IEnemyBehavior
                 // else if the boss is above 50% hp, give the boss 3 durability shield
                 else if (boss_hp_perc > 0.5f)
                 {
-                    boss.ApplyStatusEffect(EffectFactory.MakeShield(durability: 3));
+                    // boss.ApplyStatusEffect(EffectFactory.MakeShield(durability: 3));
                     return $"[-] {Self.Name} gives {boss.Name} a strong shield!";
                 }
                 else

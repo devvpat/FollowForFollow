@@ -5,7 +5,7 @@ public static class KaraageSkills
         public string Name => "Yabai!";
         public string Type => "Multi-Hit";
         public int ManaCost => 70;
-        public float Power => 350;
+        public float Power => 750;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
         
         // Hit an enemy 4 times
@@ -32,7 +32,7 @@ public static class KaraageSkills
         public string Name => "Wing Clipper";
         public string Type => "Utility/Burst";
         public int ManaCost => 90;
-        public float Power => 2200;
+        public float Power => 3200;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
         
         // Deals high damage to one target and slows them for [1 turn]
@@ -42,7 +42,7 @@ public static class KaraageSkills
             if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
 
             float total = BattleManager.CalculateAndApplyDamage(caster, target, skill: this);
-            target.ApplyStatusEffect(EffectFactory.MakeSlow(1));
+            target.ApplyStatusEffect(EffectFactory.MakeSlow(2));
             if (caster is Ally ally)
             {
                 ally.IncreaseHitCount(1);
@@ -76,7 +76,7 @@ public static class KaraageSkills
         public string Name => "Clip Farm";
         public string Type => "RNG Multi-Hit";
         public int ManaCost => 130;
-        public float Power => 300;
+        public float Power => 1000;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
         
         // Hits the character 1-8 times
