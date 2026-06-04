@@ -4,153 +4,222 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-// Handles all functionality related to the battle UI:
 public class BattleUI : MonoBehaviour
 {
-    // ----- REFERENCES -----
+    [Header("Ally Panel")]
+    public Transform allyCardContainer;
+    public GameObject allyCardPrefab;
 
-    [Header("Panels")]
-    public Transform allyPanel;
-    public Transform enemyPanel;
+    [Header("Battlefield")]
+    public RectTransform battlefieldArea;
+    public GameObject enemyFieldPrefab;
+
+    [Header("Enemy Detail")]
+    public EnemyDetailPanelUI enemyDetailPanel;
+
+    [Header("Turn Order")]
+    public TurnOrderUI turnOrderUI;
+
+    [Header("Action Panel")]
     public GameObject actionPanel;
-    public GameObject resultOverlay;
-
-    [Header("Action Buttons")]
     public Button attackButton;
     public Button skillButton;
     public Button defendButton;
 
-    [Header("Skill Submenu")]
-    public GameObject skillPanel;
-    public Button[] skillButtons; // should have 4
-    public TMP_Text[] skillButtonsTexts; // should have 4
-    public Button backButton;
-
-    [Header("Result Overlay")]
-    public TMP_Text resultTitleText;
-    public Button   resultButton;
-    public TMP_Text resultButtonLabel;
+    [Header("Skill Panel")]
+    public SkillPanelUI skillPanelUI;
 
     [Header("Battle Log")]
-    public TMP_Text battleLogText;
+    public BattleLogPanel battleLogPanel;
 
-    [Header("Prefabs")]
-    public GameObject charCardPrefab;
+    [Header("Result Overlay")]
+    public GameObject resultOverlay;
+    public TMP_Text resultTitleText;
+    public Button resultButton;
+    public TMP_Text resultButtonLabel;
 
-    // ----- INTERNAL STATE -----
+    [Header("Ally Portrait Colors")]
+    public Color[] allyColors = {
+        new Color(0.60f, 0.35f, 0.85f, 1f),
+        new Color(0.85f, 0.45f, 0.25f, 1f),
+        new Color(0.25f, 0.70f, 0.85f, 1f),
+        new Color(0.85f, 0.25f, 0.45f, 1f)
+    };
 
-    private List<CharUI> _allyCharsUI = new();
-    private List<CharUI> _enemyCharsUI = new();
+    private List<AllyCardUI> _allyCards = new();
+    private List<EnemyFieldUI> _enemyFields = new();
+
+    // Ally battlefield character sprites (static Canvas objects). Found by their art (sprite) name
+    // and mapped to the ally they represent, so they're robust to GameObject renames. Drive the
+    // hop (on action) and shake/flash (on damage) effects.
+    private readonly Dictionary<CharacterSkillSet, Image> _allyFieldSprites = new();
+    private static readonly Dictionary<string, CharacterSkillSet> FieldSpriteArt = new()
+    {
+        { "Minseong_Attack", CharacterSkillSet.JohnDreamblade },
+        { "Phoebe_Attack",   CharacterSkillSet.ApolloPhoebe },
+        { "Hatori_Attack",   CharacterSkillSet.Karaage },
+        { "Winston_Attack",  CharacterSkillSet.Bookwyrm },
+    };
 
     private AllyActionType _selectedAction;
     private ISkill _selectedSkill;
-    private BattleCharacter _selectedTarget;
-    private bool _targetingMode; // true when player must click an enemy
-    private SkillTargetType _currentTargetType; // used to determine which characters can be targeted when in targeting mode
+    private bool _targetingMode;
+    private SkillTargetType _currentTargetType;
 
-    // ----- EVENT SUBSCRIPTIONS -----
+    private static readonly Vector2[][] EnemyPositions = {
+        new[] { new Vector2(0.5f, 0.6f) },
+        new[] { new Vector2(0.40f, 0.6f), new Vector2(0.60f, 0.6f) },
+        new[] { new Vector2(0.35f, 0.55f), new Vector2(0.5f, 0.65f), new Vector2(0.65f, 0.55f) },
+        new[] { new Vector2(0.32f, 0.55f), new Vector2(0.44f, 0.65f), new Vector2(0.56f, 0.65f), new Vector2(0.68f, 0.55f) }
+    };
 
     private void OnEnable()
     {
         BattleManager.Instance.OnBattleStart += HandleBattleStart;
-        BattleManager.Instance.OnLogMessage += AppendLog;
+        BattleManager.Instance.OnLogMessage += HandleLogMessage;
         BattleManager.Instance.OnStateChanged += Refresh;
         BattleManager.Instance.OnAllyTurnStart += HandleAllyTurnStart;
         BattleManager.Instance.OnEnemyTurnStart += HandleEnemyTurnStart;
+        BattleManager.Instance.OnActionPerformed += HandleActionPerformed;
+        BattleManager.Instance.OnDamageTaken += HandleDamageTaken;
+        BattleManager.Instance.OnHeal += HandleHeal;
+        BattleManager.Instance.OnMiss += HandleMiss;
+        BattleManager.Instance.OnStatusApplied += HandleStatusApplied;
         BattleManager.Instance.OnBattleEnd += HandleBattleEnd;
 
         attackButton.onClick.AddListener(OnAttackPressed);
         skillButton.onClick.AddListener(OnSkillMenuPressed);
         defendButton.onClick.AddListener(OnDefendPressed);
-        backButton.onClick.AddListener(OnBackPressed);
-        for (int i = 0; i < skillButtons.Length; i++)
-        {
-            int index = i;
-            skillButtons[i].onClick.AddListener(() => OnSkillPressed(index));
-        }
+
+        skillPanelUI.OnSkillSelected += OnSkillSelected;
+        skillPanelUI.OnBackPressed += OnSkillBackPressed;
     }
 
     private void OnDisable()
     {
         if (BattleManager.Instance == null) return;
         BattleManager.Instance.OnBattleStart -= HandleBattleStart;
-        BattleManager.Instance.OnLogMessage -= AppendLog;
+        BattleManager.Instance.OnLogMessage -= HandleLogMessage;
         BattleManager.Instance.OnStateChanged -= Refresh;
         BattleManager.Instance.OnAllyTurnStart -= HandleAllyTurnStart;
         BattleManager.Instance.OnEnemyTurnStart -= HandleEnemyTurnStart;
+        BattleManager.Instance.OnActionPerformed -= HandleActionPerformed;
+        BattleManager.Instance.OnDamageTaken -= HandleDamageTaken;
+        BattleManager.Instance.OnHeal -= HandleHeal;
+        BattleManager.Instance.OnMiss -= HandleMiss;
+        BattleManager.Instance.OnStatusApplied -= HandleStatusApplied;
         BattleManager.Instance.OnBattleEnd -= HandleBattleEnd;
 
         attackButton.onClick.RemoveListener(OnAttackPressed);
         skillButton.onClick.RemoveListener(OnSkillMenuPressed);
         defendButton.onClick.RemoveListener(OnDefendPressed);
-        backButton.onClick.RemoveListener(OnBackPressed);
-        for (int i = 0; i < skillButtons.Length; i++)
-        {
-            skillButtons[i].onClick.RemoveListener(() => OnSkillPressed(i));
-        }
 
+        skillPanelUI.OnSkillSelected -= OnSkillSelected;
+        skillPanelUI.OnBackPressed -= OnSkillBackPressed;
     }
-
-    // ----- EVENT HANDLERS -----
 
     private void HandleBattleStart()
     {
         resultOverlay.SetActive(false);
-        battleLogText.text = "";
-        BuildAllyCharsUI();
-        BuildEnemyCharsUI();
+        battleLogPanel.Clear();
         actionPanel.SetActive(false);
+        skillPanelUI.Hide();
+        enemyDetailPanel.Hide();
+
+        BuildAllyCards();
+        BuildEnemyField();
+        BuildFieldSpriteMap();
+        turnOrderUI.Refresh();
+
+        if (_enemyFields.Count > 0)
+            FocusEnemy(_enemyFields[0].BoundEnemy);
+    }
+
+    // Locate the static ally battlefield sprites by their art name (clobber-proof vs renames).
+    private void BuildFieldSpriteMap()
+    {
+        _allyFieldSprites.Clear();
+        foreach (var img in FindObjectsOfType<Image>(true))
+        {
+            if (img.sprite == null) continue;
+            // Sprite sub-asset names carry a "_0" suffix (multi-sprite import), so match by prefix.
+            foreach (var kv in FieldSpriteArt)
+            {
+                if (img.sprite.name.StartsWith(kv.Key))
+                {
+                    _allyFieldSprites[kv.Value] = img;
+                    break;
+                }
+            }
+        }
+
+        // Make each ally field sprite clickable as a target (e.g. for ally-targeted buffs/heals),
+        // routing to the same OnTargetClicked the ally card uses.
+        var allies = BattleManager.Instance != null ? BattleManager.Instance.Allies : null;
+        if (allies != null)
+        {
+            foreach (var kv in _allyFieldSprites)
+            {
+                var ally = allies.Find(a => a.CharSkillSet == kv.Key);
+                if (ally == null) continue;
+                var img = kv.Value;
+                img.raycastTarget = true;
+                var btn = img.GetComponent<Button>();
+                if (btn == null) btn = img.gameObject.AddComponent<Button>();
+                btn.transition = Selectable.Transition.None;
+                btn.onClick.RemoveAllListeners();
+                var captured = ally;
+                btn.onClick.AddListener(() => OnTargetClicked(captured));
+            }
+        }
     }
 
     private void HandleAllyTurnStart(Ally ally)
     {
         _selectedAction = AllyActionType.Attack;
         _selectedSkill = null;
-        _selectedTarget = null;
         _targetingMode = false;
         _currentTargetType = SkillTargetType.None;
 
-        // Highlight active ally card
-        for (int i = 0; i < _allyCharsUI.Count; i++)
-            _allyCharsUI[i].SetActive(BattleManager.Instance.Allies[i] == ally);
+        for (int i = 0; i < _allyCards.Count; i++)
+            _allyCards[i].SetActive(BattleManager.Instance.Allies[i] == ally);
 
-        // Update action area
         actionPanel.SetActive(true);
-        skillPanel.SetActive(false);
-        skillButton.interactable = !ally.IsSilenced && !ally.IsForceSilenced; // disable skill button if silenced
+        if (BattleFxSettings.PanelEaseIn) BattleSpriteFx.ScalePunch(this, actionPanel.transform, 0.85f);
+        skillPanelUI.Hide();
+        skillButton.interactable = !ally.IsSilenced && !ally.IsForceSilenced;
 
-        // Clear targeting highlights
-        foreach (var card in _enemyCharsUI)
-            card.SetHighlighted(false);
-        foreach (var card in _allyCharsUI)
-            card.SetHighlighted(false);
+        ClearAllHighlights();
+        turnOrderUI.Refresh();
     }
 
-    private void HandleEnemyTurnStart(BattleCharacter enemy)
+    private void HandleEnemyTurnStart(Enemy enemy)
     {
-        // Disable action panel + set all ally cards to inactive and all enemy cards to non-highlighted
         actionPanel.SetActive(false);
-        foreach (var card in _allyCharsUI) card.SetActive(false);
-        foreach (var card in _allyCharsUI) card.SetHighlighted(false);
-        foreach (var card in _enemyCharsUI) card.SetHighlighted(false);
+        skillPanelUI.Hide();
+        foreach (var card in _allyCards) card.SetActive(false);
+        ClearAllHighlights();
+        FocusEnemy(enemy);
+        turnOrderUI.Refresh();
     }
 
     private void HandleBattleEnd(bool playerWon)
     {
         actionPanel.SetActive(false);
+        skillPanelUI.Hide();
         resultOverlay.SetActive(true);
+        if (BattleFxSettings.ResultPunch && resultTitleText != null)
+            BattleSpriteFx.ScalePunch(this, resultTitleText.transform, 1.6f);
 
         if (playerWon)
         {
-            // Show victory message and set button to start next fight
             resultTitleText.text = "Victory!";
             resultButtonLabel.text = "Continue";
             resultButton.onClick.RemoveAllListeners();
-            resultButton.onClick.AddListener(() => gameObject.SetActive(false)); // Hide the UI
+            resultButton.onClick.AddListener(() => gameObject.SetActive(false));
         }
         else
         {
-            // Show defeat message and set button to restart
             resultTitleText.text = "Defeat!";
             resultButtonLabel.text = "Replay";
             resultButton.onClick.RemoveAllListeners();
@@ -158,74 +227,278 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    // ----- UI BUILDING METHODS -----
-
-    private void BuildAllyCharsUI()
+    private void BuildAllyCards()
     {
-        foreach (Transform t in allyPanel) Destroy(t.gameObject);
-        _allyCharsUI.Clear();
+        foreach (Transform t in allyCardContainer) Destroy(t.gameObject);
+        _allyCards.Clear();
 
-        // Create an ally char ui for each ally
-        foreach (var ally in BattleManager.Instance.Allies)
+        var allies = BattleManager.Instance.Allies;
+        for (int i = 0; i < allies.Count; i++)
         {
-            var go = Instantiate(charCardPrefab, allyPanel);
-            var card = go.GetComponent<CharUI>();
-            card.Bind(ally, OnCardClicked);
-            _allyCharsUI.Add(card);
+            var go = Instantiate(allyCardPrefab, allyCardContainer);
+            var card = go.GetComponent<AllyCardUI>();
+            Color color = i < allyColors.Length ? allyColors[i] : Color.gray;
+            card.Bind(allies[i], color, OnTargetClicked);
+            _allyCards.Add(card);
         }
     }
 
-    private void BuildEnemyCharsUI()
+    private void BuildEnemyField()
     {
-        foreach (Transform t in enemyPanel) Destroy(t.gameObject);
-        _enemyCharsUI.Clear();
+        foreach (Transform t in battlefieldArea) Destroy(t.gameObject);
+        _enemyFields.Clear();
 
-        // Create an enemy char ui for each enemy
-        foreach (var enemy in BattleManager.Instance.Enemies)
+        var enemies = BattleManager.Instance.Enemies;
+        int count = Mathf.Min(enemies.Count, 4);
+        Vector2[] positions = count > 0 ? EnemyPositions[count - 1] : new Vector2[0];
+
+        for (int i = 0; i < enemies.Count; i++)
         {
-            var go = Instantiate(charCardPrefab, enemyPanel);
-            var card = go.GetComponent<CharUI>();
-            card.Bind(enemy, OnCardClicked);
-            _enemyCharsUI.Add(card);
+            var go = Instantiate(enemyFieldPrefab, battlefieldArea);
+            var field = go.GetComponent<EnemyFieldUI>();
+            field.Bind(enemies[i], OnTargetClicked);
+
+            if (i < positions.Length)
+            {
+                var rt = go.GetComponent<RectTransform>();
+                rt.anchorMin = positions[i];
+                rt.anchorMax = positions[i];
+                rt.anchoredPosition = Vector2.zero;
+            }
+
+            _enemyFields.Add(field);
         }
     }
-
-    private void PopulateSkillPanel()
-    {
-        Ally ally = BattleManager.Instance.CurrentAlly;
-        if (ally == null) return;
-
-        for (int i = 0; i < skillButtons.Length; i++)
-        {
-            ISkill skill = ally.Skills[i];
-            skillButtonsTexts[i].text = $"{skill.Name}\n({skill.ManaCost} MP)";
-            skillButtons[i].interactable = ally.CanAffordSkill(skill) && !ally.IsSilenced && !ally.IsForceSilenced;
-        }
-    }
-
-    // ----- UI UPDATE METHOD -----
 
     private void Refresh()
     {
-        foreach (var card in _allyCharsUI) card.Refresh();
-        foreach (var card in _enemyCharsUI) card.Refresh();
+        foreach (var card in _allyCards) card.Refresh();
+        foreach (var field in _enemyFields) field.Refresh();
+        enemyDetailPanel.Refresh();
+        turnOrderUI.Refresh();
+        if (BattleFxSettings.DeathFade) RefreshDeathFades();
     }
 
-    // ----- ACTION BUTTON HANDLERS -----
+    // Idle breathing on field sprites, swapped for a stronger pulse on valid targets while targeting.
+    private void Update()
+    {
+        bool pulsing = BattleFxSettings.TargetingPulse && _targetingMode;
+        if (!BattleFxSettings.IdleBreathing && !pulsing) return;
+
+        int i = 0;
+        var allies = BattleManager.Instance != null ? BattleManager.Instance.Allies : null;
+        foreach (var kv in _allyFieldSprites)
+        {
+            bool alive = allies != null && (allies.Find(a => a.CharSkillSet == kv.Key)?.IsAlive ?? false);
+            ApplyIdleScale(kv.Value, i++, true, pulsing, alive);
+        }
+        for (int e = 0; e < _enemyFields.Count; e++)
+        {
+            bool alive = _enemyFields[e].BoundEnemy != null && _enemyFields[e].BoundEnemy.IsAlive;
+            ApplyIdleScale(_enemyFields[e].enemySprite, i++, false, pulsing, alive);
+        }
+    }
+
+    private void ApplyIdleScale(Image img, int index, bool allySide, bool pulsing, bool alive)
+    {
+        if (img == null) return;
+        if (!alive) { img.transform.localScale = Vector3.one; return; } // dead: no pulse/breathe (fade stays)
+        bool validTarget = pulsing && (
+            _currentTargetType == SkillTargetType.Any ||
+            (allySide && (_currentTargetType == SkillTargetType.Ally || _currentTargetType == SkillTargetType.Self)) ||
+            (!allySide && _currentTargetType == SkillTargetType.Enemy));
+
+        if (validTarget)
+        {
+            float s = 1f + Mathf.Sin(Time.time * 6f) * 0.08f;
+            img.transform.localScale = new Vector3(s, s, 1f);
+        }
+        else if (BattleFxSettings.IdleBreathing)
+        {
+            BattleSpriteFx.Breathe(img.transform, index * 0.7f);
+        }
+        else
+        {
+            img.transform.localScale = Vector3.one;
+        }
+    }
+
+    private readonly HashSet<BattleCharacter> _faded = new();
+    private void RefreshDeathFades()
+    {
+        if (BattleManager.Instance == null) return;
+        foreach (var a in BattleManager.Instance.Allies)
+            if (!a.IsAlive && _faded.Add(a)) FadeSprite(SpriteFor(a));
+        // Dead enemies remove their whole field prefab (EnemyFieldUI.HideOnDeath), so no sprite dim here.
+    }
+    private void FadeSprite(Image img) { if (img != null) StartCoroutine(FadeRoutine(img)); }
+    private System.Collections.IEnumerator FadeRoutine(Image img)
+    {
+        float t = 0f; const float dur = 0.5f;
+        Color start = img.color;
+        Color end = new Color(start.r, start.g, start.b, 0.15f);
+        while (t < dur && img != null)
+        {
+            t += Time.deltaTime;
+            img.color = Color.Lerp(start, end, Mathf.Clamp01(t / dur));
+            yield return null;
+        }
+        if (img != null) img.color = end;
+    }
+
+    // The on-field sprite Image for any combatant (ally field sprite or enemy field sprite), or null.
+    private Image SpriteFor(BattleCharacter c)
+    {
+        if (c is Ally ally)
+            return _allyFieldSprites.TryGetValue(ally.CharSkillSet, out var img) ? img : null;
+        foreach (var field in _enemyFields)
+            if (field.BoundEnemy == c) return field.enemySprite;
+        return null;
+    }
+
+    // A character just attacked / used a skill — lunge (or hop) its field sprite toward foes.
+    private void HandleActionPerformed(BattleCharacter actor)
+    {
+        var img = SpriteFor(actor);
+        if (img == null) return;
+        if (actor is Enemy)
+            _enemyFields.Find(f => f.BoundEnemy == actor)?.PlayAttack();
+        if (BattleFxSettings.AttackLunge)
+            BattleSpriteFx.Lunge(this, img.rectTransform, actor is Ally ? 1f : -1f);
+        else
+            BattleSpriteFx.Hop(this, img.rectTransform);
+    }
+
+    // A character just took damage — shake + flash, damage number (crit-styled), and a hit-stop.
+    private void HandleDamageTaken(BattleCharacter victim, float amount, bool isCrit)
+    {
+        var img = SpriteFor(victim);
+        if (img != null)
+        {
+            BattleSpriteFx.Shake(this, img.rectTransform);
+            BattleSpriteFx.Flash(this, img);
+
+            if (BattleFxSettings.DamageNumbers)
+            {
+                string txt = Mathf.RoundToInt(amount).ToString();
+                if (isCrit && BattleFxSettings.CritNumbers)
+                    BattleFloatingText.Spawn(img.rectTransform, txt + "!", new Color(1f, 0.85f, 0.2f, 1f), 1.5f, true);
+                else
+                    BattleFloatingText.Spawn(img.rectTransform, txt, new Color(1f, 0.3f, 0.3f, 1f));
+            }
+        }
+
+        if (BattleFxSettings.HitStop && !_hitStopActive)
+            StartCoroutine(HitStopRoutine(isCrit ? 0.12f : 0.05f));
+    }
+
+    private void HandleHeal(BattleCharacter target, float amount)
+    {
+        if (!BattleFxSettings.HealNumbers) return;
+        var img = SpriteFor(target);
+        if (img == null) return;
+        var green = new Color(0.35f, 1f, 0.45f, 1f);
+        BattleFloatingText.Spawn(img.rectTransform, "+" + Mathf.RoundToInt(amount), green);
+        BattleSpriteFx.Flash(this, img, green);
+    }
+
+    private void HandleMiss(BattleCharacter target, bool dodged)
+    {
+        if (!BattleFxSettings.MissText) return;
+        var img = SpriteFor(target);
+        if (img == null) return;
+        BattleFloatingText.Spawn(img.rectTransform, dodged ? "Dodge!" : "Miss!", new Color(0.82f, 0.82f, 0.88f, 1f));
+    }
+
+    private void HandleStatusApplied(BattleCharacter target, BaseStatusEffect effect)
+    {
+        if (!BattleFxSettings.StatusApplyFlash) return;
+        var img = SpriteFor(target);
+        if (img == null) return;
+        Color c = (effect != null && effect.EffectType == StatusEffectType.Buff)
+            ? new Color(0.4f, 1f, 0.5f, 1f)
+            : new Color(1f, 0.45f, 0.45f, 1f);
+        BattleSpriteFx.Flash(this, img, c);
+    }
+
+    private bool _hitStopActive;
+    private System.Collections.IEnumerator HitStopRoutine(float seconds)
+    {
+        _hitStopActive = true;
+        float prev = Time.timeScale;
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(seconds);
+        Time.timeScale = prev;
+        _hitStopActive = false;
+    }
+
+    private void FocusEnemy(Enemy enemy)
+    {
+        foreach (var field in _enemyFields)
+            field.SetSelected(field.BoundEnemy == enemy);
+        enemyDetailPanel.Show(enemy);
+    }
 
     private void OnAttackPressed()
     {
+        if (BattleFxSettings.ButtonPop) BattleSpriteFx.ScalePunch(this, attackButton.transform, 0.9f);
         _selectedAction = AllyActionType.Attack;
         _currentTargetType = SkillTargetType.Enemy;
+        skillPanelUI.Hide();
         EnterTargetingMode(SkillTargetType.Enemy);
     }
 
     private void OnDefendPressed()
     {
-        // No need for a target when defending
+        if (BattleFxSettings.ButtonPop) BattleSpriteFx.ScalePunch(this, defendButton.transform, 0.9f);
         BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeDefend());
         actionPanel.SetActive(false);
+        skillPanelUI.Hide();
         _targetingMode = false;
+    }
+
+    private void OnSkillMenuPressed()
+    {
+        if (BattleFxSettings.ButtonPop) BattleSpriteFx.ScalePunch(this, skillButton.transform, 0.9f);
+        Ally ally = BattleManager.Instance.CurrentAlly;
+        if (ally == null) return;
+        actionPanel.SetActive(false);
+        skillPanelUI.Populate(ally);
+        skillPanelUI.Show();
+        if (BattleFxSettings.PanelEaseIn) BattleSpriteFx.ScalePunch(this, skillPanelUI.transform, 0.85f);
+    }
+
+    private void OnSkillSelected(int index)
+    {
+        Ally ally = BattleManager.Instance.CurrentAlly;
+        if (ally == null) return;
+
+        ISkill skill = ally.Skills[index];
+        if (!ally.CanAffordSkill(skill)) return;
+
+        _selectedAction = AllyActionType.Skill;
+        _selectedSkill = skill;
+        _currentTargetType = skill.TargetType;
+        skillPanelUI.Hide();
+
+        ClearAllHighlights();
+
+        if (skill.TargetType != SkillTargetType.None && skill.TargetType != SkillTargetType.Self)
+        {
+            EnterTargetingMode(skill.TargetType);
+        }
+        else
+        {
+            BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeSkill(ally, skill));
+            actionPanel.SetActive(false);
+        }
+    }
+
+    private void OnSkillBackPressed()
+    {
+        skillPanelUI.Hide();
+        actionPanel.SetActive(true);
+        if (BattleFxSettings.PanelEaseIn) BattleSpriteFx.ScalePunch(this, actionPanel.transform, 0.85f);
     }
 
     private void EnterTargetingMode(SkillTargetType targetType)
@@ -239,113 +512,71 @@ public class BattleUI : MonoBehaviour
             { SkillTargetType.Self, "Self" },
             { SkillTargetType.Any, "an Enemy or Ally" }
         };
-        AppendLog($"[*] Select {targetTypeNames[targetType]} as the target…");
+        HandleLogMessage($"[*] Select {targetTypeNames[targetType]} as the target…");
 
-        foreach (var card in _allyCharsUI)
-            card.SetHighlighted(false);
-        foreach (var card in _enemyCharsUI)
-            card.SetHighlighted(false);
+        ClearAllHighlights();
+
         if (targetType == SkillTargetType.Enemy || targetType == SkillTargetType.Any)
         {
-            foreach (var card in _enemyCharsUI)
-                card.SetHighlighted(card.Char.IsAlive);
+            foreach (var field in _enemyFields)
+                field.SetHighlighted(field.BoundEnemy.IsAlive);
         }
         if (targetType == SkillTargetType.Ally || targetType == SkillTargetType.Any)
         {
-            foreach (var card in _allyCharsUI)
-                card.SetHighlighted(card.Char.IsAlive);
+            foreach (var card in _allyCards)
+                card.SetHighlighted(card.BoundAlly.IsAlive);
         }
     }
 
-    private void OnCardClicked(BattleCharacter character)
+    private void OnTargetClicked(BattleCharacter character)
     {
+        if (character is Enemy enemy)
+            FocusEnemy(enemy);
+
         if (!_targetingMode || !character.IsAlive) return;
 
-        // check if character is a valid target based on current targeting mode
         if (_currentTargetType == SkillTargetType.Enemy && character is not Enemy
-            || _currentTargetType == SkillTargetType.Ally && character is not Ally) {
-                AppendLog($"[!] Invalid target. Please select a valid target.");
-                return;
+            || _currentTargetType == SkillTargetType.Ally && character is not Ally)
+        {
+            HandleLogMessage("[!] Invalid target. Please select a valid target.");
+            return;
         }
-        AppendLog($"[*] Selected {character.Name} as target.");
 
-        _selectedTarget = character;
-        _targetingMode  = false;
+        HandleLogMessage($"[*] Selected {character.Name} as target.");
+        _targetingMode = false;
+        ClearAllHighlights();
 
-        foreach (var card in _enemyCharsUI) card.SetHighlighted(false);
-        foreach (var card in _allyCharsUI) card.SetHighlighted(false);
-
-        // Create appropriate action based on selected action type and submit to battle manager
         PendingAllyAction action = _selectedAction switch
         {
-            AllyActionType.Attack => PendingAllyAction.MakeAttack(_selectedTarget),
-            AllyActionType.Skill => PendingAllyAction.MakeSkill(_selectedTarget, _selectedSkill),
-            _ => PendingAllyAction.MakeAttack(_selectedTarget)
+            AllyActionType.Attack => PendingAllyAction.MakeAttack(character),
+            AllyActionType.Skill => PendingAllyAction.MakeSkill(character, _selectedSkill),
+            _ => PendingAllyAction.MakeAttack(character)
         };
 
         BattleManager.Instance.SubmitAllyAction(action);
         actionPanel.SetActive(false);
     }
 
-    private void OnSkillMenuPressed()
+    private void ClearAllHighlights()
     {
-        skillPanel.SetActive(true);
-        PopulateSkillPanel();
+        foreach (var card in _allyCards) card.SetHighlighted(false);
+        foreach (var field in _enemyFields) field.SetHighlighted(false);
     }
 
-    private void OnSkillPressed(int index)
+    private void HandleLogMessage(string msg)
     {
-        Ally ally = BattleManager.Instance.CurrentAlly;
-        if (ally == null) return;
-
-        ISkill skill = ally.Skills[index];
-        if (!ally.CanAffordSkill(skill)) return;
-
-        _selectedAction = AllyActionType.Skill;
-        _selectedSkill = skill;
-        _currentTargetType = skill.TargetType;
-
-        skillPanel.SetActive(false);
-
-        foreach (var card in _allyCharsUI)
-            card.SetHighlighted(false);
-        foreach (var card in _enemyCharsUI)
-            card.SetHighlighted(false);
-
-        if (skill.TargetType != SkillTargetType.None && skill.TargetType != SkillTargetType.Self)
-        {
-            EnterTargetingMode(skill.TargetType);
-        } else
-        {
-            // If skill doesn't need target, submit action immediately with ally as target
-            BattleManager.Instance.SubmitAllyAction(PendingAllyAction.MakeSkill(ally, skill));
-            actionPanel.SetActive(false);
-        }
+        battleLogPanel.AppendLog(msg);
     }
-
-    private void OnBackPressed()
-    {
-        skillPanel.SetActive(false);
-    }
-
-    // ----- LOG -----
-
-    private void AppendLog(string msg)
-    {
-        battleLogText.text += msg + "\n";
-    }
-
-    // ----- RESTART (DEFEAT) -----
 
     private void OnRestart()
     {
-        // Reload current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    // Info panel toggle (merged from main). Null-guarded since the classroom scene may not wire InfoText.
     public GameObject InfoText;
     public void ToggleInfoText()
     {
-        InfoText.SetActive(!InfoText.activeSelf);
+        if (InfoText != null) InfoText.SetActive(!InfoText.activeSelf);
     }
 }

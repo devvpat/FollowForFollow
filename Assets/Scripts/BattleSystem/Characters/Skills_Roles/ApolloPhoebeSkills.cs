@@ -6,6 +6,7 @@ public static class ApolloPhoebeSkills
     {
         public string Name => "World Cutting Slash";
         public string Type => "Burst";
+        public string Description => "Sacrifice 15% HP to deal massive damage to all enemies.";
         public int ManaCost => 0;
         public float Power => 5000;
         public SkillTargetType TargetType => SkillTargetType.None;
@@ -33,6 +34,7 @@ public static class ApolloPhoebeSkills
     {
         public string Name => "Riposte";
         public string Type => "Parry";
+        public string Description => "Gain a shield that blocks 2 hits.";
         public int ManaCost => 120;
         public float Power => 3500;
         public SkillTargetType TargetType => SkillTargetType.None;
@@ -50,6 +52,7 @@ public static class ApolloPhoebeSkills
     {
         public string Name => "Instigation";
         public string Type => "Taunt";
+        public string Description => "Boost own defense by 75% for 2 turns.";
         public int ManaCost => 100;
         public float Power => 0;
         public SkillTargetType TargetType => SkillTargetType.None;
@@ -67,6 +70,7 @@ public static class ApolloPhoebeSkills
     {
         public string Name => "Blackout";
         public string Type => "Execute";
+        public string Description => "Hit all enemies harder the lower their HP. Up to 3x damage.";
         public int ManaCost => 250;
         public float Power => 4000;
         public SkillTargetType TargetType => SkillTargetType.None;

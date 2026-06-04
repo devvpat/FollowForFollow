@@ -8,6 +8,7 @@ public abstract class BaseStatusEffect
     public int RemainingDuration { get; protected set; } // Remaining duration in turns
     public bool HasExpired => RemainingDuration <= 0;
     public StatusEffectType EffectType { get; protected set; } // Type of the status effect (buff, debuff, etc.)
+    public StatusEffectIcon Icon { get; protected set; } // Which icon the UI displays for this effect
 
     public BaseStatusEffect(string name, string description, int totalDuration, StatusEffectType effectType)
     {
@@ -30,4 +31,29 @@ public enum StatusEffectType
     Buff,
     Debuff,
     Other,
+}
+
+// Identifies which icon the UI shows for a status effect. Each effect sets its own value;
+// the StatusEffectIconLibrary maps these to sprites. None = fall back to the letter label.
+public enum StatusEffectIcon
+{
+    None,
+    AttackUp,
+    AttackDown,
+    DefenseUp,
+    DefenseDown,
+    CritUp,
+    CritDown,
+    Blind,
+    Blurry,
+    Haste,
+    Slow,
+    Poison,
+    PoisonWeapon,
+    Shield,
+    Silence,
+    Stun,
+    HealBuff,       // no effect class yet — reserved slot
+    HealReduction,  // no effect class yet — reserved slot
+    Lifesteal,      // no effect class yet — reserved slot
 }

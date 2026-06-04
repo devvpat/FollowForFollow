@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3c1e7a2b4d4c6e8f0a1b2c3d4e5f60, type: 3}
+  m_Name: MimicSpriteLibrary
+  m_EditorClassIdentifier:
+  defaultSprite: {fileID: 8804333700367408735, guid: 5527532ccab6de54a96c57660e4aa085, type: 3}
+  entries:
+  - skillSet: 0
+    sprite: {fileID: 8846708408243296662, guid: bfd59eca58d3ba14ab6f30e07c4684bc, type: 3}
+  - skillSet: 1
+    sprite: {fileID: -926198726618568872, guid: 325101d72a92424419f4d88732948daf, type: 3}
+  - skillSet: 2
+    sprite: {fileID: 3123973212670904301, guid: 53bf3027c197a9d4aa5ca6a4e6f08850, type: 3}
+  - skillSet: 3
+    sprite: {fileID: -1161129017461989057, guid: 381f8d389a16bc84f9b544beed18b821, type: 3}

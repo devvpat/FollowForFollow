@@ -13,6 +13,7 @@ public class AttackModifier : BaseStatusEffect
         effectType: StatusEffectType.Buff)
     {
         atkMod = modifier;
+        Icon = modifier >= 0 ? StatusEffectIcon.AttackUp : StatusEffectIcon.AttackDown;
     }
 
     public override void OnApply(BattleCharacter target)

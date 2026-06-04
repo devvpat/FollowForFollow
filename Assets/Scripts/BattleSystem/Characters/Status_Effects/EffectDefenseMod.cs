@@ -13,6 +13,7 @@ public class DefenseModifier : BaseStatusEffect
         effectType: StatusEffectType.Buff)
     {
         defMod = modifier;
+        Icon = modifier >= 0 ? StatusEffectIcon.DefenseUp : StatusEffectIcon.DefenseDown;
     }
 
     public override void OnApply(BattleCharacter target)

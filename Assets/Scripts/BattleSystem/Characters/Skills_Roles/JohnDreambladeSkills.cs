@@ -7,6 +7,7 @@ public static class JohnDreambladeSkills
     {
         public string Name => "All-Kill";
         public string Type => "AOE";
+        public string Description => "Damage all enemies with a 75% chance to stun each.";
         public int ManaCost => 110;
         public float Power => 3250;
         public SkillTargetType TargetType => SkillTargetType.None;
@@ -33,6 +34,7 @@ public static class JohnDreambladeSkills
     {
         public string Name => "Bias Wrecker";
         public string Type => "Single Target Burst";
+        public string Description => "Deal massive single-target damage.";
         public int ManaCost => 90;
         public float Power => 4500;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
@@ -52,6 +54,7 @@ public static class JohnDreambladeSkills
     {
         public string Name => "Aegyo";
         public string Type => "Party Shield";
+        public string Description => "Grant all allies a shield for 3 turns.";
         public int ManaCost => 150;
         public float Power => 2500;
         public SkillTargetType TargetType => SkillTargetType.None;
@@ -73,6 +76,7 @@ public static class JohnDreambladeSkills
     {
         public string Name => "Vacant Void";
         public string Type => "Buff Stripper";
+        public string Description => "Strip up to 2 random buffs from an enemy.";
         public int ManaCost => 120;
         public float Power => 3000;
         public SkillTargetType TargetType => SkillTargetType.Enemy;

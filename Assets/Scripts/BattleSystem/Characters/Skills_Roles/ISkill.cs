@@ -7,6 +7,7 @@ public interface ISkill
 
     string Name { get; }
     string Type { get; }
+    string Description { get; }
     int ManaCost { get; }
     float Power { get; }
     SkillTargetType TargetType { get; }

@@ -10,7 +10,9 @@ public class Blur : BaseStatusEffect
         description: $"Increases evasion by {blurModifier * 100}% for {duration} turns.",
         totalDuration: duration,
         effectType: StatusEffectType.Buff)
-    {}
+    {
+        Icon = StatusEffectIcon.Blurry;
+    }
 
     public override void OnApply(BattleCharacter target)
     {

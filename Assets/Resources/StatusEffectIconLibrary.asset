@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863f7062293e1664f915281703fff4b3, type: 3}
+  m_Name: StatusEffectIconLibrary
+  m_EditorClassIdentifier:
+  entries:
+  - id: 1
+    sprite: {fileID: -3365666469229197934, guid: 8cbcacef2e3dee7469c5b46c77157717, type: 3}
+  - id: 2
+    sprite: {fileID: -4294323636002425662, guid: e55a3e7c510188b4dac823a2ae9b186e, type: 3}
+  - id: 3
+    sprite: {fileID: 7724667515525264183, guid: 7eb6576038e4dc742a0193d7d0298925, type: 3}
+  - id: 4
+    sprite: {fileID: 6183365169919371970, guid: 5883fa354e84db643926670fd8016cbf, type: 3}
+  - id: 5
+    sprite: {fileID: -972431674026957955, guid: 2ee2a22aed2f8674f982388408ac9064, type: 3}
+  - id: 6
+    sprite: {fileID: -7778066515028163550, guid: 6356c66648bb1a941b8bfe149e0561cc, type: 3}
+  - id: 7
+    sprite: {fileID: 369668087167358545, guid: 89725933cfac9a541aaa807e85cab2e8, type: 3}
+  - id: 8
+    sprite: {fileID: -6214393888521340875, guid: 89e800da8dbd75d46bf1ab59782ea4b1, type: 3}
+  - id: 9
+    sprite: {fileID: 8342651642436244010, guid: e63f76c30a3a7514ebefeb50a878123c, type: 3}
+  - id: 10
+    sprite: {fileID: 5898077900638200736, guid: 9da424bdc8c640b49849860981873005, type: 3}
+  - id: 11
+    sprite: {fileID: -5429881311256161995, guid: 96a7403abb04bb346acebb9ffa2563d2, type: 3}
+  - id: 12
+    sprite: {fileID: -5429881311256161995, guid: 96a7403abb04bb346acebb9ffa2563d2, type: 3}
+  - id: 13
+    sprite: {fileID: 6633669497325363184, guid: adc9409101efa4741990311b56de2810, type: 3}
+  - id: 15
+    sprite: {fileID: -2668362156668252186, guid: f9aa34f31c5ed794c809b4bd095303b6, type: 3}
+  - id: 16
+    sprite: {fileID: 3396164728819121191, guid: 4819e507260d3084b9c1be9b30f686f5, type: 3}
+  - id: 17
+    sprite: {fileID: 6757652361488975392, guid: 959f8dc2c29ce5648a52ac231ee0f3a0, type: 3}
+  - id: 18
+    sprite: {fileID: 365073411985746606, guid: 366420e1c0ba92f4ebd3cba7e9e10058, type: 3}

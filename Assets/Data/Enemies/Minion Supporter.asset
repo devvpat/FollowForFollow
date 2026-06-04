@@ -23,3 +23,5 @@ MonoBehaviour:
   Level: 95
   Type: 0
   Behavior: 3
+  idleSprite: {fileID: 21300000, guid: 5b0a17e0c0de4f1a9b2c3d4e5f60a7b1, type: 3}
+  attackSprite: {fileID: 21300000, guid: 5b0a17e0c0de4f1a9b2c3d4e5f60a7b2, type: 3}

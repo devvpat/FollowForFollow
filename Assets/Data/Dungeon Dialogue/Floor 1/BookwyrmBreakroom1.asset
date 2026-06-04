@@ -16,10 +16,12 @@ MonoBehaviour:
   - name: "Apo11o\u2727\u02D6\xB0."
     portrait: {fileID: 7451469615984823181, guid: 2fb21f77094d54c41888390cea042695, type: 3}
     themeColor: {r: 0.726, g: 0.257, b: 0.257, a: 1}
+    profile: {fileID: 11400000, guid: e1a2b3c4d5e6f70819203a4b5c6d7e83, type: 2}
     voiceBlip: {fileID: 8300000, guid: 8c15c351a579c37409198b65070fd741, type: 3}
   - name: Bookwyrm
     portrait: {fileID: -184693960786962222, guid: 85e3c73ee41d345359853fe605fb7935, type: 3}
     themeColor: {r: 0.4, g: 0.55, b: 0.85, a: 1}
+    profile: {fileID: 11400000, guid: 917cec5e14bb0194ea10a5b2396f6a23, type: 2}
     voiceBlip: {fileID: 8300000, guid: 60f2e93a3e02b7a4e9100e7a3b50ff4f, type: 3}
   dialogueLines:
   - speakerIndex: 1

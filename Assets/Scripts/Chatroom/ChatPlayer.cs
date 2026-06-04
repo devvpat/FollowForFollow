@@ -95,14 +95,11 @@ public class ChatPlayer : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(sendHotkey))
-        {
-            OnSendPressed();
-            return;
-        }
+        if (!DialogueInput.AdvancePressed()) return;
 
-        if (isPlaying && !waitingForSend && Input.GetMouseButtonDown(0))
-            skipRequested = true;
+        if (waitingForSend) { OnSendPressed(); return; }
+
+        if (isPlaying) skipRequested = true;
     }
 
     IEnumerator PlayChat()
