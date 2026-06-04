@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ally 1
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
   Name: BOOKWYRM
-  MaxHP: 6500
+  MaxHP: 8000
   Attack: 500
   Defense: 900
   Speed: 95

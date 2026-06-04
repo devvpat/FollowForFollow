@@ -6,7 +6,7 @@ public static class KaraageSkills
         public string Type => "Multi-Hit";
         public string Description => "Strike an enemy 4 times in rapid succession.";
         public int ManaCost => 70;
-        public float Power => 350;
+        public float Power => 750;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
         
         // Hit an enemy 4 times
@@ -34,7 +34,7 @@ public static class KaraageSkills
         public string Type => "Utility/Burst";
         public string Description => "Deal heavy damage and slow the target for 1 turn.";
         public int ManaCost => 90;
-        public float Power => 2200;
+        public float Power => 3200;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
         
         // Deals high damage to one target and slows them for [1 turn]
@@ -44,7 +44,7 @@ public static class KaraageSkills
             if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
 
             float total = BattleManager.CalculateAndApplyDamage(caster, target, skill: this);
-            target.ApplyStatusEffect(EffectFactory.MakeSlow(1));
+            target.ApplyStatusEffect(EffectFactory.MakeSlow(2));
             if (caster is Ally ally)
             {
                 ally.IncreaseHitCount(1);
@@ -80,7 +80,7 @@ public static class KaraageSkills
         public string Type => "RNG Multi-Hit";
         public string Description => "Hit an enemy 1-8 times at random.";
         public int ManaCost => 130;
-        public float Power => 300;
+        public float Power => 1000;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
         
         // Hits the character 1-8 times

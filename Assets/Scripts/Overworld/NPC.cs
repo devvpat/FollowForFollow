@@ -59,11 +59,24 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    void StartDialogue()
+    public bool TryStartDialogue()
+    {
+        if (dialogueData == null || (PauseController.IsGamePaused && !isDialogueActive)) return false;
+
+        return StartDialogue();
+    }
+
+    private bool StartDialogue()
     {
         if (dialogueData.dialogueLines == null || dialogueData.dialogueLines.Length == 0)
         {
-            return;
+            return false;
+        }
+
+        if (!HasRequiredDialogueUI())
+        {
+            Debug.LogWarning($"{name} cannot start dialogue because its dialogue UI reference was removed or destroyed.", this);
+            return false;
         }
 
         isDialogueActive = true;
@@ -73,10 +86,25 @@ public class NPC : MonoBehaviour, IInteractable
         PauseController.SetPause(true);
 
         StartCoroutine(TypeLine());
+        return true;
+    }
+
+    private bool HasRequiredDialogueUI()
+    {
+        return dialoguePanel != null
+            && dialogueText != null
+            && nameText != null
+            && portraitImage != null;
     }
 
     void NextLine()
     {
+        if (!HasRequiredDialogueUI())
+        {
+            EndDialogue();
+            return;
+        }
+
         if (isTyping)
         {
             StopAllCoroutines();
@@ -93,6 +121,12 @@ public class NPC : MonoBehaviour, IInteractable
 
     IEnumerator TypeLine()
     {
+        if (!HasRequiredDialogueUI())
+        {
+            EndDialogue();
+            yield break;
+        }
+
         isTyping = true;
         dialogueText.SetText("");
 
@@ -155,8 +189,9 @@ public class NPC : MonoBehaviour, IInteractable
     {
         StopAllCoroutines();
         isDialogueActive = false;
-        dialogueText.SetText("");
-        dialoguePanel.SetActive(false);
+        isTyping = false;
+        if (dialogueText != null) dialogueText.SetText("");
+        if (dialoguePanel != null) dialoguePanel.SetActive(false);
         PauseController.SetPause(false);
 
         OnDialogueEnded?.Invoke();

@@ -9,7 +9,7 @@ public static class JohnDreambladeSkills
         public string Type => "AOE";
         public string Description => "Damage all enemies with a 75% chance to stun each.";
         public int ManaCost => 110;
-        public float Power => 1800;
+        public float Power => 3250;
         public SkillTargetType TargetType => SkillTargetType.None;
 
         // Does damage to every enemy
@@ -24,7 +24,7 @@ public static class JohnDreambladeSkills
                 if (e.PerformDodgeCheck()) continue;
                 total += BattleManager.CalculateAndApplyDamage(caster, e, skill: this);
                 // 75% chance to apply stun for 1 turn
-                if (UnityEngine.Random.value < 0.75) e.ApplyStatusEffect(EffectFactory.MakeStun(1));
+                if (UnityEngine.Random.value < 0.75) e.ApplyStatusEffect(EffectFactory.MakeStun(2));
             }
             return SkillResult.Success($"[+] {caster.Name} used All-Kill on all enemies for a total of {total} damage", total);
         }
@@ -36,7 +36,7 @@ public static class JohnDreambladeSkills
         public string Type => "Single Target Burst";
         public string Description => "Deal massive single-target damage.";
         public int ManaCost => 90;
-        public float Power => 4000;
+        public float Power => 4500;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
 
         // Deals high damage to one target
@@ -78,7 +78,7 @@ public static class JohnDreambladeSkills
         public string Type => "Buff Stripper";
         public string Description => "Strip up to 2 random buffs from an enemy.";
         public int ManaCost => 120;
-        public float Power => 2000;
+        public float Power => 3000;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
 
         // Removes [2] random buffs from the enemy

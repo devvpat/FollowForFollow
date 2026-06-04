@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 // Defense Modifier: Changes the defender's damage output by a percentage
 public class DefenseModifier : BaseStatusEffect
@@ -18,6 +19,7 @@ public class DefenseModifier : BaseStatusEffect
     public override void OnApply(BattleCharacter target)
     {
         target.ModifyMultDefense(1 + defMod);
+        Debug.Log($"{target.Name} Defense buff applied: Defense is now {target.Defense}");
     }
 
     public override void OnReapply(BattleCharacter target, BaseStatusEffect newEffect)
@@ -32,6 +34,7 @@ public class DefenseModifier : BaseStatusEffect
 
     public override void OnExpire(BattleCharacter target)
     {
-        target.ModifyMultDefense(1 - defMod); // reverse the defense modifier
+        target.ModifyMultDefense(1 / (1 + defMod)); // reverse the defense modifier
+        Debug.Log($"{target.Name} Defense buff expired: Defense is now {target.Defense}");
     }
 }

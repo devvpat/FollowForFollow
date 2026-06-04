@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ally 3
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
   Name: JOHN DREAMBLADE
-  MaxHP: 8800
+  MaxHP: 12000
   Attack: 950
   Defense: 750
   Speed: 110

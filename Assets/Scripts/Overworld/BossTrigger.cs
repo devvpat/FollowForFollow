@@ -17,8 +17,12 @@ public class BossTrigger : MonoBehaviour
         {
             Debug.Log("Starting boss dialogue");
             npc.OnDialogueEnded += StartBossFight;
-            npc.Interact();
-            return;
+            if (npc.TryStartDialogue())
+            {
+                return;
+            }
+
+            npc.OnDialogueEnded -= StartBossFight;
         }
 
         StartBossFight();
@@ -54,6 +58,9 @@ public class BossTrigger : MonoBehaviour
                 boss.SetActive(false);
             }
             gameObject.SetActive(false);
+        } else
+        {
+            hasTriggered = false;
         }
     }
 }

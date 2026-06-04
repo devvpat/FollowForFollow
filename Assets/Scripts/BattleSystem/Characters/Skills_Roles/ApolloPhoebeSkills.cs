@@ -61,7 +61,7 @@ public static class ApolloPhoebeSkills
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
-            caster.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(2, 1.75f));
+            caster.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(3, 1.75f));
             return SkillResult.Success($"[+] {caster.Name} used Instigation and gained high defense for 2 turns", 2);
         }
     }
@@ -72,7 +72,7 @@ public static class ApolloPhoebeSkills
         public string Type => "Execute";
         public string Description => "Hit all enemies harder the lower their HP. Up to 3x damage.";
         public int ManaCost => 250;
-        public float Power => 5000;
+        public float Power => 4000;
         public SkillTargetType TargetType => SkillTargetType.None;
 
         // Deal high damage to all targets
