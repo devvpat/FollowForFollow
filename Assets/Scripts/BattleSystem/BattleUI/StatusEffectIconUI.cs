@@ -68,6 +68,9 @@ public class StatusEffectIconUI : MonoBehaviour
             }
         }
         Refresh(effect);
+
+        if (BattleFxSettings.StatusIconPop)
+            BattleSpriteFx.ScalePunch(this, transform, 0f);
     }
 
     public void Refresh(BaseStatusEffect effect)

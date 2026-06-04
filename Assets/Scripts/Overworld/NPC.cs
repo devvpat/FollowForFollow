@@ -31,6 +31,14 @@ public class NPC : MonoBehaviour, IInteractable
         if (dialoguePanel != null) dialoguePanel.SetActive(false);
     }
 
+    void Update()
+    {
+        // Once a conversation is open, the standard advance buttons progress it.
+        // E is excluded here because InteractionDetector already routes E -> Interact() -> NextLine().
+        if (isDialogueActive && DialogueInput.AdvancePressed(includeInteractKey: false))
+            NextLine();
+    }
+
     private NPCDialogueLine CurrentLine => dialogueData.dialogueLines[dialogueIndex];
 
     public bool CanInteract()
@@ -110,6 +118,12 @@ public class NPC : MonoBehaviour, IInteractable
             nameBackground.rectTransform.sizeDelta = new Vector2(preferredW + bgPadding, s.y);
         }
 
+        // Prefer the shared CharacterProfile voice; fall back to the legacy inline blip
+        // for profile-less NPCs (e.g. dungeon NPCs without a CharacterProfile asset).
+        AudioClip blip = (speaker != null && speaker.profile != null && speaker.profile.textSound != null)
+            ? speaker.profile.textSound
+            : (speaker != null ? speaker.voiceBlip : null);
+
         int step = Mathf.Max(1, charsPerSound);
         int shown = 0;
         foreach(char letter in CurrentLine.text)
@@ -118,11 +132,11 @@ public class NPC : MonoBehaviour, IInteractable
             shown++;
 
             if (!char.IsWhiteSpace(letter)
-                && speaker != null && speaker.voiceBlip != null
+                && blip != null
                 && audioSource != null
                 && shown % step == 0)
             {
-                audioSource.PlayOneShot(speaker.voiceBlip);
+                audioSource.PlayOneShot(blip);
             }
 
             yield return new WaitForSeconds(dialogueData.typingSpeed);

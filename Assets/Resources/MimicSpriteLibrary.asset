@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3c1e7a2b4d4c6e8f0a1b2c3d4e5f60, type: 3}
   m_Name: MimicSpriteLibrary
   m_EditorClassIdentifier:
+  defaultSprite: {fileID: 8804333700367408735, guid: 5527532ccab6de54a96c57660e4aa085, type: 3}
   entries:
   - skillSet: 0
     sprite: {fileID: 8846708408243296662, guid: bfd59eca58d3ba14ab6f30e07c4684bc, type: 3}

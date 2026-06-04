@@ -17,13 +17,28 @@ public class BattleManager : MonoBehaviour
     public event System.Action<Ally> OnAllyTurnStart; // ally taking turn
     public event System.Action<Enemy> OnEnemyTurnStart; // enemy taking turn
     public event System.Action<BattleCharacter> OnActionPerformed; // a character just attacked / used a skill
-    public event System.Action<BattleCharacter> OnDamageTaken; // a character just took damage
+    public event System.Action<BattleCharacter, float, bool> OnDamageTaken; // (victim, amount, isCrit)
+    public event System.Action<BattleCharacter, float> OnHeal;             // (target, amount healed)
+    public event System.Action<BattleCharacter, bool> OnMiss;              // (target, dodged)
+    public event System.Action<BattleCharacter, BaseStatusEffect> OnStatusApplied; // (target, effect)
     public event System.Action<bool> OnBattleEnd; // true = player won
+
+    // Called from BattleCharacter (events can only be raised by the declaring class).
+    public void RaiseHeal(BattleCharacter c, float amount) => OnHeal?.Invoke(c, amount);
+    public void RaiseMiss(BattleCharacter c, bool dodged) => OnMiss?.Invoke(c, dodged);
+    public void RaiseStatusApplied(BattleCharacter c, BaseStatusEffect e) => OnStatusApplied?.Invoke(c, e);
+
+    private static bool _lastHitWasCrit; // set by the damage calc, read when firing OnDamageTaken
 
     // ----- BATTLE NUMBERS -----
 
     public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
     public const float DefenseConstant = 5000f;
+
+    // Enemy-turn pacing (seconds): a beat after an enemy is highlighted before it acts, and a longer
+    // beat after the action so the result is readable. Tune to taste.
+    private const float EnemyTurnStartDelay = 0.6f;
+    private const float EnemyActionDelay = 1.25f;
 
     // ----- BATTLE STATE -----
 
@@ -145,11 +160,12 @@ public class BattleManager : MonoBehaviour
                     // Log turn start, execute enemy action, and log result
                     OnEnemyTurnStart?.Invoke(enemy);
                     Log($"[*] {enemy.Name}'s turn.");
+                    yield return new WaitForSeconds(EnemyTurnStartDelay); // beat so the focused enemy is visible before it acts
                     OnActionPerformed?.Invoke(enemy);
                     string result = enemy.TakeTurn(GetLivingAllies(), GetLivingEnemies());
                     Log(result);
 
-                    yield return new WaitForSeconds(1f); // small delay after enemy action for log readability
+                    yield return new WaitForSeconds(EnemyActionDelay); // delay after enemy action for log readability
                 }
 
                 // Process all status effects for end of turn (after action but before checking for expired effects)
@@ -251,7 +267,7 @@ public class BattleManager : MonoBehaviour
     {
         float damage = CalculateDamage(attacker, defender, skill, isGuaranteedCrit, bypassDefense, isPercentHealthDamage, maxHealthPercentDamage);
         defender.TakeDamage(damage);
-        if (damage > 0f && Instance != null) Instance.OnDamageTaken?.Invoke(defender);
+        if (damage > 0f && Instance != null) Instance.OnDamageTaken?.Invoke(defender, damage, _lastHitWasCrit);
         if (attacker.HasPoisonedWeapon)
         {
             var weapon = attacker.StatusEffects.First(e => e is PoisonWeapon) as PoisonWeapon;
@@ -265,6 +281,7 @@ public class BattleManager : MonoBehaviour
     public static float CalculateDamage(BattleCharacter attacker, BattleCharacter defender, ISkill skill = null, bool isGuaranteedCrit = false, bool bypassDefense = false, bool isPercentHealthDamage = false, float maxHealthPercentDamage = 0f)
     {
         float rawDamage;
+        _lastHitWasCrit = false;
         if (isPercentHealthDamage)
             rawDamage = CalculatePreMitigationPercentHealthDamage(defender, maxHealthPercentDamage);
         else
@@ -281,7 +298,10 @@ public class BattleManager : MonoBehaviour
     {
         float dmg = attacker.Attack * attacker.AttackModifier;
         if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
+        {
             dmg *= attacker.CritDamage;
+            _lastHitWasCrit = true;
+        }
         return dmg;
     }
 
@@ -291,7 +311,10 @@ public class BattleManager : MonoBehaviour
     {
         float dmg = skill.Power * Mathf.Pow(ISkill.SkillPowerScale, AllyParty.Instance.LevelScale) * (attacker is Ally ? (attacker as Ally).SkillPowerMod : 1f) + (attacker.Attack * attacker.AttackModifier);
         if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
+        {
             dmg *= attacker.CritDamage;
+            _lastHitWasCrit = true;
+        }
         return dmg;
     }
 

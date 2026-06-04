@@ -29,7 +29,36 @@ public static class BattleSpriteFx
     public static void Shake(MonoBehaviour host, RectTransform rt)
         => StartPos(host, rt, ShakeRoutine);
 
-    public static void Flash(MonoBehaviour host, Image img)
+    // Horizontal step toward foes (dirX = +1 right / -1 left) and back.
+    public static void Lunge(MonoBehaviour host, RectTransform rt, float dirX)
+    {
+        if (host == null || rt == null || !host.isActiveAndEnabled) return;
+        Vector2 basePos;
+        if (_posRunning.TryGetValue(rt, out var existing) && existing != null)
+        {
+            host.StopCoroutine(existing);
+            basePos = _posBase[rt];
+            rt.anchoredPosition = basePos;
+        }
+        else
+        {
+            basePos = rt.anchoredPosition;
+            _posBase[rt] = basePos;
+        }
+        _posRunning[rt] = host.StartCoroutine(LungeRoutine(rt, basePos, dirX));
+    }
+
+    // Per-frame subtle scale "breathing". Call from an Update loop; pass a phase to stagger.
+    public static void Breathe(Transform t, float phase = 0f, float speed = 1.3f, float amplitude = 0.03f)
+    {
+        if (t == null) return;
+        float s = 1f + Mathf.Sin(Time.time * speed + phase) * amplitude;
+        t.localScale = new Vector3(s, s, 1f);
+    }
+
+    public static void Flash(MonoBehaviour host, Image img) => Flash(host, img, FlashColor);
+
+    public static void Flash(MonoBehaviour host, Image img, Color flashColor)
     {
         if (host == null || img == null || !host.isActiveAndEnabled) return;
         Color baseColor;
@@ -44,7 +73,7 @@ public static class BattleSpriteFx
             baseColor = img.color;
             _flashBase[img] = baseColor;
         }
-        _flashRunning[img] = host.StartCoroutine(FlashRoutine(img, baseColor));
+        _flashRunning[img] = host.StartCoroutine(FlashRoutine(img, baseColor, flashColor));
     }
 
     private delegate IEnumerator PosEffect(RectTransform rt, Vector2 basePos);
@@ -80,6 +109,21 @@ public static class BattleSpriteFx
         EndPos(rt, basePos);
     }
 
+    private static IEnumerator LungeRoutine(RectTransform rt, Vector2 basePos, float dirX)
+    {
+        const float dur = 0.28f;
+        const float dist = 55f;
+        float t = 0f;
+        while (t < dur)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.Clamp01(t / dur);
+            rt.anchoredPosition = basePos + new Vector2(Mathf.Sin(p * Mathf.PI) * dist * dirX, 0f);
+            yield return null;
+        }
+        EndPos(rt, basePos);
+    }
+
     private static IEnumerator ShakeRoutine(RectTransform rt, Vector2 basePos)
     {
         float t = 0f;
@@ -103,19 +147,84 @@ public static class BattleSpriteFx
         _posBase.Remove(rt);
     }
 
-    private static IEnumerator FlashRoutine(Image img, Color baseColor)
+    private static IEnumerator FlashRoutine(Image img, Color baseColor, Color flashColor)
     {
         float t = 0f;
         while (t < FlashDuration)
         {
             t += Time.deltaTime;
             float p = Mathf.Clamp01(t / FlashDuration);
-            // Start fully red, lerp back to the base color.
-            img.color = Color.Lerp(FlashColor, baseColor, p);
+            // Start at the flash color, lerp back to the base color.
+            img.color = Color.Lerp(flashColor, baseColor, p);
             yield return null;
         }
         img.color = baseColor;
         _flashRunning.Remove(img);
         _flashBase.Remove(img);
+    }
+
+    // ----- Scale effects (localScale-based, so they're safe on layout-group children) -----
+
+    private const float PunchDuration = 0.3f;
+    private static readonly Dictionary<Transform, Coroutine> _scaleRunning = new();
+    private static readonly Dictionary<Transform, Coroutine> _pulseRunning = new();
+
+    // One-shot "punch": start at fromScale and ease back to 1 with a slight overshoot.
+    public static void ScalePunch(MonoBehaviour host, Transform t, float fromScale)
+    {
+        if (host == null || t == null || !host.isActiveAndEnabled) return;
+        PulseStop(t); // pulse and punch share the scale; don't fight
+        if (_scaleRunning.TryGetValue(t, out var existing) && existing != null)
+            host.StopCoroutine(existing);
+        _scaleRunning[t] = host.StartCoroutine(PunchRoutine(t, fromScale));
+    }
+
+    private static IEnumerator PunchRoutine(Transform t, float fromScale)
+    {
+        float time = 0f;
+        while (time < PunchDuration)
+        {
+            time += Time.deltaTime;
+            float p = Mathf.Clamp01(time / PunchDuration);
+            // Ease-out with a small overshoot near the end.
+            float s = Mathf.Lerp(fromScale, 1f, p) + Mathf.Sin(p * Mathf.PI) * 0.08f;
+            t.localScale = new Vector3(s, s, 1f);
+            yield return null;
+        }
+        t.localScale = Vector3.one;
+        _scaleRunning.Remove(t);
+    }
+
+    // Looping gentle pulse (e.g. on the active actor). Call PulseStop to end + reset.
+    public static void PulseStart(MonoBehaviour host, Transform t)
+    {
+        if (host == null || t == null || !host.isActiveAndEnabled) return;
+        if (_pulseRunning.ContainsKey(t)) return; // already pulsing
+        _pulseRunning[t] = host.StartCoroutine(PulseRoutine(t));
+    }
+
+    public static void PulseStop(Transform t)
+    {
+        if (t == null) return;
+        if (_pulseRunning.TryGetValue(t, out var c))
+        {
+            // Stopping via the dictionary owner isn't possible here without the host; the coroutine
+            // checks the dictionary each frame and exits when its entry is removed.
+            _pulseRunning.Remove(t);
+            t.localScale = Vector3.one;
+        }
+    }
+
+    private static IEnumerator PulseRoutine(Transform t)
+    {
+        float time = 0f;
+        while (_pulseRunning.ContainsKey(t) && t != null)
+        {
+            time += Time.deltaTime;
+            float s = 1f + Mathf.Sin(time * 4f) * 0.04f; // subtle ±4% breathing
+            t.localScale = new Vector3(s, s, 1f);
+            yield return null;
+        }
+        if (t != null) t.localScale = Vector3.one;
     }
 }

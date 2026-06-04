@@ -17,6 +17,9 @@ public class MimicSpriteLibrary : ScriptableObject
 
     public List<Entry> entries = new();
 
+    // Shown on a Mimic before it has copied anyone (its base/uncopied form).
+    public Sprite defaultSprite;
+
     public Sprite Get(CharacterSkillSet skillSet)
     {
         foreach (var e in entries)

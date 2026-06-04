@@ -48,6 +48,30 @@ public class BattleLogPanel : MonoBehaviour
         if (logText == null) return;
         logText.text += message + "\n";
         ScrollToBottom();
+
+        if (BattleFxSettings.LogFlash && isActiveAndEnabled)
+        {
+            if (!_baseCaptured) { _logBaseColor = logText.color; _baseCaptured = true; }
+            if (_flashCo != null) StopCoroutine(_flashCo);
+            logText.color = _logBaseColor;
+            _flashCo = StartCoroutine(FlashLog());
+        }
+    }
+
+    private Color _logBaseColor = Color.white;
+    private bool _baseCaptured;
+    private Coroutine _flashCo;
+    private System.Collections.IEnumerator FlashLog()
+    {
+        float t = 0f; const float dur = 0.25f;
+        while (t < dur && logText != null)
+        {
+            t += Time.deltaTime;
+            logText.color = Color.Lerp(Color.white, _logBaseColor, t / dur);
+            yield return null;
+        }
+        if (logText != null) logText.color = _logBaseColor;
+        _flashCo = null;
     }
 
     private void ScrollToBottom()

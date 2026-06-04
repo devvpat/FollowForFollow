@@ -15,4 +15,8 @@ public class EnemyData : ScriptableObject
 
     public EnemyType Type = EnemyType.Minion;
     public EnemyBehaviorType Behavior = EnemyBehaviorType.Random;
+
+    [Header("Visuals")]
+    public Sprite idleSprite;     // shown on the battlefield at rest
+    public Sprite attackSprite;   // shown briefly when this enemy acts
 }

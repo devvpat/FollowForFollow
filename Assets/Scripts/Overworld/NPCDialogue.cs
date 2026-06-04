@@ -6,6 +6,11 @@ public class Speaker
     public string name;
     public Sprite portrait;
     public Color themeColor = Color.white;
+
+    [Tooltip("When set, the typing-blip voice comes from this profile's textSound (shared with Classroom/Chatroom).")]
+    public CharacterProfile profile;
+
+    [Tooltip("Legacy/fallback blip used when no profile is assigned.")]
     public AudioClip voiceBlip;
 }
 

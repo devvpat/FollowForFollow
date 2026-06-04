@@ -107,6 +107,7 @@ public class BattleCharacter
             StatusEffects.Add(effect);
             Debug.Log($"[Status Effect] {Name} gains new status effect: {effect.Name}");
         }
+        if (BattleManager.Instance != null) BattleManager.Instance.RaiseStatusApplied(this, effect);
     }
 
     // Adds a status effect to the character without calling OnApply or OnReapply
@@ -178,14 +179,18 @@ public class BattleCharacter
     public bool PerformAccuracyCheck()
     {
         float accuracyRoll = Random.Range(0, 100)/100f;
-        return accuracyRoll < Accuracy;
+        bool hit = accuracyRoll < Accuracy;
+        if (!hit && BattleManager.Instance != null) BattleManager.Instance.RaiseMiss(this, false);
+        return hit;
     }
 
     // Returns true if dodge
     public bool PerformDodgeCheck()
     {
         float dodgeRoll = Random.Range(0, 100)/100f;
-        return dodgeRoll < Blur;
+        bool dodged = dodgeRoll < Blur;
+        if (dodged && BattleManager.Instance != null) BattleManager.Instance.RaiseMiss(this, true);
+        return dodged;
     }
 
     public void StartDefend()
@@ -226,7 +231,10 @@ public class BattleCharacter
     // Restores HP by the specified amount (HP clamped to MaxHP)
     public void RestoreHP(float amount)
     {
+        float before = CurrentHP;
         CurrentHP = Mathf.Min(MaxHP, CurrentHP + amount);
+        float healed = CurrentHP - before;
+        if (healed > 0f && BattleManager.Instance != null) BattleManager.Instance.RaiseHeal(this, healed);
     }
 
     // Modifies attack (multiplicative) by the specified amount (e.g. amount = 1.2f -> 20% increase)

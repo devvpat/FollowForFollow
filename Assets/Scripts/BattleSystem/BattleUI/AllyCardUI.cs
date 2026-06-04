@@ -32,6 +32,9 @@ public class AllyCardUI : MonoBehaviour
 
     public Ally BoundAlly => _ally;
 
+    private float _targetHp, _targetMp;
+    private bool _barsInitialized;
+
     public void Bind(Ally ally, Color portraitColor, Action<BattleCharacter> onClick)
     {
         _ally = ally;
@@ -49,12 +52,29 @@ public class AllyCardUI : MonoBehaviour
     public void Refresh()
     {
         if (_ally == null) return;
-        hpBar.value = _ally.CurrentHP / _ally.MaxHP;
-        mpBar.value = (float)_ally.CurrentMana / _ally.MaxMana;
+        float newHp = _ally.CurrentHP / _ally.MaxHP;
+        if (BattleFxSettings.HpChip && _barsInitialized && newHp < _targetHp - 0.001f)
+            FlashHpFill();
+        _targetHp = newHp;
+        _targetMp = (float)_ally.CurrentMana / _ally.MaxMana;
+        if (!BattleFxSettings.SmoothBars || !_barsInitialized)
+        {
+            if (hpBar != null) hpBar.value = _targetHp;
+            if (mpBar != null) mpBar.value = _targetMp;
+            _barsInitialized = true;
+        }
         if (defendingBadge != null) defendingBadge.SetActive(_ally.IsDefending);
         if (deadOverlay != null) deadOverlay.SetActive(!_ally.IsAlive);
         if (cardButton != null) cardButton.interactable = _ally.IsAlive;
         RefreshStatusIcons();
+    }
+
+    // Flash the HP fill white when HP drops (a "damage chip" read).
+    private void FlashHpFill()
+    {
+        if (hpBar == null || hpBar.fillRect == null) return;
+        var f = hpBar.fillRect.GetComponent<Image>();
+        if (f != null) BattleSpriteFx.Flash(this, f, Color.white);
     }
 
     // Colors only — the purple tag's dynamic size is handled by a ContentSizeFitter +
@@ -96,6 +116,21 @@ public class AllyCardUI : MonoBehaviour
     {
         if (activeHighlight != null)
             activeHighlight.enabled = active;
+
+        if (BattleFxSettings.ActiveActorPulse)
+        {
+            if (active) BattleSpriteFx.PulseStart(this, transform);
+            else BattleSpriteFx.PulseStop(transform);
+        }
+    }
+
+    private void Update()
+    {
+        if (BattleFxSettings.SmoothBars && _ally != null)
+        {
+            if (hpBar != null) hpBar.value = Mathf.MoveTowards(hpBar.value, _targetHp, Time.deltaTime * 1.5f);
+            if (mpBar != null) mpBar.value = Mathf.MoveTowards(mpBar.value, _targetMp, Time.deltaTime * 1.5f);
+        }
     }
 
     public void SetHighlighted(bool highlighted)

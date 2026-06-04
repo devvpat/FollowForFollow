@@ -85,9 +85,7 @@ public class DialoguePlayer : MonoBehaviour
     {
         if (!isPlaying) return;
 
-        bool mouseClick = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
-        bool enterKey   = Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame;
-        if (!mouseClick && !enterKey) return;
+        if (!DialogueInput.AdvancePressed()) return;
 
         if (awaitingAdvance)
             awaitingAdvance = false;
