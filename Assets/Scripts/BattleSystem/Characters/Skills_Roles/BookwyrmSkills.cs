@@ -24,17 +24,18 @@ public static class BookwyrmSkills
         public SkillTargetType TargetType => SkillTargetType.None;
 
 
-        // [10% attack buff, 10% defense buff, 10% crit rate buff, haste] for 3 turns
+        // [10% attack buff, 10% defense buff, 10% crit rate buff] for 3 turns
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
 
             foreach (var ally in BattleManager.Instance.GetLivingTeamOf(caster))
             {
-                ally.ApplyStatusEffect(EffectFactory.MakeAttackModifier(3, 1.10f));
-                ally.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(3, 1.10f));
-                ally.ApplyStatusEffect(EffectFactory.MakeCritRateModifier(3, 0.10f));
-                ally.ApplyStatusEffect(EffectFactory.MakeHaste(3));
+                ally.ApplyStatusEffect(EffectFactory.MakeAttackModifier(4, 1.10f));
+                ally.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(4, 1.10f));
+                ally.ApplyStatusEffect(EffectFactory.MakeCritRateModifier(4, 0.10f));
+                ally.RestoreHP(ally.MaxHP * 0.15f);
+                // ally.ApplyStatusEffect(EffectFactory.MakeHaste(3));
             }
             return SkillResult.Success($"[+] {caster.Name} shared some lore, buffing the party's attack, defense, crit rate, and speed for 3 turns!", 0);
         }
@@ -42,20 +43,20 @@ public static class BookwyrmSkills
 
     public class Demonization : ISkill
     {
-        public string Name => "Demonization";
+        public string Name => "Demonitization";
         public string Type => "Single Target Debuff";
         public int ManaCost => 80;
         public float Power => 1200;
         public SkillTargetType TargetType => SkillTargetType.Enemy;
 
-        // Lowers target Defense by [20%] for [2 turns].
+        // Lowers target Defense by [100%] for [2 turns].
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
             if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
 
-            target.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(2, 0.80f));
-            return SkillResult.Success($"[+] {caster.Name} demonized {target.Name}, lowering their defense by 20% for 2 turns!", 1200);
+            target.ApplyStatusEffect(EffectFactory.MakeDefenseModifier(3, -1.00f));
+            return SkillResult.Success($"[+] {caster.Name} demonized {target.Name}, lowering their defense by 100% for 2 turns!", 1200);
         }
     }
 
@@ -67,11 +68,13 @@ public static class BookwyrmSkills
         public float Power => 0;
         public SkillTargetType TargetType => SkillTargetType.Ally;
 
-        // Target ally gains [10,000] Speed Bucket progress
+        // Target ally gains [10,000] Speed Bucket progress and 50% more attack for 1 turn.
         public SkillResult Execute(BattleCharacter caster, BattleCharacter target)
         {
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
             if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
+
+            target.ApplyStatusEffect(EffectFactory.MakeAttackModifier(2, 0.50f));
 
             target.AddToTickTimer(10000);
             if (target.TickTimer >= BattleManager.BattleTickThreshold)
@@ -94,7 +97,7 @@ public static class BookwyrmSkills
             if (!caster.PerformAccuracyCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but missed");
             if (target.PerformDodgeCheck()) return SkillResult.Fail($"[+] {caster.Name} tried to use {Name} but {target.Name} dodged");
 
-            target.ApplyStatusEffect(EffectFactory.MakeBlind(2));
+            target.ApplyStatusEffect(EffectFactory.MakeBlind(3));
             return SkillResult.Success($"[+] {caster.Name} set a mouse trap, blinding {target.Name} for 2 turns!", 1800);
         }
     }

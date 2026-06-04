@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Minion Supporter
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   Name: Minion (Support)
-  MaxHP: 12000
+  MaxHP: 40000
   Attack: 1
-  Defense: 500
+  Defense: 50
   Speed: 100
   Accuracy: 0.75
   CritChance: 0.25

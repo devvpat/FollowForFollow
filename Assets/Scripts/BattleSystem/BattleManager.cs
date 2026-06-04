@@ -21,7 +21,7 @@ public class BattleManager : MonoBehaviour
     // ----- BATTLE NUMBERS -----
 
     public const float BattleTickThreshold = 10000f; // when a character's tick timer reaches this, they can act
-    public const float DefenseConstant = 5000f;
+    public const float DefenseConstant = 100f;
 
     // ----- BATTLE STATE -----
 
@@ -273,7 +273,7 @@ public class BattleManager : MonoBehaviour
     // RawDamage = (Attack * AttackModifier) * (isCrit ? CritDamage : 1)
     public static float CalculatePreMitigationAttackDamage(BattleCharacter attacker, bool isGuaranteedCrit = false)
     {
-        float dmg = attacker.Attack * attacker.AttackModifier;
+        float dmg = attacker.Attack * attacker.AttackModifier + 750;
         if (isGuaranteedCrit || Random.Range(0, 100)/100f < attacker.CritChance)
             dmg *= attacker.CritDamage;
         return dmg;

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ally 2
   m_EditorClassIdentifier: Assembly-CSharp::AllyData
   Name: KARAAGE
-  MaxHP: 5400
+  MaxHP: 10000
   Attack: 850
   Defense: 450
   Speed: 145
@@ -21,6 +21,6 @@ MonoBehaviour:
   CritChance: 0.25
   CritDamage: 1.5
   Level: 95
-  MaxMana: 600
+  MaxMana: 900
   charSkillSet: 1
   Role: 1
