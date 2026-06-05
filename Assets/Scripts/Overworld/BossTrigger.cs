@@ -49,7 +49,7 @@ public class BossTrigger : MonoBehaviour
 
         AllyParty.Instance.ResetAllAlliesHealthAndMana();
         PauseController.SetPause(false);
-        MusicManager.Instance.StopMusic();
+        MusicManager.Instance.PlayMusic(MusicManager.Instance.overworldTheme);
 
         if (playerWon)
         {
