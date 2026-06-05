@@ -8,6 +8,7 @@ public class MusicManager : MonoBehaviour
     [Header("Music Clips")]
     public AudioClip battleTheme;
     public AudioClip overworldTheme;
+    public AudioClip titleScreenTheme;
 
     private AudioSource audioSource;
 

@@ -1774,7 +1774,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &569491170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1789,6 +1789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   battleTheme: {fileID: 8300000, guid: b050c2dcc1ab346fd8e5e85bcf002129, type: 3}
   overworldTheme: {fileID: 8300000, guid: 1e830020d89f44a91a9d4c0445866cca, type: 3}
+  titleScreenTheme: {fileID: 0}
 --- !u!4 &569491171
 Transform:
   m_ObjectHideFlags: 0
