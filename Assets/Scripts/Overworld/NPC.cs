@@ -91,10 +91,43 @@ public class NPC : MonoBehaviour, IInteractable
 
     private bool HasRequiredDialogueUI()
     {
+        ResolveDialogueUIReferences();
+
         return dialoguePanel != null
             && dialogueText != null
             && nameText != null
             && portraitImage != null;
+    }
+
+    private void ResolveDialogueUIReferences()
+    {
+        if (dialoguePanel != null
+            && dialogueText != null
+            && nameText != null
+            && portraitImage != null)
+        {
+            return;
+        }
+
+        foreach (DialogueBox dialogueBox in FindObjectsByType<DialogueBox>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (!dialogueBox.gameObject.scene.IsValid() || !dialogueBox.gameObject.scene.isLoaded)
+            {
+                continue;
+            }
+
+            if (dialogueBox.bodyText == null || dialogueBox.nameText == null || dialogueBox.portraitImage == null)
+            {
+                continue;
+            }
+
+            dialoguePanel = dialogueBox.gameObject;
+            dialogueText = dialogueBox.bodyText;
+            nameText = dialogueBox.nameText;
+            portraitImage = dialogueBox.portraitImage;
+            nameBackground = dialogueBox.nameBackground;
+            return;
+        }
     }
 
     void NextLine()

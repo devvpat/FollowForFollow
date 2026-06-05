@@ -216,7 +216,7 @@ public class BattleUI : MonoBehaviour
             resultTitleText.text = "Victory!";
             resultButtonLabel.text = "Continue";
             resultButton.onClick.RemoveAllListeners();
-            resultButton.onClick.AddListener(() => gameObject.SetActive(false));
+            resultButton.onClick.AddListener(() => transform.parent.gameObject.SetActive(false));
         }
         else
         {
@@ -571,6 +571,10 @@ public class BattleUI : MonoBehaviour
     private void OnRestart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // GameObject player = GameObject.FindWithTag("Player");
+        // player.transform.position = new Vector3(0f, -1f, 0f);
+        // AllyParty.Instance.ResetAllAlliesHealthAndMana();
+        // transform.parent.gameObject.SetActive(false);
     }
 
     // Info panel toggle (merged from main). Null-guarded since the classroom scene may not wire InfoText.
