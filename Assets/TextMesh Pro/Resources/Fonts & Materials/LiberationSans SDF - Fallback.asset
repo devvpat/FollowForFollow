@@ -807,7 +807,127 @@ MonoBehaviour:
           m_XAdvance: 0
           m_YAdvance: 0
       m_FeatureLookupFlags: 0
-    m_MarkToBaseAdjustmentRecords: []
+    m_MarkToBaseAdjustmentRecords:
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 546
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.1308594
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 547
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.298828
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 548
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 7.4746094
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 549
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.928711
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 550
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.466797
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 552
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.298828
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 553
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.298828
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 554
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.4248047
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 555
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.3828125
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 556
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.6347656
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 557
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.1728516
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: 26.49707
+      m_MarkGlyphID: 558
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.298828
+        m_YPositionAdjustment: 18.896484
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: -0.50390625
+      m_MarkGlyphID: 559
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.1308594
+        m_YPositionAdjustment: 0
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 12.303711
+        m_YCoordinate: -0.50390625
+      m_MarkGlyphID: 560
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.256836
+        m_YPositionAdjustment: 0
+    - m_BaseGlyphID: 66
+      m_BaseGlyphAnchorPoint:
+        m_XCoordinate: 101.20117
+        m_YCoordinate: 100.78125
+      m_MarkGlyphID: 561
+      m_MarkPositionAdjustment:
+        m_XPositionAdjustment: 6.2148438
+        m_YPositionAdjustment: 0
     m_MarkToMarkAdjustmentRecords: []
   m_ShouldReimportFontFeatures: 0
   m_FallbackFontAssetTable: []
