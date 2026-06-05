@@ -216,7 +216,7 @@ public class BattleUI : MonoBehaviour
             resultTitleText.text = "Victory!";
             resultButtonLabel.text = "Continue";
             resultButton.onClick.RemoveAllListeners();
-            resultButton.onClick.AddListener(() => gameObject.SetActive(false));
+            resultButton.onClick.AddListener(() => transform.parent.gameObject.SetActive(false));
         }
         else
         {
