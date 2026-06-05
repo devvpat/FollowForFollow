@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainPlayer_Profile
   m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
   realName: Phoebe
-  ign: "Apo11o\u2727\u02D6\xB0."
+  ign: "Apo11o\u02D6\xB0."
   portraitSprite: {fileID: -8897452064755399100, guid: 6c684e434068ccd47a022d27b3b9b1ea, type: 3}
   themeColor: {r: 0.726, g: 0.257, b: 0.257, a: 1}
   alignment: 1
