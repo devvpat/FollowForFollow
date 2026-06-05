@@ -22,4 +22,5 @@ public static class BattleFxSettings
     public static bool CritNumbers = true;       // crit damage numbers bigger + yellow + shake
     public static bool MissText = true;          // floating "Miss!" / "Dodge!"
     public static bool HealNumbers = true;       // green "+N" + green flash on heal
+    public static bool AttackSfx = true;         // per-character sound effect when an ally attacks / uses a skill
 }

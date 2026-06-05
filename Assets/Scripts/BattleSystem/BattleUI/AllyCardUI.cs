@@ -30,6 +30,10 @@ public class AllyCardUI : MonoBehaviour
     private Ally _ally;
     private Action<BattleCharacter> _onClick;
 
+    // Shared portrait lookup (CharacterSkillSet -> Sprite), loaded once from Resources like
+    // EnemyFieldUI does for its MimicSpriteLibrary.
+    private static CharacterPortraitLibrary _portraitLib;
+
     public Ally BoundAlly => _ally;
 
     private float _targetHp, _targetMp;
@@ -41,7 +45,7 @@ public class AllyCardUI : MonoBehaviour
         _onClick = onClick;
         nameText.text = ally.Name;
         StyleNameTag();
-        if (portraitImage != null) portraitImage.color = portraitColor;
+        ApplyPortrait(ally, portraitColor);
         ApplyBarColors();
         cardButton.onClick.AddListener(() => _onClick?.Invoke(_ally));
         SetActive(false);
@@ -75,6 +79,27 @@ public class AllyCardUI : MonoBehaviour
         if (hpBar == null || hpBar.fillRect == null) return;
         var f = hpBar.fillRect.GetComponent<Image>();
         if (f != null) BattleSpriteFx.Flash(this, f, Color.white);
+    }
+
+    // Assign the ally's character portrait sprite, falling back to the solid placeholder color
+    // when no portrait is available (library missing or no entry for this character).
+    private void ApplyPortrait(Ally ally, Color fallbackColor)
+    {
+        if (portraitImage == null) return;
+        if (_portraitLib == null) _portraitLib = Resources.Load<CharacterPortraitLibrary>("CharacterPortraitLibrary");
+
+        Sprite sprite = _portraitLib != null ? _portraitLib.Get(ally.CharSkillSet) : null;
+        if (sprite != null)
+        {
+            portraitImage.sprite = sprite;
+            portraitImage.color = Color.white;
+            portraitImage.preserveAspect = true;
+        }
+        else
+        {
+            portraitImage.sprite = null;
+            portraitImage.color = fallbackColor;
+        }
     }
 
     // Colors only — the purple tag's dynamic size is handled by a ContentSizeFitter +

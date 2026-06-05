@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c4ac6937ccbfa674fb6fbe65d028e470
+guid: 23c435f51c392094eb41e1d4431feaa0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2450555277375350716
-    second: KARAAGE_0
+      213: 2664075238007577169
+    second: DAYCOUNTER_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: KARAAGE_0
+      name: DAYCOUNTER_0
       rect:
         serializedVersion: 2
-        x: 650
-        y: 750
-        width: 1626
-        height: 1564
+        x: 0
+        y: 3
+        width: 521
+        height: 204
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cb7aa6a8a0f120220800000000000000
-      internalID: 2450555277375350716
+      spriteID: 15a1b586052b8f420800000000000000
+      internalID: 2664075238007577169
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      KARAAGE_0: 2450555277375350716
+      DAYCOUNTER_0: 2664075238007577169
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

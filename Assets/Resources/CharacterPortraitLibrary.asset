@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1f4d2c7b3e4a519c6d0e8f2b5a7c34, type: 3}
+  m_Name: CharacterPortraitLibrary
+  m_EditorClassIdentifier:
+  entries:
+  - skillSet: 0
+    sprite: {fileID: -3835497804806572940, guid: a5b50f3a7f43e9f4180e6c0413c1b552, type: 3}
+  - skillSet: 1
+    sprite: {fileID: 2450555277375350716, guid: c4ac6937ccbfa674fb6fbe65d028e470, type: 3}
+  - skillSet: 2
+    sprite: {fileID: -5693232787724555018, guid: 95e46a2e63caecf439610e35b32462bd, type: 3}
+  - skillSet: 3
+    sprite: {fileID: 8732524576015440202, guid: 02b3efea672466049981cbec1bec2551, type: 3}
+  defaultSprite: {fileID: 0}

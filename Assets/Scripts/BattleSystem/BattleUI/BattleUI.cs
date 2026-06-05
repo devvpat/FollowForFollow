@@ -61,6 +61,11 @@ public class BattleUI : MonoBehaviour
         { "Winston_Attack",  CharacterSkillSet.Bookwyrm },
     };
 
+    // Per-character turn-start SFX (CharacterSkillSet -> AudioClip), loaded once from Resources like
+    // EnemyFieldUI does for its MimicSpriteLibrary. Played through a 2D AudioSource on this object.
+    private static CharacterAudioLibrary _audioLib;
+    private AudioSource _sfxSource;
+
     private AllyActionType _selectedAction;
     private ISkill _selectedSkill;
     private bool _targetingMode;
@@ -191,6 +196,22 @@ public class BattleUI : MonoBehaviour
 
         ClearAllHighlights();
         turnOrderUI.Refresh();
+    }
+
+    // Plays the character-specific sound when an ally attacks / uses a skill, if enabled and mapped.
+    private void PlayAttackSfx(Ally ally)
+    {
+        if (!BattleFxSettings.AttackSfx) return;
+        if (_audioLib == null) _audioLib = Resources.Load<CharacterAudioLibrary>("CharacterAudioLibrary");
+        var clip = _audioLib != null ? _audioLib.Get(ally.CharSkillSet) : null;
+        if (clip == null) return;
+        if (_sfxSource == null)
+        {
+            if (!TryGetComponent(out _sfxSource)) _sfxSource = gameObject.AddComponent<AudioSource>();
+            _sfxSource.playOnAwake = false;
+            _sfxSource.spatialBlend = 0f; // 2D UI sound
+        }
+        _sfxSource.PlayOneShot(clip);
     }
 
     private void HandleEnemyTurnStart(Enemy enemy)
@@ -359,6 +380,8 @@ public class BattleUI : MonoBehaviour
     // A character just attacked / used a skill — lunge (or hop) its field sprite toward foes.
     private void HandleActionPerformed(BattleCharacter actor)
     {
+        if (actor is Ally ally) PlayAttackSfx(ally);
+
         var img = SpriteFor(actor);
         if (img == null) return;
         if (actor is Enemy)

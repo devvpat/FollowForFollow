@@ -3,8 +3,8 @@ guid: 02b3efea672466049981cbec1bec2551
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8897452064755399100
-    second: phoebe_0
+      213: 8732524576015440202
+    second: PHOEBE_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: phoebe_0
+      name: PHOEBE_0
       rect:
         serializedVersion: 2
-        x: 631
-        y: 856
-        width: 1842
-        height: 1493
+        x: 593
+        y: 1020
+        width: 1863
+        height: 1676
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4464032ec76e58480800000000000000
-      internalID: -8897452064755399100
+      spriteID: a49d4c1c5d8203970800000000000000
+      internalID: 8732524576015440202
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      phoebe_0: -8897452064755399100
+      PHOEBE_0: 8732524576015440202
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

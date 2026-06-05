@@ -24,4 +24,4 @@ MonoBehaviour:
   preferredRole: Attacker / Damage
   partyRole: 1
   allyData: {fileID: 0}
-  textSound: {fileID: 0}
+  textSound: {fileID: 8300000, guid: 5253bfcc3abd9eb409e6a5501741299e, type: 3}
