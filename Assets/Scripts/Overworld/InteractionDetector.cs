@@ -12,10 +12,28 @@ public class InteractionDetector : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && TryGetCurrentInteractable(out IInteractable interactable))
         {
-            interactableInRange?.Interact();
+            interactable.Interact();
         }
+    }
+
+    private bool TryGetCurrentInteractable(out IInteractable interactable)
+    {
+        interactable = interactableInRange;
+        if (interactable == null)
+        {
+            return false;
+        }
+
+        if (interactable is MonoBehaviour behaviour && behaviour == null)
+        {
+            interactableInRange = null;
+            interactable = null;
+            return false;
+        }
+
+        return true;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -9,19 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a9909e73908f894eaf09712ac044467, type: 3}
-  m_Name: Troll
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  Name: Troll
-  MaxHP: 120
-  Attack: 1
-  Defense: 0.35
+  m_Script: {fileID: 11500000, guid: 5a42ead85d01fbb43b3359f6318099c9, type: 3}
+  m_Name: chud
+  m_EditorClassIdentifier: Assembly-CSharp::AllyData
+  Name: APOLLO / PHOEBE
+  MaxHP: 1
+  Attack: 1200
+  Defense: 650
   Speed: 1
   Accuracy: 1
-  CritChance: 0.15
+  CritChance: 0.25
   CritDamage: 1.5
   Level: 95
-  Type: 0
-  Behavior: 0
-  idleSprite: {fileID: 0}
-  attackSprite: {fileID: 0}
+  MaxMana: 750
+  charSkillSet: 3
+  Role: 3

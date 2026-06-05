@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScreenFader : MonoBehaviour
 {
@@ -13,21 +14,58 @@ public class ScreenFader : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+
+        ResolveSceneReferences();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            Instance = null;
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ResolveSceneReferences();
+    }
+
+    private void ResolveSceneReferences()
+    {
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponentInChildren<CanvasGroup>();
+        }
+
+        cam = FindAnyObjectByType<CinemachineCamera>();
     }
 
     async Task Fade(float targetTransparency)
     {
+        ResolveSceneReferences();
+
+        if (canvasGroup == null)
+        {
+            Debug.LogError("ScreenFader is missing a CanvasGroup reference.");
+            return;
+        }
+
         float start = canvasGroup.alpha, t = 0;
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
             canvasGroup.alpha = Mathf.Lerp(start, targetTransparency, t / fadeDuration);
-            cam.PreviousStateIsValid = false;
+            if (cam != null)
+            {
+                cam.PreviousStateIsValid = false;
+            }
 
             await Task.Yield();
         }

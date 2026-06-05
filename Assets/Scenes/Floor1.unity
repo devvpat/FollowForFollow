@@ -1691,7 +1691,7 @@ PrefabInstance:
     - target: {fileID: 5565890274548783510, guid: deede9458d13eed4ca3a1c5e22c3869c, type: 3}
       propertyPath: 'AllyDataList.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 3dbbaffa81f184554815e611a0cfcf09, type: 2}
+      objectReference: {fileID: 11400000, guid: a9b7512bc4c4d482ca48fa49a2d39c13, type: 2}
     - target: {fileID: 5565890274548783510, guid: deede9458d13eed4ca3a1c5e22c3869c, type: 3}
       propertyPath: 'AllyDataList.Array.data[1]'
       value: 
